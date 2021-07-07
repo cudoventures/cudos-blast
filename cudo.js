@@ -43,7 +43,10 @@ require('yargs')
             execSync("docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .").toString('utf-8');
         }
 
-        execSync(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`).toString('utf-8');
+        try {
+            execSync(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`).toString('utf-8');
+        } catch (e) {
+        }
         console.log("Compiled.");
     })
     .help()
