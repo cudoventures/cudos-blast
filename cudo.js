@@ -21,9 +21,9 @@ require('yargs')
             console.log(`${argv.contractname} exists`);
             return
         }
-        // will be replaced with bundled version of the contract template
-        execSync("cargo install cargo-generate --features vendored-openssl").toString('utf-8');
-        execSync(`cargo generate --git https://github.com/CosmWasm/cosmwasm-template.git --name ${argv.contractname}`).toString('utf-8');
+
+        execSync(`cp -r template ${argv.contractname}`);
+        console.log('Done.');
     })
     .command('compile [contractname]', 'compile smart contract', (yargs) => {
         yargs.positional('contractname', {
@@ -32,7 +32,19 @@ require('yargs')
             describe: 'smart contract name'
         })
     }, function(argv) {
-        execSync(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source="${path.basename(process.env.PWD)}_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry  cosmwasm/rust-optimizer:0.11.4`).toString('utf-8');
+        if (!fs.existsSync(argv.contractname)) {
+            console.log(`${argv.contractname} does not exist`);
+            return
+        }
+        // temporary solution before uploading our dockerimage to the Hub
+        try {
+            execSync("docker inspect cudo/rust-wasm").toString('utf-8');
+        } catch (e) {
+            execSync("docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .").toString('utf-8');
+        }
+
+        execSync(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`).toString('utf-8');
+        console.log("Compiled.");
     })
     .help()
     .argv
