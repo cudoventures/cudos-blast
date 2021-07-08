@@ -14,16 +14,16 @@ Options:
 
 ## install
 ```
-npm --save install
+npm install -g
 ```
 
 ## usage
 ### create smart contract project
 ```
-node cudo init sea-animals
+cudo init sea-animals
 ```
 
 ### compile
 ```
-node cudo compile sea-animals
+cudo compile sea-animals
 ```
