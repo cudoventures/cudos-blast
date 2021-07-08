@@ -1,6 +1,6 @@
 const fs = require('fs')
 const {
-    execSync
+    exec,
 } = require("child_process");
 
 function compileCmd(argv) {
@@ -8,20 +8,17 @@ function compileCmd(argv) {
         console.log(`${argv.contractname} does not exist`);
         return
     }
-    // temporary solution before uploading our dockerimage to the Hub
-    try {
-        execSync("docker inspect cudo/rust-wasm").toString('utf-8');
-    } catch (e) {
-        try {
-            execSync("docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .").toString('utf-8');
-        } catch (e) {}
-    }
+    execCmd(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`);
+}
 
-    try {
-        execSync(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`).toString('utf-8');
-    } catch (e) {
-    }
-    console.log("Compiled.");
+function execCmd(cmd) {
+    exec(cmd,
+        function(error, stdout, stderr) {
+            console.log(stdout);
+            if (error !== null) {
+                console.log(stderr);
+            }
+        });
 }
 
 module.exports.compileCmd = compileCmd;
