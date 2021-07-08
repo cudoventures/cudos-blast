@@ -26,6 +26,7 @@ function initCmd(argv) {
     mkdir(dir, `${argv.contractname}/schema`);
     mkdir(dir, `${argv.contractname}/src`);
     mkdir(dir, `${argv.contractname}/tests`);
+    mkdir(dir, `${argv.contractname}/deploy`);
 
     copyTemplateMulti('', `${dir}/${argv.contractname}`, '*.toml');
     copyTemplateMulti('examples', `${dir}/${argv.contractname}/examples`, '*.rs');
