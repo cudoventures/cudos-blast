@@ -10,6 +10,8 @@ RUN rustup target add wasm32-unknown-unknown
 # Check cargo version
 RUN cargo --version
 
+RUN rustup target list --installed
+
 WORKDIR /code
 
-CMD ["cargo", "wasm"]
+CMD ["cargo", "build", "--target", "wasm32-unknown-unknown"]
