@@ -16,6 +16,10 @@ Options:
 ```
 npm install -g
 ```
+Build Docker image
+```
+docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .
+```
 
 ## usage
 ### create smart contract project
