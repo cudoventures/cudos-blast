@@ -1,21 +1,33 @@
 #!/usr/bin/env node
 
 const {
-    execSync
-} = require("child_process");
+    initCmd,
+    compileCmd
+} = require("./cmd");
 
 require('yargs')
     .scriptName("cudo")
+    .version()
     .usage('$0 <cmd> [args]')
-    .command('init', 'init cudo project', (yargs) => {
+    .command('init [contractname]', 'init smart contract template', (yargs) => {
+        yargs.positional('contractname', {
+                type: 'string',
+                default: 'contract1',
+                describe: 'smart contract name'
+            })
+            .option('dir', {
+                alias: 'd',
+                type: 'string',
+                default: '.',
+                description: 'smart contracs directory'
+            })
+    }, initCmd)
+    .command('compile [contractname]', 'compile smart contract', (yargs) => {
         yargs.positional('contractname', {
             type: 'string',
-            default: 'wasm-start',
-            describe: 'the name of the cosmwasm smart contract project'
+            default: 'contract1',
+            describe: 'smart contract name'
         })
-    }, function(argv) {
-        execSync("cargo install cargo-generate --features vendored-openssl").toString('utf-8');
-        execSync("cargo generate --git https://github.com/CosmWasm/cosmwasm-template.git --name " + argv.contractname).toString('utf-8');
-    })
+    }, compileCmd)
     .help()
     .argv

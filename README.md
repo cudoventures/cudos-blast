@@ -1,12 +1,29 @@
 # cudo-framework
 
+```cudo <cmd> [args]
+
+Commands:
+  cudo init [contractname]     init smart contract template
+  cudo compile [contractname]  compile smart contract
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+
+```
+
 ## install
 ```
-npm --save install
+npm install -g
 ```
 
 ## usage
 ### create smart contract project
 ```
-node cudo init sea-animals
+cudo init sea-animals
+```
+
+### compile
+```
+cudo compile sea-animals
 ```
