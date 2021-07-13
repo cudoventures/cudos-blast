@@ -5,7 +5,7 @@ const {
     compileCmd
 } = require("./cmd");
 
-const wasmdCmd = require('./cmd/wasmd');
+const nodeCmd = require('./cmd/node');
 
 require('yargs')
     .scriptName("cudo")
@@ -31,6 +31,6 @@ require('yargs')
             describe: 'smart contract name'
         })
     }, compileCmd)
-    .command(wasmdCmd)
+    .command(nodeCmd)
     .help()
     .argv
