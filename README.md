@@ -18,7 +18,9 @@ npm install -g
 ```
 Build Docker image
 ```
-docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .
+# necessary step before we make production ready public cudos repo
+git clone [cudos-node repo]
+docker build -t cudos/node -f cudos-node.Dockerfile .
 ```
 
 ## usage
