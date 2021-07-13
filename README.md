@@ -24,10 +24,23 @@ docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .
 ## usage
 ### create smart contract project
 ```
-cudo init sea-animals
+cudo init contractname
 ```
 
 ### compile
 ```
-cudo compile sea-animals
+cudo compile contractname
+```
+
+### setup wasmd node
+```
+cudo wasmd setup
+```
+
+### starting and stopping wasmd node
+```
+cudo wasmd start
+```
+```
+cudo wasmd stop
 ```
