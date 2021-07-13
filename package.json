@@ -1,6 +1,6 @@
 {
     "name": "cudo-framework",
-    "version": "0.4.1",
+    "version": "0.5.3",
     "description": "",
     "main": "cudo.js",
     "bin": {
