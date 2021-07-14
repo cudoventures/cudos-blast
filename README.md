@@ -37,8 +37,8 @@ cudo compile contractname
 
 ### starting and stopping cudos-node
 ```
-cudo cudo start
+cudo node start
 ```
 ```
-cudo cudo stop
+cudo node stop
 ```
