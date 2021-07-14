@@ -1,15 +1,16 @@
 # cudo-framework
 
-```cudo <cmd> [args]
+```
+cudo <cmd> [args]
 
 Commands:
   cudo init [contractname]     init smart contract template
   cudo compile [contractname]  compile smart contract
+  cudo node                    manage cudo local node
 
 Options:
   --version  Show version number                                       [boolean]
   --help     Show help                                                 [boolean]
-
 ```
 
 ## install
@@ -34,15 +35,10 @@ cudo init contractname
 cudo compile contractname
 ```
 
-### setup wasmd node
+### starting and stopping cudos-node
 ```
-cudo wasmd setup
-```
-
-### starting and stopping wasmd node
-```
-cudo wasmd start
+cudo cudo start
 ```
 ```
-cudo wasmd stop
+cudo cudo stop
 ```
