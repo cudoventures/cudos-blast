@@ -1,7 +1,7 @@
 const fs = require('fs')
 const {
-    exec,
-} = require("child_process");
+    execCmd
+} = require("./lib");
 
 function compileCmd(argv) {
     let scmd = `docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`;
@@ -11,18 +11,7 @@ function compileCmd(argv) {
         return
     }
     console.log('compiling...');
-    execCmd(`docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`);
-}
-
-function execCmd(cmd) {
-    exec(cmd,
-        function(error, stdout, stderr) {
-            console.log("execcc");
-            console.log(stdout);
-            if (error !== null) {
-                console.log(stderr);
-            }
-        });
+    execCmd(scmd);
 }
 
 module.exports.compileCmd = compileCmd;

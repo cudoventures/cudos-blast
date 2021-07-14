@@ -1,15 +1,16 @@
 # cudo-framework
 
-```cudo <cmd> [args]
+```
+cudo <cmd> [args]
 
 Commands:
   cudo init [contractname]     init smart contract template
   cudo compile [contractname]  compile smart contract
+  cudo node                    manage cudo local node
 
 Options:
   --version  Show version number                                       [boolean]
   --help     Show help                                                 [boolean]
-
 ```
 
 ## install
@@ -18,16 +19,26 @@ npm install -g
 ```
 Build Docker image
 ```
-docker build -f rust-wasm.Dockerfile --tag cudo/rust-wasm .
+# necessary step before we make production ready public cudos repo
+git clone [cudos-node repo]
+docker build -t cudos/node -f cudos-node.Dockerfile .
 ```
 
 ## usage
 ### create smart contract project
 ```
-cudo init sea-animals
+cudo init contractname
 ```
 
 ### compile
 ```
-cudo compile sea-animals
+cudo compile contractname
+```
+
+### starting and stopping cudos-node
+```
+cudo node start
+```
+```
+cudo node stop
 ```
