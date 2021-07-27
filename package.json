@@ -1,14 +1,16 @@
 {
     "name": "cudo-framework",
-    "version": "0.5.7",
+    "version": "0.6.1",
     "description": "",
     "main": "cudo.js",
     "bin": {
         "cudo": "./cudo.js"
     },
     "dependencies": {
-        "yargs": "^17.0.1",
+        "@cosmjs/cosmwasm-stargate": "^0.25.5",
+        "@cosmjs/proto-signing": "^0.25.6",
+        "minimatch": "3.0.4",
         "mkdirp": "1.0.4",
-        "minimatch": "3.0.4"
+        "yargs": "^17.0.1"
     }
 }

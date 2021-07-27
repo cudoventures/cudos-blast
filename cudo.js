@@ -1,36 +1,52 @@
 #!/usr/bin/env node
 
+const yargs = require('yargs');
+const {
+    hideBin
+} = require('yargs/helpers');
+
 const {
     initCmd,
-    compileCmd
+    compileCmd,
+    deployCmd
 } = require("./cmd");
 
 const nodeCmd = require('./cmd/node');
 
-require('yargs')
-    .scriptName("cudo")
-    .version()
-    .usage('$0 <cmd> [args]')
-    .command('init [contractname]', 'init smart contract template', (yargs) => {
-        yargs.positional('contractname', {
+(async function main() {
+
+    await yargs(hideBin(process.argv))
+        .scriptName("cudo")
+        .version()
+        .usage('$0 <cmd> [args]')
+        .command('init [contractname]', 'init smart contract template', (yargs) => {
+            yargs.positional('contractname', {
+                    type: 'string',
+                    default: 'contract1',
+                    describe: 'smart contract name'
+                })
+                .option('dir', {
+                    alias: 'd',
+                    type: 'string',
+                    default: '.',
+                    description: 'smart contracs directory'
+                })
+        }, initCmd)
+        .command('compile [contractname]', 'compile smart contract', (yargs) => {
+            yargs.positional('contractname', {
                 type: 'string',
                 default: 'contract1',
                 describe: 'smart contract name'
             })
-            .option('dir', {
-                alias: 'd',
+        }, compileCmd)
+        .command(nodeCmd)
+        .command('deploy [contractname]', 'deploy smart contract', (yargs) => {
+            yargs.positional('contractname', {
                 type: 'string',
-                default: '.',
-                description: 'smart contracs directory'
+                default: 'contract1',
+                describe: 'smart contract name'
             })
-    }, initCmd)
-    .command('compile [contractname]', 'compile smart contract', (yargs) => {
-        yargs.positional('contractname', {
-            type: 'string',
-            default: 'contract1',
-            describe: 'smart contract name'
-        })
-    }, compileCmd)
-    .command(nodeCmd)
-    .help()
-    .argv
+        }, deployCmd)
+        .help()
+        .argv
+})();
