@@ -10,6 +10,6 @@ services:
       - cudos_data:/apps/cudos-node/cudos_data
     environment:
       APP_HOME: ./cudos_data/node
-    command: serve
+    command: serve --home ./cudos_data/node
 volumes:
   cudos_data:

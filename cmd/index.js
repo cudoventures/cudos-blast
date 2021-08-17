@@ -7,9 +7,9 @@ const {
 } = require("./compile");
 
 const {
-    deployCmd
-} = require("./deploy");
+    runCmd
+} = require("./run");
 
 module.exports.initCmd = initCmd;
 module.exports.compileCmd = compileCmd;
-module.exports.deployCmd = deployCmd;
+module.exports.runCmd = runCmd;

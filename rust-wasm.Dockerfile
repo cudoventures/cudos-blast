@@ -1,5 +1,7 @@
 FROM rust:1.53.0-alpine
 
+ENV RUSTFLAGS="-C link-arg=-s"
+
 RUN apk update
 # Being required for gcc linking
 RUN apk add --no-cache musl-dev

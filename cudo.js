@@ -8,28 +8,24 @@ const {
 const {
     initCmd,
     compileCmd,
-    deployCmd
+    runCmd
 } = require("./cmd");
 
 const nodeCmd = require('./cmd/node');
 
-(async function main() {
+async function main() {
 
     await yargs(hideBin(process.argv))
         .scriptName("cudo")
         .version()
         .usage('$0 <cmd> [args]')
-        .command('init [contractname]', 'init smart contract template', (yargs) => {
-            yargs.positional('contractname', {
-                    type: 'string',
-                    default: 'contract1',
-                    describe: 'smart contract name'
-                })
+        .command('init', 'create sample project', (yargs) => {
+            yargs
                 .option('dir', {
                     alias: 'd',
                     type: 'string',
                     default: '.',
-                    description: 'smart contracs directory'
+                    description: 'project directory'
                 })
         }, initCmd)
         .command('compile [contractname]', 'compile smart contract', (yargs) => {
@@ -40,13 +36,19 @@ const nodeCmd = require('./cmd/node');
             })
         }, compileCmd)
         .command(nodeCmd)
-        .command('deploy [contractname]', 'deploy smart contract', (yargs) => {
-            yargs.positional('contractname', {
+        .command('run [scriptPath]', 'run script', (yargs) => {
+            yargs.positional('scriptPath', {
                 type: 'string',
-                default: 'contract1',
-                describe: 'smart contract name'
+                describe: 'path to script',
             })
-        }, deployCmd)
+        }, runCmd)
         .help()
         .argv
-})();
+}
+
+main()
+    .then(() => process.exit(0))
+    .catch(error => {
+        console.error(error);
+        process.exit(1);
+    });
