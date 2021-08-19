@@ -36,7 +36,7 @@ async function main() {
             })
         }, compileCmd)
         .command(nodeCmd)
-        .command('run [scriptPath]', 'run script', (yargs) => {
+        .command('run [scriptfile]', 'run script', (yargs) => {
             yargs.positional('scriptPath', {
                 type: 'string',
                 describe: 'path to script',
@@ -49,6 +49,6 @@ async function main() {
 main()
     .then(() => process.exit(0))
     .catch(error => {
-        console.error(error);
+        console.error(`${error}`);
         process.exit(1);
     });

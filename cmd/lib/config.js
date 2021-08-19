@@ -6,6 +6,10 @@ let config = {};
 
 const configPath = path.join(process.cwd(), 'cudos.config.js');
 
+async function checkConfig() {
+    const config = await getConfig();
+}
+
 async function getConfig() {
     if (await fsExstra.pathExists(configPath)) {
         config = require(configPath);

@@ -1,17 +1,20 @@
-const fs = require('fs')
+const fs = require('fs');
 const {
-    execCmd
+    execSyncCmd
 } = require("./lib");
 
-function compileCmd(argv) {
-    let scmd = `docker run --rm -v "${process.env.PWD}/${argv.contractname}":/code --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cudo/rust-wasm`;
+const path = require('path');
 
-    if (!fs.existsSync(argv.contractname)) {
+function compileCmd(argv) {
+    let optcmd = `docker run --rm -v "${process.env.PWD}/contracts/${argv.contractname}":/code  --mount type=volume,source="${argv.contractname}_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/rust-optimizer:0.11.3`
+
+    if (!fs.existsSync(`${process.env.PWD}/contracts/${argv.contractname}`)) {
         console.log(`${argv.contractname} does not exist`);
         return
     }
     console.log('compiling...');
-    execCmd(scmd);
+    const r = execSyncCmd(optcmd);
+    console.log(String(r));
 }
 
 module.exports.compileCmd = compileCmd;

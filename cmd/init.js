@@ -8,6 +8,7 @@ const {
 
 async function initCmd(argv) {
 
+    // check for project	
     await fsExstra.copy(
         path.join(getPackageRoot(), "template"), '.'
     )

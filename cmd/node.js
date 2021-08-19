@@ -5,10 +5,15 @@ const {
 
 const path = require('path');
 
+const docker = require('./lib/docker');
+const {
+    getPrivKey
+} = require('./lib/node');
+
 const dockerComposeFile = path.join(__dirname, '..', 'cudos-node.yaml');
 const cudosNodeHomeDir = './cudos_data/node';
 
-const startNode = function(argv) {
+const startNode = async function(argv) {
     execSyncCmd(`docker-compose -f ${dockerComposeFile} up -d`);
 };
 
@@ -17,22 +22,21 @@ const stopNode = function(argv) {
 };
 
 
-// TODO
-const resetNode = function(argv) {
-    execCmd(`docker-compose -f ${dockerComposeFile} run cudos-node serve --home ${cudosNodeHomeDir} -r`);
-};
-
 const statusNode = function(argv) {
-    try {
-        let nStatus = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`);
-        console.log(nStatus.toString());
-    } catch (e) {}
-	console.log('Node is down.');
+    let nStatus = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`);
+    console.log(nStatus.toString());
 };
 
-const keysNode = function(argv) {
-    execCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list`);
+const keysNode = async function(argv) {
+    const keys = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`);
+    console.log(JSON.parse(keys));
+
 };
+
+const _getPrivKey = async function(argv) {
+    const privKey = getPrivKey(argv.user);
+    console.log(String(privKey));
+}
 
 exports.command = 'node';
 exports.describe = 'manage cudo local node';
@@ -40,8 +44,14 @@ exports.describe = 'manage cudo local node';
 exports.builder = (yargs) => {
     yargs.command('start', 'start node', (yargs) => {}, startNode)
         .command('stop', 'stopping node', (yargs) => {}, stopNode)
-        .command('status', 'chece node status', (yargs) => {}, statusNode)
+        .command('status', 'check node status', (yargs) => {}, statusNode)
         .command('keys', 'list keys', (yargs) => {}, keysNode)
+        .command('getpriv [user]', 'get privkey', (yargs) => {
+            yargs.positional('user', {
+                type: 'string',
+                describe: 'account name',
+            })
+        }, _getPrivKey);
 };
 
 exports.handler = function(argv) {}
