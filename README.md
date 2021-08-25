@@ -4,9 +4,10 @@
 cudo <cmd> [args]
 
 Commands:
-  cudo init [contractname]     init smart contract template
+  cudo init                    create sample project
   cudo compile [contractname]  compile smart contract
   cudo node                    manage cudo local node
+  cudo run [scriptfile]        run script
 
 Options:
   --version  Show version number                                       [boolean]
@@ -20,14 +21,16 @@ npm install -g
 Build Docker image
 ```
 # necessary step before we make production ready public cudos repo
-git clone [cudos-node repo]
 docker build -t cudos/node -f cudos-node.Dockerfile .
 ```
 
 ## usage
-### create smart contract project
+### create sample project
+
 ```
-cudo init contractname
+mkdir [project-dir]
+cd [project-dir]
+cudo init
 ```
 
 ### compile
