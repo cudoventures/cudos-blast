@@ -21,7 +21,6 @@ const stopNode = function(argv) {
     execSyncCmd(`docker-compose -f ${dockerComposeFile} down`);
 };
 
-
 const statusNode = function(argv) {
     let nStatus = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`);
     console.log(nStatus.toString());

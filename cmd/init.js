@@ -5,7 +5,6 @@ const {
     getPackageRoot
 } = require('./lib/packageInfo');
 
-
 async function initCmd(argv) {
 
     // check for project	
@@ -13,6 +12,5 @@ async function initCmd(argv) {
         path.join(getPackageRoot(), "template"), '.'
     )
 }
-
 
 module.exports.initCmd = initCmd;

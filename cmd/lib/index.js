@@ -3,7 +3,6 @@ const {
     execSync
 } = require("child_process");
 
-
 const math_1 = require("@cosmjs/math");
 const proto_signing_1 = require("@cosmjs/proto-signing");
 
