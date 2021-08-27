@@ -5,9 +5,10 @@ const path = require('path')
 const fs = require('fs');
 const vm = require('vm');
 
-const {getContractFactory} = require('./lib/contract');
+const {getContractFactory, getContractFromAddress} = require('./lib/contract');
 
 global.getContractFactory = getContractFactory;
+global.getContractFromAddress = getContractFromAddress;
 
 async function runCmd(argv) {
 
