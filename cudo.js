@@ -8,7 +8,8 @@ const {
 const {
     initCmd,
     compileCmd,
-    runCmd
+    runCmd,
+    testCmd
 } = require("./cmd");
 
 const nodeCmd = require('./cmd/node');
@@ -42,6 +43,7 @@ async function main() {
                 describe: 'path to script',
             })
         }, runCmd)
+        .command('test', 'run tests', (yargs) => {}, testCmd)
         .help()
         .argv
 }
