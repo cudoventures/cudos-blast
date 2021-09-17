@@ -29,18 +29,12 @@ async function main() {
                     description: 'project directory'
                 })
         }, initCmd)
-        .command('compile [contractname]', 'Compiles one or more smart contracts. Example usage: \ncudo compile contractName\ncudo compile contractName1 contractName2 contractName3', (yargs) => {
-            yargs.positional('contractname', {
+        .command('compile [contractsFolderName]', 'Compiles in alphabetical order the smart contracts in the specified contracts folder(by default: workspace/contracts). \n Please note that your contracts have to be in the [workspace] folder. \n If you decide to change the default name - you need to change the workspace Cargo.toml file to point to the your folder name. \n Example usage: cudo compile myContractsFolderName.', (yargs) => {
+            yargs.positional('contractsFolderName', {
                 type: 'string',
-                describe: 'The smart contract to compile name',
+                default: 'contracts',
+                describe: 'The folder in which the smart contracts are located',
             })
-
-            // yargs.option("contracts", {
-            //     type: 'string',
-            //     array: true,
-            //     describe: 'Array of contracts to compile.\nEx: cudo compile --many contract1 contract2 contract3'
-            // })
-
         }, compileCmd)
         .command(nodeCmd)
         .command('run [scriptFilePath]', 'run script', (yargs) => {
