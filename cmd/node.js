@@ -12,20 +12,20 @@ const dockerComposeFile = path.join(__dirname, '..', 'cudos-node.yaml');
 const cudosNodeHomeDir = './cudos_data/node';
 
 const startNode = async function (argv) {
-    execSyncCmd(`docker-compose -f ${dockerComposeFile} up -d`);
+    execSyncCmd(`docker-compose -f ${dockerComposeFile} up -d`, { stdio: 'inherit' });
 };
 
 const stopNode = function (argv) {
-    execSyncCmd(`docker-compose -f ${dockerComposeFile} down`);
+    execSyncCmd(`docker-compose -f ${dockerComposeFile} down`, { stdio: 'inherit' });
 };
 
 const statusNode = function (argv) {
-    let nStatus = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`);
+    let nStatus = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`, { stdio: 'inherit' });
     console.log(nStatus.toString());
 };
 
 const keysNode = async function (argv) {
-    const keys = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`);
+    const keys = execSyncCmd(`docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`, { stdio: 'inherit' });
     console.log(JSON.parse(keys));
 
 };
