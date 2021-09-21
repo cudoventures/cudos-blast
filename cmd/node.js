@@ -4,10 +4,6 @@ const {
 
 const path = require('path');
 
-const {
-    getPrivKey
-} = require('./lib/node');
-
 const dockerComposeFile = path.join(__dirname, '..', 'docker-compose.yaml');
 const cudosNodeHomeDir = './cudos_data/node';
 
@@ -29,14 +25,21 @@ const statusNode = function () {
 };
 
 const keysNode = async function () {
-    const keys = execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`, { stdio: 'inherit' });
-    console.log(JSON.parse(keys));
-
+    try {
+        execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`, { stdio: 'inherit' });
+    }
+    catch {
+        console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
+    }
 };
 
 const _getPrivKey = async function (argv) {
-    const privKey = getPrivKey(argv.user);
-    console.log(String(privKey));
+    try {
+        execSyncCmd(`yes y | docker-compose -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys export --unsafe --unarmored-hex ${argv.user}`, { stdio: 'inherit' });
+    }
+    catch (ex) {
+        console.log("Could not export private key, is your node online? Execute 'cudo node status' for more info")
+    }
 }
 
 exports.command = 'node';
