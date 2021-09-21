@@ -12,7 +12,7 @@ const dockerComposeFile = path.join(__dirname, '..', 'docker-compose.yaml');
 const cudosNodeHomeDir = './cudos_data/node';
 
 const startNode = async function () {
-    execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} up -d`, { stdio: 'inherit' });
+    execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} up`, { stdio: 'inherit' });
 };
 
 const stopNode = function () {
@@ -20,7 +20,12 @@ const stopNode = function () {
 };
 
 const statusNode = function () {
-    execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`, { stdio: 'inherit' });
+    try {
+        execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`, { stdio: 'inherit' });
+        console.log("Node is online!");
+    } catch (ex) {
+        console.log("Node is offline!");
+    }
 };
 
 const keysNode = async function () {
