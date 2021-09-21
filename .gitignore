@@ -1,3 +1,4 @@
 node_modules/
+cudos_data/
 .vscode
 template/**/artifacts/
