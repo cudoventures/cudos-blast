@@ -7,9 +7,12 @@
         "cudo": "./cudo.js"
     },
     "dependencies": {
-        "@cosmjs/cosmwasm-stargate": "^0.25.0",
-        "@cosmjs/proto-signing": "^0.25.0",
-        "@cosmjs/stargate": "^0.25.0",
+        "@cosmjs/cosmwasm-stargate": "^0.25.6",
+        "@cosmjs/proto-signing": "0.25.6",
+        "@cosmjs/stargate": "0.25.6",
+        "bech32": "^2.0.0",
+        "bip32": "^2.0.6",
+        "bip39": "^3.0.4",
         "chai": "^4.3.4",
         "dockerode": "^3.3.0",
         "dockerode-compose": "^1.2.1",
@@ -19,6 +22,7 @@
         "minimatch": "3.0.4",
         "mkdirp": "1.0.4",
         "mocha": "^9.1.1",
+        "secp256k1": "^4.0.2",
         "yargs": "^17.0.1"
     }
 }
