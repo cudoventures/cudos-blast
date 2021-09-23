@@ -2,8 +2,8 @@ const {
     docker
 } = require("./lib");
 
-const startNode = async function() {
-    docker.startNode();
+const startNode = async function(argv) {
+    docker.startNode(argv.daemon);
 };
 
 const stopNode = function() {
@@ -31,7 +31,14 @@ exports.command = 'node';
 exports.describe = 'manage cudo local node';
 
 exports.builder = (yargs) => {
-    yargs.command('start', 'start node', () => {}, startNode)
+    yargs.command('start', 'start node', () => {
+            yargs.option('daemon', {
+                alias: 'd',
+                type: 'boolean',
+                default: false,
+                description: 'Run Node in the background',
+            })
+        }, startNode)
         .command('stop', 'stopping node', () => {}, stopNode)
         .command('status', 'check node status', () => {}, statusNode)
         .command('keys', 'list keys', () => {}, keysNode)

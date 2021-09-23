@@ -33,8 +33,12 @@ const stopNode = function() {
     execute('down');
 }
 
-const startNode = function() {
-    execute('up');
+const startNode = function(inBackground) {
+    if (inBackground) {
+        execute('up -d');
+    } else {
+        execute('up');
+    }
 }
 
 const statusNode = function() {
