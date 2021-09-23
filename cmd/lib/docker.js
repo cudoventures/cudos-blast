@@ -9,9 +9,10 @@ const {
 
 const cudosNodeHomeDir = './cudos_data/node';
 
-const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${getDockerComposeFile()} `
+const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${getDockerComposeFile()} `;
 
-const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `
+const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `;
+const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `;
 
 const doDocker = function(cmd) {
     spawnSync(cmd, {
@@ -27,6 +28,10 @@ const execute = function(arg) {
 
 const executeNode = function(arg) {
     execute(nodeCmd + arg);
+}
+
+const executeStarport = function(arg) {
+    execute(starportCmd + arg);
 }
 
 const stopNode = function() {
@@ -49,9 +54,14 @@ const keysNode = function() {
     executeNode('keys list  --output json');
 }
 
+const fundAccount = function(address, tokens) {
+    executeStarport(`chain faucet ${address} ${tokens}`);
+}
+
 module.exports = {
     stopNode: stopNode,
     startNode: startNode,
     statusNode: statusNode,
-    keysNode: keysNode
+    keysNode: keysNode,
+    fundAccount: fundAccount
 }
