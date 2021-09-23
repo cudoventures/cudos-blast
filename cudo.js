@@ -9,7 +9,8 @@ const {
     initCmd,
     compileCmd,
     runCmd,
-    testCmd
+    testCmd,
+    unitTestCmd,
 } = require("./cmd");
 
 const nodeCmd = require('./cmd/node');
@@ -29,16 +30,11 @@ async function main() {
                     description: 'project directory'
                 })
         }, initCmd)
-        .command('compile [contractsFolderName]', 'Compiles in alphabetical order the smart contracts in the specified contracts folder(by default: workspace/contracts).', (yargs) => {
-            yargs.positional('contractsFolderName', {
-                type: 'string',
-                default: 'contracts',
-                describe: 'The folder in which the smart contracts are located',
-            })
-
-            //TODO - update readme and add below info + additional stuff making it more easy to understand
-            // \n Please note that your contracts have to be in the[workspace] folder.\n If you decide to change the default name - you need to change the workspace Cargo.toml file to point to the your folder name.\n Example usage: cudo compile myContractsFolderName.
-        }, compileCmd)
+        .command('compile',
+            'Compiles in alphabetical order the smart contracts in the workspace',
+            (yargs) => {
+            },
+            compileCmd)
         .command(nodeCmd)
         .command('run [scriptFilePath]', 'run script', (yargs) => {
             yargs.positional('scriptPath', {
@@ -46,7 +42,14 @@ async function main() {
                 describe: 'The path to to the script to run',
             })
         }, runCmd)
-        .command('test', 'run tests', (yargs) => { }, testCmd)
+        .command('test',
+            'run integration tests',
+            (yargs) => { },
+            testCmd)
+        .command('unittest',
+            'runs the unit tests of the smart contracts',
+            (yargs) => { },
+            unitTestCmd)
         .demandCommand(1, "No command specified!") // user must specify atleast one command 
         .recommendCommands()
         .strictCommands() // checks if the command is specified, if its not - user friendly error
