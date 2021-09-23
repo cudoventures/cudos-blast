@@ -18,15 +18,9 @@ function findClosestPackageJson(file) {
     });
 }
 
-function dockerComposeFile() {
-    return findup.sync("cudos-node.yaml", {
-        cwd: getPackageRoot()
-    });
-}
 
 module.exports = {
     findClosestPackageJson: findClosestPackageJson,
     getPackageJsonPath: getPackageJsonPath,
     getPackageRoot: getPackageRoot,
-    dockerComposeFile: dockerComposeFile
 }
