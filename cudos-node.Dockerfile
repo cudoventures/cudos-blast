@@ -7,4 +7,4 @@ WORKDIR ./cudos-node
 
 USER root
 
-CMD ["chain serve"]
+CMD ["chain", "serve"]
