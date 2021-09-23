@@ -28,10 +28,15 @@ const execCmd = function execCmd(cmd) {
 }
 
 const keypair = require('./keypair');
-const {keystore} = require('./keystore');
+const {
+    keystore
+} = require('./keystore');
+
+const docker = require('./docker');
 
 module.exports.execCmd = execCmd;
 module.exports.execSyncCmd = execSync;
 module.exports.calculateFee = calculateFee;
 exports.keypair = keypair;
 exports.keystore = keystore;
+exports.docker = docker;

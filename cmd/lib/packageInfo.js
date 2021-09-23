@@ -2,6 +2,14 @@ const path = require('path');
 const findup = require('find-up');
 
 
+function getDockerComposeFile() {
+    return path.join(getPackageRoot(), 'docker-compose.yaml');
+}
+
+function getDockerEnvFile() {
+    return path.join(getPackageRoot(), '.docker_env');
+}
+
 function getPackageJsonPath() {
     return findClosestPackageJson(__filename);
 }
@@ -23,4 +31,6 @@ module.exports = {
     findClosestPackageJson: findClosestPackageJson,
     getPackageJsonPath: getPackageJsonPath,
     getPackageRoot: getPackageRoot,
+    getDockerComposeFile: getDockerComposeFile,
+    getDockerEnvFile: getDockerEnvFile
 }
