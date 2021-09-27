@@ -38,7 +38,7 @@ async function main() {
             compileCmd)
         .command(nodeCmd)
         .command('run [scriptFilePath]', 'run script', (yargs) => {
-            yargs.positional('scriptPath', {
+            yargs.positional('scriptFilePath', {
                 type: 'string',
                 describe: 'The path to to the script to run',
             })

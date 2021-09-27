@@ -10,7 +10,6 @@ global.getContractFactory = getContractFactory;
 global.getContractFromAddress = getContractFromAddress;
 
 async function runCmd(argv) {
-
     if (argv.scriptFilePath === undefined || argv.scriptFilePath === '') {
         console.error("You must specify a scriptfile path to run. Execute cudo run --help for more info")
         return;
