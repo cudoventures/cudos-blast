@@ -9,8 +9,6 @@ const {
     GasPrice,
 } = require('@cosmjs/stargate');
 
-const FindFiles = require('file-regex');
-
 const {
     calculateFee
 } = require('./index.js');
@@ -58,13 +56,13 @@ const Contract = class {
 
     async init() {
         if (!this.deployed) {
-            let artifacts = path.join(process.cwd(), `contracts/${this.contractname}/artifacts`);
-            let r = await FindFiles(artifacts, /\.wasm$/);
-            if (r.length < 1 || this.deployed) {
-                console.log('Use [compile] command to compile all the contracts in the project.');
-                process.exit(1);
+            this.wasmPath = '';
+            try {
+                this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`);
             }
-            this.wasmPath = path.join(artifacts, r[0].file);
+            catch (ex) {
+                console.error(`Contract with name ${this.contractname} was not found, did you compile it ? \n run cudo --help for more available commands`)
+            }
         }
 
         let {
@@ -74,7 +72,7 @@ const Contract = class {
 
         // check config file
 
-        if (!config.hasOwnProperty('gasPrice')) {
+        if (!this.config.hasOwnProperty('gasPrice')) {
             console.log('Missing [gasPrice] field in the config file.');
             process.exit(1);
         }
@@ -97,7 +95,6 @@ const Contract = class {
 
     async uploadContract() {
         const uploadFee = calculateFee(1_500_000, this.gasPrice);
-
         const wasm = fs.readFileSync(this.wasmPath);
 
         return await this.client.upload(
@@ -119,7 +116,7 @@ const Contract = class {
     }
 
     addAddress(contractAddress) {
-	this.deployed = true;
+        this.deployed = true;
         this.contractAddress = contractAddress
     }
 
