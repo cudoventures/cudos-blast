@@ -1,8 +1,10 @@
+
 async function main() {
-    const TemplateContract = await getContractFactory('alpha', {
+
+    const contract = await getContractFactory('alpha', {
         count: 13
     });
-    const contractAddress = await TemplateContract.deploy();
+    const contractAddress = await contract.deploy();
     console.log(`${contractAddress}`);
 }
 
