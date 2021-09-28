@@ -2,8 +2,8 @@ module.exports.config = {
 	name: 'template',
 	network: 'local',
 	account: {
-		address0: 'cudos1wg3nt76pajxvjzep34msc8e4j5kaxpfc9lua9s',
-		privKey: '4c7f7cc251bfd697f66c7569130ff7a3d60d544bafe448d397108b4906328d56',
+		address0: 'cudos1jr2xpv3ytswesef3g57wq9tjur2z6jxzgqfz5n',
+		privKey: '0b02b4025e4f0416cbc74fdf4d900d00dec9b9d9cd4b9107dd87cf7777361a6b',
 	},
 	gasPrice: '0.000000000025token',
 	// TODO endpoint -> network

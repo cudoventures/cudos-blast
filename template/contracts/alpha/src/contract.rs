@@ -1,12 +1,14 @@
-#[cfg(not(feature = "library"))]
-use cosmwasm_std::entry_point;
-use cosmwasm_std::{to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult};
+use cosmwasm_std::{
+    entry_point, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Response, StdResult,
+};
 
 use crate::error::ContractError;
 use crate::msg::{CountResponse, ExecuteMsg, InstantiateMsg, QueryMsg};
 use crate::state::{State, STATE};
 
-#[cfg_attr(not(feature = "library"), entry_point)]
+// Note, you can use StdResult in some functions where you do not
+// make use of the custom errors
+#[entry_point]
 pub fn instantiate(
     deps: DepsMut,
     _env: Env,
@@ -15,17 +17,15 @@ pub fn instantiate(
 ) -> Result<Response, ContractError> {
     let state = State {
         count: msg.count,
-        owner: info.sender.clone(),
+        owner: info.sender,
     };
     STATE.save(deps.storage, &state)?;
 
-    Ok(Response::new()
-        .add_attribute("method", "instantiate")
-        .add_attribute("owner", info.sender)
-        .add_attribute("count", msg.count.to_string()))
+    Ok(Response::default())
 }
 
-#[cfg_attr(not(feature = "library"), entry_point)]
+// And declare a custom Error variant for the ones where you will want to make use of it
+#[entry_point]
 pub fn execute(
     deps: DepsMut,
     _env: Env,
@@ -44,8 +44,9 @@ pub fn try_increment(deps: DepsMut) -> Result<Response, ContractError> {
         Ok(state)
     })?;
 
-    Ok(Response::new().add_attribute("method", "try_increment"))
+    Ok(Response::default())
 }
+
 pub fn try_reset(deps: DepsMut, info: MessageInfo, count: i32) -> Result<Response, ContractError> {
     STATE.update(deps.storage, |mut state| -> Result<_, ContractError> {
         if info.sender != state.owner {
@@ -54,10 +55,10 @@ pub fn try_reset(deps: DepsMut, info: MessageInfo, count: i32) -> Result<Respons
         state.count = count;
         Ok(state)
     })?;
-    Ok(Response::new().add_attribute("method", "reset"))
+    Ok(Response::default())
 }
 
-#[cfg_attr(not(feature = "library"), entry_point)]
+#[entry_point]
 pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::GetCount {} => to_binary(&query_count(deps)?),

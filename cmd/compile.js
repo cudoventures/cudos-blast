@@ -12,11 +12,12 @@ function compileCmd(argv) {
         return
     }
 
-    let optcmd = `docker run --rm -v "${path.resolve('.')}/":/code  --mount type=volume,source="${argv.contractsFolderName}_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.11.5`
+    let optcmd = `docker run --rm -v "${path.resolve('.')}/":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.11.5`
+    console.log(optcmd)
+
 
     console.log('compiling...');
     const r = execSyncCmd(optcmd, { stdio: 'inherit' });
-    console.log(String(r));
     console.log('compilation finished');
 
 }
