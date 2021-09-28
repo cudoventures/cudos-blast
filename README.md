@@ -37,9 +37,33 @@ cd [project-dir]
 cudo init
 ```
 
+### create account (keypair)
+```
+cudo keys add alice
+```
+
+### fund account
+```
+cudo keys fund alice -t 1000000000ucudos
+```
+```
+cudo keys ls
+[
+  {
+    name: 'alice',
+    addr: 'cudos1n4mxz8qu8zestvkk790ans2klj4qyzutcl550q',
+    balance: { denom: 'ucudos', amount: '1000000000' }
+  },
+  {
+    name: 'juliette',
+    addr: 'cudos1nd8ppd846rhnuulujv7ay0vrppa5md705tvp8d',
+    balance: { denom: 'ucudos', amount: '100043434300' }
+  }
+]
+```
 ### compile
 ```
-cudo compile contractname
+cudo compile
 ```
 
 ### starting and stopping cudos-node
