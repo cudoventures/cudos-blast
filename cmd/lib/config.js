@@ -21,4 +21,19 @@ async function getConfig() {
     return config;
 }
 
-module.exports.getConfig = getConfig;
+async function getEndpoint() {
+    let {
+        config
+    } = await getConfig();
+
+    if (!config.hasOwnProperty('endpoint')) {
+        throw new Error('Missing [endpoint] in the config file.');
+    }
+
+    return config.endpoint;
+}
+
+module.exports = {
+    getConfig: getConfig,
+    getEndpoint: getEndpoint
+}

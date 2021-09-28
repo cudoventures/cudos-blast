@@ -6,8 +6,17 @@ const {
 } = require('./lib');
 
 const list = async function() {
-    const accs = await keystore.list();
-    console.log(accs);
+    try {
+        const accs = await keystore.listWithBalance();
+        console.log(accs);
+    } catch (err) {
+        if (err.code == 'ECONNREFUSED') {
+            const accs = await keystore.list();
+            console.log(accs);
+        } else {
+            console.log(err);
+        }
+    }
 }
 
 const rm = async function(argv) {
