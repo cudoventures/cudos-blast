@@ -4,10 +4,14 @@
 cudo <cmd> [args]
 
 Commands:
-  cudo init                    create sample project
-  cudo compile [contractname]  compile smart contract
-  cudo node                    manage cudo local node
-  cudo run [scriptfile]        run script
+  cudo init                  create sample project
+  cudo compile               Compiles in alphabetical order the smart contracts
+                             in the workspace
+  cudo node                  manage cudo local node
+  cudo run [scriptFilePath]  run script
+  cudo test                  run integration tests
+  cudo unittest              runs the unit tests of the smart contracts
+  cudo keys                  Manage keystore/accounts
 
 Options:
   --version  Show version number                                       [boolean]
