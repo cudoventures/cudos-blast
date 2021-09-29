@@ -146,10 +146,14 @@ cudos test
 ### `cudos node start`
 > Starts a local CUDOS node
 
+- arguments: `none`
+- options: `--daemon` `--d` `runs the node as a daemon and leaves the current console window free and usable` `not required`
+
 **Example:**
 
 ```bash
 cudos node start
+cudos node start --d
 ```
 
 ### `cudos node stop`
@@ -246,16 +250,18 @@ cudos keys ls
 
 #### `cudos keys fund accountName`
 > Fund account with tokens
-- arguments: `accountName` `string`
+- arguments: `accountName` `string` 
 - options: 
-  - `--address, -a` `string` `The address of the account`
+  - `--address, -a` `string` `The address of the account` `not required if accountName is supplied - only if we want to fund account which is not in the keystore`
   - `--tokens, -t` `string` `The amount of tokens to give` `required`
   
   
 **Example:**
 
 ```bash
-cudos keys fund accountName --address=sampleAddress --token=10000000ucudos
+cudos keys fund accountName --token=10000000ucudos
+cudos keys fund --address=yourCosmosAddress --token=10000000ucudos
+
 ```
 
 ---
