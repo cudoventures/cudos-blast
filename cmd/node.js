@@ -5,19 +5,20 @@ const {
 const path = require('path');
 
 const dockerComposeFile = path.join(__dirname, '..', 'docker-compose.yaml');
+const dockerEnvFile = path.join(__dirname, '..', '.docker_env');
 const cudosNodeHomeDir = './cudos_data/node';
 
 const startNode = async function () {
-    execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} up`, { stdio: 'inherit' });
+    execSyncCmd(`docker-compose --env-file=${dockerEnvFile} -f ${dockerComposeFile} up`, { stdio: 'inherit' });
 };
 
 const stopNode = function () {
-    execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} down`, { stdio: 'inherit' });
+    execSyncCmd(`docker-compose --env-file=${dockerEnvFile} -f ${dockerComposeFile} down`, { stdio: 'inherit' });
 };
 
 const statusNode = function () {
     try {
-        execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`, { stdio: 'inherit' });
+        execSyncCmd(`docker-compose --env-file=${dockerEnvFile} -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} status`, { stdio: 'inherit' });
         console.log("Node is online!");
     } catch (ex) {
         console.log("Node is offline!");
@@ -26,7 +27,7 @@ const statusNode = function () {
 
 const keysNode = async function () {
     try {
-        execSyncCmd(`docker-compose --env-file=.docker_env -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`, { stdio: 'inherit' });
+        execSyncCmd(`docker-compose --env-file=${dockerEnvFile} -f ${dockerComposeFile} exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} keys list  --output json`, { stdio: 'inherit' });
     }
     catch {
         console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")

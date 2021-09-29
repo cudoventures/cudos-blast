@@ -2,6 +2,7 @@ const process = require('process');
 
 const fs = require('fs');
 const vm = require('vm');
+const path = require('path');
 
 const { getContractFactory, getContractFromAddress } = require('./lib/contract');
 
@@ -14,12 +15,12 @@ async function runCmd(argv) {
         console.error("You must specify a scriptfile path to run. Execute cudo run --help for more info")
         return;
     }
-    if (!fs.existsSync(`${process.env.PWD}/${argv.scriptfile}`)) {
-        console.log(`Script at location ${argv.scriptFilePath} does not exist. Execute cudo run --help for more info.`);
+    if (!fs.existsSync(`${path.resolve('.')}/${argv.scriptFilePath}`)) {
+        console.log(`Script at location ${path.resolve('.')}/${argv.scriptFilePath} does not exist. Execute cudo run --help for more info.`);
         return;
     }
 
-    const ds = new vm.Script(fs.readFileSync(argv.scriptfile));
+    const ds = new vm.Script(fs.readFileSync(argv.scriptFilePath));
     await ds.runInThisContext();
 }
 

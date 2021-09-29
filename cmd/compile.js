@@ -7,16 +7,15 @@ const path = require('path');
 
 function compileCmd(argv) {
 
-    if (!fs.existsSync(`${path.resolve('.')}/Cargo.toml`)) {
-        console.log(`No Cargo.toml found, are you calling this command from the root of your project? Execute cudo compile --help for more info.`);
+    if (!fs.existsSync(`${path.resolve('.')}/contracts`)) {
+        console.error(`No contracts folder found! Make sure to place your smart contracts in /contracts. \nExecute cudo compile --help for more info.`);
         return
     }
 
-    let optcmd = `docker run --rm -v "${path.resolve('.')}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.11.3`
+    let optcmd = `docker run --rm -v "${path.resolve('.')}/":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.11.5`
 
     console.log('compiling...');
     const r = execSyncCmd(optcmd, { stdio: 'inherit' });
-    console.log(String(r));
     console.log('compilation finished');
 
 }

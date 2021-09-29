@@ -14,7 +14,7 @@ async function getConfig() {
     if (await fsExstra.pathExists(configPath)) {
         config = require(configPath);
     } else {
-        console.log('init config');
+        console.log(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`);
         process.exit(1);
     }
 
