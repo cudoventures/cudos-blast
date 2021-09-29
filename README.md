@@ -11,14 +11,13 @@ _Click on a command for more information and examples._
 
 | Command                                               | Description                                                                                                                            |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| **Main commands**                                       |                                                                                                                                        |
-| [`cudos init`](#cudos-init)                          | Initializes a sample project                                                  |
-| [`cudos compile`](#cudos-compile)                                     | Compiles all the smart contracts in the project in alphabetical order                                                                      |
-| [`cudos unittest`](#cudos-unittest)                   | Runs the unit tests for the smart contracts |
-| [`cudos test`](#cudos-test)                      | Runs the integration tests for the smart contracts                                                                                                |
-| [`cudos node`](#cudos-node)                 | Base command for interacting with a local node. Subcommands offered: 'start', 'stop', 'status'. Click for more info and examples.                                                                                             |
-| [`cudos run`](#cudos-run-scriptFilePath)                 | Runs a custom javascript file. Currently runs the bundled deployment and interaction script files ( see template.scripts folder) | 
-| [`cudos keys`](#cudos-keys)                | Base comand for maneging keystore/accounts. Subcommands: add, remove, fund, list accounts. Click for more info and examples. |                                                                                          |
+| [`cudos init`](#cudos-init)                           | Initializes a sample project                                                   |
+| [`cudos compile`](#cudos-compile)                             | Compiles all the smart contracts in the project in alphabetical order                                                                           |
+| [`cudos unittest`](#cudos-unittest)             | Runs the unit tests for the smart contracts   |
+| [`cudos test`](#cudos-test)                        | Runs the integration tests for the smart contracts                                                                                                    |
+| [`cudos node`](#cudos-node)                  | Base command for interacting with a local node. Subcommands: start, stop, status. Click for more info.                                                                                                |
+| [`cudos run`](#cudos-run)                        |  Runs a custom javascript file - for deployment and interaction                                                                                                 |
+| [`cudos keys`](#cudos-keys)                 | Base comand for maneging keystore/accounts. Subcommands offered: 'add', 'rm', 'fund', 'ls'.                                                                              |
 
 ### Installation
 
@@ -181,7 +180,7 @@ cudos node keys
 
 ---
 
-### `cudos run [scriptFilePath]`
+### `cudos run`
 > Runs a custom javascript file. 
 > Currently in the /scripts directory there are two files: deploy.js and interact.js
 > In the future it should be possibly to supply relevant info by the command line (smart contract name, user adress, etc) as option
