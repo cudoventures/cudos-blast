@@ -20,10 +20,7 @@ const KeyStore = class {
     constructor() {
         this.network = 'cudos';
         this.keyStoreDir = path.join(os.homedir(), '.cudos-cli', 'keystore');
-    }
-
-    async init() {
-        await fsExtra.ensureDir(this.keyStoreDir);
+        fsExtra.ensureDirSync(this.keyStoreDir);
     }
 
     async getAccountPath(name) {
@@ -114,7 +111,6 @@ const KeyStore = class {
 }
 
 const ks = new KeyStore();
-ks.init();
 
 module.exports = {
     keystore: ks

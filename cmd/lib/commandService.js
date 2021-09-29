@@ -10,7 +10,6 @@ const {
 } = require('./packageInfo');
 
 const optimizerVer = '0.11.5';
-const projectRootPath = getProjectRootPath();
 
 const cudosNodeHomeDir = './cudos_data/node';
 
@@ -18,8 +17,6 @@ const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${g
 
 const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `;
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `;
-
-const compileCmd = `docker run --rm -v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:${optimizerVer}`
 
 const doDocker = function(cmd) {
     spawnSync(cmd, {
@@ -66,6 +63,9 @@ const fundAccount = function(address, tokens) {
 }
 
 const compile = function() {
+    const projectRootPath = getProjectRootPath();
+    const compileCmd = `docker run --rm -v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:${optimizerVer}`
+
     console.log(`${projectRootPath}/contracts`);
     if (!fs.existsSync(`${projectRootPath}/contracts`)) {
         throw new Error('No contracts folder found! Make sure to place your smart contracts in /contracts.');

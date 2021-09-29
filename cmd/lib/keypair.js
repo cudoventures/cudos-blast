@@ -7,7 +7,7 @@ const {
 const createHash = require('create-hash');
 
 function createFromMnemonic(mnenonic, hdPath) {
-    if (typeof mnemonic === 'undefined') {
+    if (!mnenonic) {
         const mnemonic = bip39.generateMnemonic(256);
         const privateKey = seedToPrivateKey(mnemonic, hdPath);
         return {

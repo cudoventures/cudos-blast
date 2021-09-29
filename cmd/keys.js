@@ -14,7 +14,7 @@ const list = async function() {
             const accs = await keystore.list();
             console.log(accs);
         } else {
-            console.log(err);
+            console.log(err.message);
         }
     }
 }
@@ -43,11 +43,11 @@ const add = async function(argv) {
 
 
 const fund = async function(argv) {
-    if (typeof argv.name !== 'undefined') {
+    if (argv.name) {
         const addr = await keystore.getAccountAddress(argv.name);
         console.log(`fund user account ${argv.name} ==> ${addr}`);
         commandService.fundAccount(addr, argv.tokens);
-    } else if (typeof argv.address !== 'undefined') {
+    } else if (argv.address) {
         console.log('fund address');
         commandService.fundAccount(argv.address, argv.tokens)
     } else {
