@@ -13,8 +13,8 @@ _Click on a command for more information and examples._
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
 | **Main commands**                                       |                                                                                                                                        |
 | [`cudos init`](#cudos-init)                          | Initializes a sample project                                                  |
-| [`cudos compile`](#cudos-compile)                             | Compiles all the smart contracts in the project in alphabetical order                                                                      |
-| [`cudos unittest`](#cudos-unittest)             | Runs the unit tests for the smart contracts |
+| [`cudos compile`](#cudos-compile)                                     | Compiles all the smart contracts in the project in alphabetical order                                                                      |
+| [`cudos unittest`](#cudos-unittest)                   | Runs the unit tests for the smart contracts |
 | [`cudos test`](#cudos-test)                      | Runs the integration tests for the smart contracts                                                                                                |
 | [`cudos node`](#cudos-node)                 | Base command for interacting with a local node. Subcommands offered: 'start', 'stop', 'status'. Click for more info and examples.                                                                                             |
 | [`cudos run`](#cudos-run-scriptFilePath)                 | Runs a custom javascript file. Currently runs the bundled deployment and interaction script files ( see template.scripts folder) | 
