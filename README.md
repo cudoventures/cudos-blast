@@ -122,7 +122,7 @@ cudos unittest
 
 ### `cudos test`
 
-##### Currently its not working correctly, only for demo purpose !
+`Currently its not working correctly, only for demo purpose !`
 > Runs the integration tests of the smart contracts - by default located in the `integration_test` folder
 > In order for the command to find the tests - please call it from the root of your project.
 
@@ -132,7 +132,7 @@ cudos unittest
 **Example:**
 
 ```bash
-cudos unittest
+cudos test
 ```
 
 ---
