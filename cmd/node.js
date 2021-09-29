@@ -1,27 +1,30 @@
 const {
-    docker
-} = require("./lib");
+    stopNode,
+    startNode,
+    statusNode,
+    keysNode
+} = require("./lib/commandService");
 
-const startNode = async function(argv) {
-    docker.startNode(argv.daemon);
+const startNodeCmd = async function(argv) {
+    startNode(argv.daemon);
 };
 
-const stopNode = function() {
-    docker.stopNode();
+const stopNodeCmd = function() {
+    stopNode();
 };
 
-const statusNode = function() {
+const statusNodeCmd = function() {
     try {
-        docker.statusNode();
+        statusNode();
         console.log("Node is online!");
     } catch (ex) {
         console.log("Node is offline!");
     }
 };
 
-const keysNode = async function() {
+const keysNodeCmd = async function() {
     try {
-        docker.keysNode();
+        keysNode();
     } catch {
         console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
     }
@@ -38,8 +41,8 @@ exports.builder = (yargs) => {
                 default: false,
                 description: 'Run Node in the background',
             })
-        }, startNode)
-        .command('stop', 'stopping node', () => {}, stopNode)
-        .command('status', 'check node status', () => {}, statusNode)
-        .command('keys', 'list keys', () => {}, keysNode)
+        }, startNodeCmd)
+        .command('stop', 'stopping node', () => {}, stopNodeCmd)
+        .command('status', 'check node status', () => {}, statusNodeCmd)
+        .command('keys', 'list keys', () => {}, keysNodeCmd)
 };

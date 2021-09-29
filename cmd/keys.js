@@ -2,7 +2,7 @@ const prompt = require('prompt');
 
 const {
     keystore,
-    docker
+    commandService
 } = require('./lib');
 
 const list = async function() {
@@ -46,10 +46,10 @@ const fund = async function(argv) {
     if (typeof argv.name !== 'undefined') {
         const addr = await keystore.getAccountAddress(argv.name);
         console.log(`fund user account ${argv.name} ==> ${addr}`);
-        docker.fundAccount(addr, argv.tokens);
+        commandService.fundAccount(addr, argv.tokens);
     } else if (typeof argv.address !== 'undefined') {
         console.log('fund address');
-        docker.fundAccount(argv.address, argv.tokens)
+        commandService.fundAccount(argv.address, argv.tokens)
     } else {
         console.log('Provide account name or cudos address.');
     }

@@ -32,11 +32,11 @@ const {
     keystore
 } = require('./keystore');
 
-const docker = require('./docker');
+const commandService = require('./commandService');
 
 module.exports.execCmd = execCmd;
 module.exports.execSyncCmd = execSync;
 module.exports.calculateFee = calculateFee;
 exports.keypair = keypair;
 exports.keystore = keystore;
-exports.docker = docker;
+exports.commandService = commandService;

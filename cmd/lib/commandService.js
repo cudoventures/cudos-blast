@@ -1,11 +1,16 @@
+const fs = require('fs');
 const {
     spawnSync
 } = require("child_process");
 
 const {
     getDockerComposeFile,
-    getDockerEnvFile
+    getDockerEnvFile,
+    getProjectRootPath
 } = require('./packageInfo');
+
+const optimizerVer = '0.11.5';
+const projectRootPath = getProjectRootPath();
 
 const cudosNodeHomeDir = './cudos_data/node';
 
@@ -13,6 +18,8 @@ const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${g
 
 const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `;
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `;
+
+const compileCmd = `docker run --rm -v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:${optimizerVer}`
 
 const doDocker = function(cmd) {
     spawnSync(cmd, {
@@ -58,10 +65,20 @@ const fundAccount = function(address, tokens) {
     executeStarport(`chain faucet ${address} ${tokens}`);
 }
 
+const compile = function() {
+    console.log(`${projectRootPath}/contracts`);
+    if (!fs.existsSync(`${projectRootPath}/contracts`)) {
+        throw new Error('No contracts folder found! Make sure to place your smart contracts in /contracts.');
+    }
+    doDocker(compileCmd);
+
+}
+
 module.exports = {
     stopNode: stopNode,
     startNode: startNode,
     statusNode: statusNode,
     keysNode: keysNode,
-    fundAccount: fundAccount
+    fundAccount: fundAccount,
+    compile: compile
 }
