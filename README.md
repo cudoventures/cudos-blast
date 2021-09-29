@@ -15,9 +15,9 @@ _Click on a command for more information and examples._
 | [`cudos compile`](#cudos-compile)                             | Compiles all the smart contracts in the project in alphabetical order                                                                           |
 | [`cudos unittest`](#cudos-unittest)             | Runs the unit tests for the smart contracts   |
 | [`cudos test`](#cudos-test)                        | Runs the integration tests for the smart contracts                                                                                                    |
-| [`cudos node`](#cudos-node)                  | Base command for interacting with a local node. Subcommands: start, stop, status. Click for more info.                                                                                                |
+| [`cudos node`](#cudos-node)                  | Base command for interacting with a local node. Subcommands: 'start', 'stop', 'status', 'keys'.                                                                                               |
 | [`cudos run`](#cudos-run)                        |  Runs a custom javascript file - for deployment and interaction                                                                                                 |
-| [`cudos keys`](#cudos-keys)                 | Base comand for maneging keystore/accounts. Subcommands offered: 'add', 'rm', 'fund', 'ls'.                                                                              |
+| [`cudos keys`](#cudos-keys)                 | Base comand for maneging keystore/accounts. Subcommands: 'add', 'rm', 'fund', 'ls'.                                                                              |
 
 ### Installation
 
