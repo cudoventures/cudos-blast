@@ -1,26 +1,24 @@
-const process = require('process');
+const fs = require('fs')
+const vm = require('vm')
+const path = require('path')
 
-const fs = require('fs');
-const vm = require('vm');
-const path = require('path');
+const { getContractFactory, getContractFromAddress } = require('./lib/contract')
 
-const { getContractFactory, getContractFromAddress } = require('./lib/contract');
+global.getContractFactory = getContractFactory
+global.getContractFromAddress = getContractFromAddress
 
-global.getContractFactory = getContractFactory;
-global.getContractFromAddress = getContractFromAddress;
+async function runCmd (argv) {
+  if (argv.scriptFilePath === undefined || argv.scriptFilePath === '') {
+    console.error('You must specify a scriptfile path to run. Execute cudo run --help for more info')
+    return
+  }
+  if (!fs.existsSync(`${path.resolve('.')}/${argv.scriptFilePath}`)) {
+    console.log(`Script at location ${path.resolve('.')}/${argv.scriptFilePath} does not exist. Execute cudo run --help for more info.`)
+    return
+  }
 
-async function runCmd(argv) {
-    if (argv.scriptFilePath === undefined || argv.scriptFilePath === '') {
-        console.error("You must specify a scriptfile path to run. Execute cudo run --help for more info")
-        return;
-    }
-    if (!fs.existsSync(`${path.resolve('.')}/${argv.scriptFilePath}`)) {
-        console.log(`Script at location ${path.resolve('.')}/${argv.scriptFilePath} does not exist. Execute cudo run --help for more info.`);
-        return;
-    }
-
-    const ds = new vm.Script(fs.readFileSync(argv.scriptFilePath));
-    await ds.runInThisContext();
+  const ds = new vm.Script(fs.readFileSync(argv.scriptFilePath))
+  await ds.runInThisContext()
 }
 
-module.exports.runCmd = runCmd;
+module.exports.runCmd = runCmd
