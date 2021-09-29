@@ -73,7 +73,7 @@ exports.builder = (yargs) => {
         alias: 't',
         type: 'string',
         required: true,
-        describe: 'amount of tokens in the format 10000000ucudos'
+        describe: 'amount of tokens in the format 10000000acudos'
       })
     }, fund)
     .command('ls', 'List all accounts in the keystore', () => { }, list)

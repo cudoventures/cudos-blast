@@ -88,7 +88,7 @@ const KeyStore = class {
 
     await accInfo.reduce(async (memo, acc) => {
       await memo
-      const b = await client.getBalance(acc.addr, 'ucudos')
+      const b = await client.getBalance(acc.addr, 'acudos')
       acc.balance = b
       _accInfo.push(acc)
     }, undefined)

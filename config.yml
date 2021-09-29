@@ -1,18 +1,18 @@
 version: 1
 accounts:
   - name: user1
-    coins: [ "1000000000000000000000ucudos", "1000000000stake" ]
+    coins: [ "1000000000000000000000acudos", "1000000000stake" ]
   - name: user2
-    coins: [ "1000000000000000000000ucudos" ]
+    coins: [ "1000000000000000000000acudos" ]
   - name: faucet
-    coins: [ "1000000000000000000000000000ucudos" ]
+    coins: [ "1000000000000000000000000000acudos" ]
 validator:
   name: user1
   staked: "100000000stake"
 faucet:
   name: faucet
-  coins: ["10000000000ucudos"]
-  coins_max: ["20000000000ucudos"]
+  coins: ["10000000000acudos"]
+  coins_max: ["20000000000acudos"]
   port: 4500
 genesis:
   app_state:

@@ -44,7 +44,7 @@ cudo keys add alice
 
 ### fund account
 ```
-cudo keys fund alice -t 1000000000ucudos
+cudo keys fund alice -t 1000000000acudos
 ```
 ```
 cudo keys ls
@@ -52,12 +52,12 @@ cudo keys ls
   {
     name: 'alice',
     addr: 'cudos1n4mxz8qu8zestvkk790ans2klj4qyzutcl550q',
-    balance: { denom: 'ucudos', amount: '1000000000' }
+    balance: { denom: 'acudos', amount: '1000000000' }
   },
   {
     name: 'juliette',
     addr: 'cudos1nd8ppd846rhnuulujv7ay0vrppa5md705tvp8d',
-    balance: { denom: 'ucudos', amount: '100043434300' }
+    balance: { denom: 'acudos', amount: '100043434300' }
   }
 ]
 ```
