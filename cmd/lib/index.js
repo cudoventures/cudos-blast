@@ -27,6 +27,16 @@ const execCmd = function execCmd(cmd) {
         });
 }
 
+const keypair = require('./keypair');
+const {
+    keystore
+} = require('./keystore');
+
+const commandService = require('./commandService');
+
 module.exports.execCmd = execCmd;
 module.exports.execSyncCmd = execSync;
 module.exports.calculateFee = calculateFee;
+exports.keypair = keypair;
+exports.keystore = keystore;
+exports.commandService = commandService;

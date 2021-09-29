@@ -14,6 +14,7 @@ const {
 } = require("./cmd");
 
 const nodeCmd = require('./cmd/node');
+const keysCmd = require('./cmd/keys');
 
 async function main() {
 
@@ -37,7 +38,7 @@ async function main() {
             compileCmd)
         .command(nodeCmd)
         .command('run [scriptFilePath]', 'run script', (yargs) => {
-            yargs.positional('scriptPath', {
+            yargs.positional('scriptFilePath', {
                 type: 'string',
                 describe: 'The path to to the script to run',
             })
@@ -50,6 +51,7 @@ async function main() {
             'runs the unit tests of the smart contracts',
             (yargs) => { },
             unitTestCmd)
+        .command(keysCmd)
         .demandCommand(1, "No command specified!") // user must specify atleast one command 
         .recommendCommands()
         .strictCommands() // checks if the command is specified, if its not - user friendly error

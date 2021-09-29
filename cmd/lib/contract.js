@@ -20,6 +20,10 @@ const {
     getConfig
 } = require('./config');
 
+const {
+    keystore
+} = require('./keystore');
+
 async function getContractSigner(contractAddress) {
     const client = await getClient();
     return await client.getContract(contractAddress);
@@ -29,15 +33,20 @@ async function getClient() {
     let {
         config
     } = await getConfig();
-    this.config = config;
+    let wallet;
 
     if (!config.hasOwnProperty('account')) {
         console.log('Missing [account] in the config file.');
         process.exit(1);
     }
 
-    let privKey = Buffer.from(config.account.privKey, 'hex');
-    let wallet = await DirectSecp256k1Wallet.fromKey(privKey, 'cudos');
+    if (!config.account.hasOwnProperty('name')) {
+        console.log('Provide account name in the cudos.config.js file.');
+	process.exit(1);
+    }
+
+    let name = config.account.name;
+    wallet = await keystore.getSigner(name);
 
     if (!config.hasOwnProperty('endpoint')) {
         console.log('Missing [endpoint] in the config file.');
@@ -79,6 +88,7 @@ const Contract = class {
         this.gasPrice = GasPrice.fromString(config.gasPrice);
 
         this.client = await getClient();
+	this.config.account.address0 = await keystore.getAccountAddress(config.account.name);
 
         return this;
     }

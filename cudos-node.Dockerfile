@@ -5,6 +5,8 @@ RUN git clone https://github.com/CudoVentures/cudos-node.git
 
 WORKDIR ./cudos-node
 
+COPY ./config.yml ./config.yaml
+
 USER root
 
 CMD ["chain", "serve"]

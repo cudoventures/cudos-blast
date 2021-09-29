@@ -18,7 +18,7 @@ async function initCmd(argv) {
         argv.dir
     )
 
-    console.log(`Success! Sample project initialized in /${argv.dir !== '.' ? argv.dir : process.cwd()}`)
+    console.log(`Success! Sample project initialized in ${argv.dir !== '.' ? argv.dir : process.cwd()}`)
 
 }
 
