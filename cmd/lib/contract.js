@@ -72,7 +72,7 @@ const Contract = class {
 
         // check config file
 
-        if (!this.config.hasOwnProperty('gasPrice')) {
+        if (!config.hasOwnProperty('gasPrice')) {
             console.log('Missing [gasPrice] field in the config file.');
             process.exit(1);
         }

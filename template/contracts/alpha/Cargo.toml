@@ -1,7 +1,6 @@
 [package]
 name = "alpha"
 version = "0.1.0"
-authors = ["infra1515 <lyubomir.yonchev@limechain.tech>"]
 edition = "2018"
 
 exclude = [
