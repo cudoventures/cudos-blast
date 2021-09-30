@@ -1,11 +1,11 @@
---- node_modules/@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient.js	2021-08-26 14:05:40.290936121 +0300
-+++ signingcosmwasmclient.js	2021-08-26 14:08:50.623151369 +0300
+--- signingcosmwasmclient.js	2021-09-30 14:27:36.847180161 +0300
++++ node_modules/@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient.js	2021-09-30 14:26:58.033389436 +0300
 @@ -76,7 +76,7 @@
          return new SigningCosmWasmClient(undefined, signer, options);
      }
      /** Uploads code and returns a receipt, including the code ID */
--    async upload(senderAddress, wasmCode, meta = {}, memo = "") {
-+    async upload(senderAddress, wasmCode, fee, meta = {}, memo = "") {
+-    async upload(senderAddress, wasmCode, fee, meta = {}, memo = "") {
++    async upload(senderAddress, wasmCode, meta = {}, memo = "") {
          const source = meta.source || "";
          const builder = prepareBuilder(meta.builder);
          const compressed = pako_1.default.gzip(wasmCode, { level: 9 });
@@ -13,8 +13,8 @@
                  builder: builder,
              }),
          };
--        const result = await this.signAndBroadcast(senderAddress, [storeCodeMsg], this.fees.upload, memo);
-+        const result = await this.signAndBroadcast(senderAddress, [storeCodeMsg], fee, memo);
+-        const result = await this.signAndBroadcast(senderAddress, [storeCodeMsg], fee, memo);
++        const result = await this.signAndBroadcast(senderAddress, [storeCodeMsg], this.fees.upload, memo);
          if (stargate_1.isBroadcastTxFailure(result)) {
              throw new Error(createBroadcastTxErrorMessage(result));
          }
@@ -22,8 +22,8 @@
              transactionHash: result.transactionHash,
          };
      }
--    async instantiate(senderAddress, codeId, msg, label, options = {}) {
-+    async instantiate(senderAddress, codeId, msg, label, fee, options = {}) {
+-    async instantiate(senderAddress, codeId, msg, label, fee, options = {}) {
++    async instantiate(senderAddress, codeId, msg, label, options = {}) {
          const instantiateContractMsg = {
              typeUrl: "/cosmwasm.wasm.v1beta1.MsgInstantiateContract",
              value: tx_4.MsgInstantiateContract.fromPartial({
@@ -31,8 +31,33 @@
                  admin: options.admin,
              }),
          };
--        const result = await this.signAndBroadcast(senderAddress, [instantiateContractMsg], this.fees.init, options.memo);
-+        const result = await this.signAndBroadcast(senderAddress, [instantiateContractMsg], fee, options.memo);
+-        const result = await this.signAndBroadcast(senderAddress, [instantiateContractMsg], fee, options.memo);
++        const result = await this.signAndBroadcast(senderAddress, [instantiateContractMsg], this.fees.init, options.memo);
          if (stargate_1.isBroadcastTxFailure(result)) {
              throw new Error(createBroadcastTxErrorMessage(result));
          }
+@@ -183,7 +183,7 @@
+             transactionHash: result.transactionHash,
+         };
+     }
+-    async execute(senderAddress, contractAddress, msg, fee, memo = "", funds) {
++    async execute(senderAddress, contractAddress, msg, memo = "", funds) {
+         const executeContractMsg = {
+             typeUrl: "/cosmwasm.wasm.v1beta1.MsgExecuteContract",
+             value: tx_4.MsgExecuteContract.fromPartial({
+@@ -193,7 +193,7 @@
+                 funds: [...(funds || [])],
+             }),
+         };
+-        const result = await this.signAndBroadcast(senderAddress, [executeContractMsg], fee, memo);
++        const result = await this.signAndBroadcast(senderAddress, [executeContractMsg], this.fees.exec, memo);
+         if (stargate_1.isBroadcastTxFailure(result)) {
+             throw new Error(createBroadcastTxErrorMessage(result));
+         }
+@@ -320,4 +320,4 @@
+     }
+ }
+ exports.SigningCosmWasmClient = SigningCosmWasmClient;
+-//# sourceMappingURL=signingcosmwasmclient.js.map
++//# sourceMappingURL=signingcosmwasmclient.js.map
+\ No newline at end of file
