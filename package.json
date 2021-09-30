@@ -6,6 +6,9 @@
     "bin": {
         "cudos": "./cudos.js"
     },
+    "scripts": {
+      "test": "echo Add tests"  
+    },
     "dependencies": {
         "@cosmjs/cosmwasm-stargate": "^0.25.6",
         "@cosmjs/proto-signing": "0.25.6",
