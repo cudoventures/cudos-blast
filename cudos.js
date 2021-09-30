@@ -19,7 +19,7 @@ const keysCmd = require('./cmd/keys');
 async function main() {
 
     await yargs(hideBin(process.argv))
-        .scriptName("cudo")
+        .scriptName("cudos")
         .version()
         .usage('$0 <cmd> [args]')
         .command('init', 'create sample project', (yargs) => {

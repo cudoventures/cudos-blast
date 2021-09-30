@@ -1,10 +1,10 @@
 {
-    "name": "cudo-framework",
+    "name": "cudos-cli",
     "version": "0.8.1",
     "description": "",
-    "main": "cudo.js",
+    "main": "cudos.js",
     "bin": {
-        "cudo": "./cudo.js"
+        "cudos": "./cudos.js"
     },
     "dependencies": {
         "@cosmjs/cosmwasm-stargate": "^0.25.6",
