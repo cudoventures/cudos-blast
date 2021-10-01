@@ -1,13 +1,13 @@
 const {
     SigningCosmWasmClient
-} = require('@cosmjs/cosmwasm-stargate');
+} = require('@nikolakterziev/cudosjs');
 
 const {
     DirectSecp256k1Wallet
-} = require('@cosmjs/proto-signing');
+} = require('@nikolakterziev/cudosjs');
 const {
     GasPrice,
-} = require('@cosmjs/stargate');
+} = require('@nikolakterziev/cudosjs');
 
 const {
     calculateFee

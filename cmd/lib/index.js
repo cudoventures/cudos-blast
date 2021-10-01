@@ -3,8 +3,8 @@ const {
     execSync
 } = require("child_process");
 
-const math_1 = require("@cosmjs/math");
-const proto_signing_1 = require("@cosmjs/proto-signing");
+const math_1 = require("@nikolakterziev/cudosjs");
+const proto_signing_1 = require("@nikolakterziev/cudosjs");
 
 const calculateFee = function calculateFee(gasLimit, {
     denom,

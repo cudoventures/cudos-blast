@@ -7,9 +7,7 @@
         "cudos": "./cudos.js"
     },
     "dependencies": {
-        "@cosmjs/cosmwasm-stargate": "^0.25.6",
-        "@cosmjs/proto-signing": "0.25.6",
-        "@cosmjs/stargate": "0.25.6",
+        "@nikolakterziev/cudosjs": "0.0.13",
         "bech32": "^2.0.0",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
