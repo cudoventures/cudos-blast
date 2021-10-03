@@ -1,39 +1,39 @@
-const fsExstra = require('fs-extra');
-const process = require('process');
-const path = require('path');
+/* eslint no-prototype-builtins: "off" */
 
-let config = {};
+const fsExstra = require('fs-extra')
+const process = require('process')
+const path = require('path')
 
-const configPath = path.join(process.cwd(), 'cudos.config.js');
+let config = {}
 
-async function checkConfig() {
-    const config = await getConfig();
+const configPath = path.join(process.cwd(), 'cudos.config.js')
+
+// async function checkConfig () {
+//   const config = await getConfig()
+// }
+
+async function getConfig () {
+  if (await fsExstra.pathExists(configPath)) {
+    config = require(configPath)
+  } else {
+    console.log(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
+    process.exit(1)
+  }
+
+  return config
 }
 
-async function getConfig() {
-    if (await fsExstra.pathExists(configPath)) {
-        config = require(configPath);
-    } else {
-        console.log(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`);
-        process.exit(1);
-    }
+async function getEndpoint () {
+  const { config } = await getConfig()
 
-    return config;
-}
+  if (!config.hasOwnProperty('endpoint')) {
+    throw new Error('Missing [endpoint] in the config file.')
+  }
 
-async function getEndpoint() {
-    let {
-        config
-    } = await getConfig();
-
-    if (!config.hasOwnProperty('endpoint')) {
-        throw new Error('Missing [endpoint] in the config file.');
-    }
-
-    return config.endpoint;
+  return config.endpoint
 }
 
 module.exports = {
-    getConfig: getConfig,
-    getEndpoint: getEndpoint
+  getConfig: getConfig,
+  getEndpoint: getEndpoint
 }
