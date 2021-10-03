@@ -1,14 +1,14 @@
-const { stopNode, startNode, statusNode, keysNode } = require('./lib/commandService')
+import { stopNode, startNode, statusNode, keysNode } from './lib/commandService'
 
-const startNodeCmd = async function (argv) {
+async function startNodeCmd (argv) {
   startNode(argv.daemon)
 }
 
-const stopNodeCmd = function () {
+function stopNodeCmd () {
   stopNode()
 }
 
-const statusNodeCmd = function () {
+function statusNodeCmd () {
   try {
     statusNode()
     console.log('Node is online!')
@@ -17,7 +17,7 @@ const statusNodeCmd = function () {
   }
 }
 
-const keysNodeCmd = async function () {
+async function keysNodeCmd () {
   try {
     keysNode()
   } catch {

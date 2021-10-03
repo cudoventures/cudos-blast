@@ -1,6 +1,6 @@
-const fs = require('fs')
-const { spawnSync } = require('child_process')
-const { getDockerComposeFile, getDockerEnvFile, getProjectRootPath } = require('./packageInfo')
+import fs from 'fs'
+import { spawnSync } from 'child_process'
+import { getDockerComposeFile, getDockerEnvFile, getProjectRootPath } from './packageInfo'
 
 const optimizerVer = '0.11.5'
 
@@ -11,48 +11,45 @@ const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${g
 const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
 
-const doDocker = function (cmd) {
+function doDocker(cmd) {
   spawnSync(cmd, { stdio: 'inherit', shell: true })
 }
 
-const execute = function (arg) {
+function execute(arg) {
   const cmd = dockerComposeCmd + arg
   doDocker(cmd)
 }
 
-const executeNode = function (arg) {
+function executeNode(arg) {
   execute(nodeCmd + arg)
 }
 
-const executeStarport = function (arg) {
+function executeStarport(arg) {
   execute(starportCmd + arg)
 }
 
-const stopNode = function () {
+export function stopNode() {
   execute('down')
 }
 
-const startNode = function (inBackground) {
-  if (inBackground) {
-    execute('up -d')
-  } else {
-    execute('up')
-  }
+export function startNode(inBackground) {
+  let cmd = inBackground ? 'up -d' : 'up'
+  execute(cmd)
 }
 
-const statusNode = function () {
+export function statusNode() {
   executeNode('status')
 }
 
-const keysNode = function () {
+export function keysNode() {
   executeNode('keys list  --output json')
 }
 
-const fundAccount = function (address, tokens) {
+export function fundAccount(address, tokens) {
   executeStarport(`chain faucet ${address} ${tokens}`)
 }
 
-const compile = function () {
+export function compile() {
   const projectRootPath = getProjectRootPath()
   const compileCmd = `docker run --rm -v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:${optimizerVer}`
 
@@ -61,13 +58,4 @@ const compile = function () {
     throw new Error('No contracts folder found! Make sure to place your smart contracts in /contracts.')
   }
   doDocker(compileCmd)
-}
-
-module.exports = {
-  stopNode: stopNode,
-  startNode: startNode,
-  statusNode: statusNode,
-  keysNode: keysNode,
-  fundAccount: fundAccount,
-  compile: compile
 }

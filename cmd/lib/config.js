@@ -1,8 +1,8 @@
 /* eslint no-prototype-builtins: "off" */
 
-const fsExstra = require('fs-extra')
-const process = require('process')
-const path = require('path')
+import fsExstra from 'fs-extra'
+import process from 'process'
+import path from 'path'
 
 let config = {}
 
@@ -12,7 +12,7 @@ const configPath = path.join(process.cwd(), 'cudos.config.js')
 //   const config = await getConfig()
 // }
 
-async function getConfig () {
+export async function getConfig () {
   if (await fsExstra.pathExists(configPath)) {
     config = require(configPath)
   } else {
@@ -23,7 +23,7 @@ async function getConfig () {
   return config
 }
 
-async function getEndpoint () {
+export async function getEndpoint () {
   const { config } = await getConfig()
 
   if (!config.hasOwnProperty('endpoint')) {
@@ -31,9 +31,4 @@ async function getEndpoint () {
   }
 
   return config.endpoint
-}
-
-module.exports = {
-  getConfig: getConfig,
-  getEndpoint: getEndpoint
 }

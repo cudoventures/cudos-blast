@@ -1,6 +1,6 @@
-const Mocha = require('mocha')
-const path = require('path')
-const fs = require('fs')
+import Mocha from 'mocha'
+import path from 'path'
+import fs from 'fs'
 
 const mocha = new Mocha()
 
@@ -20,9 +20,7 @@ function runTest () {
   })
 }
 
-async function testCmd (argv) {
+export async function testCmd (argv) {
   console.log('run tests')
   runTest()
 }
-
-module.exports.testCmd = testCmd

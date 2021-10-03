@@ -1,8 +1,8 @@
-const prompt = require('prompt')
+import prompt from 'prompt'
 
-const { keystore, commandService } = require('./lib')
+import { keystore, commandService } from './lib'
 
-const list = async function () {
+async function list () {
   try {
     const accs = await keystore.listWithBalance()
     console.log(accs)
@@ -16,7 +16,7 @@ const list = async function () {
   }
 }
 
-const rm = async function (argv) {
+async function rm (argv) {
   const name = argv.name
   if (argv.yes) {
     await keystore.removeAccount(name)
@@ -30,13 +30,13 @@ const rm = async function (argv) {
   }
 }
 
-const add = async function (argv) {
+async function add (argv) {
   const acc = await keystore.createNewAccount(argv.name)
   console.log(`Account ${argv.name} is created. ${acc.address}`)
   console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
 }
 
-const fund = async function (argv) {
+async function fund (argv) {
   if (argv.name) {
     const addr = await keystore.getAccountAddress(argv.name)
     console.log(`fund user account ${argv.name} ==> ${addr}`)

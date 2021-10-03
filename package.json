@@ -3,6 +3,7 @@
     "version": "0.8.1",
     "description": "",
     "main": "cudos.js",
+    "type": "module",
     "bin": {
         "cudos": "./cudos.js"
     },
@@ -27,6 +28,11 @@
         "yargs": "^17.0.1"
     },
     "standard": {
-        "globals": ["describe","getContractFactory","getContractFromAddress", "expect"]
+        "globals": [
+            "describe",
+            "getContractFactory",
+            "getContractFromAddress",
+            "expect"
+        ]
     }
 }

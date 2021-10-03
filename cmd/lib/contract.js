@@ -1,16 +1,16 @@
 /* eslint no-prototype-builtins: "off" */
-const { SigningCosmWasmClient } = require('@cosmjs/cosmwasm-stargate')
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
 
-const { GasPrice } = require('@cosmjs/stargate')
+import { GasPrice } from '@cosmjs/stargate'
 
-const { calculateFee } = require('./index.js')
+import { calculateFee } from './index.js'
 
-const path = require('path')
-const fs = require('fs')
+import path from 'path'
+import fs from 'fs'
 
-const { getConfig } = require('./config')
+import { getConfig } from './config'
 
-const { keystore } = require('./keystore')
+import { keystore } from './keystore'
 
 // async function getContractSigner (contractAddress) {
 //   const client = await getClient()
@@ -111,20 +111,15 @@ const Contract = class {
   }
 }
 
-async function getContractFactory (contractname, initMsg) {
+export async function getContractFactory (contractname, initMsg) {
   const contract = new Contract(contractname, initMsg)
   await contract.init()
   return contract
 }
 
-async function getContractFromAddress (contractAddress) {
+export async function getContractFromAddress (contractAddress) {
   const contract = new Contract()
   contract.addAddress(contractAddress)
   await contract.init()
   return contract
-}
-
-module.exports = {
-  getContractFactory: getContractFactory,
-  getContractFromAddress: getContractFromAddress
 }

@@ -1,6 +1,6 @@
-const { compile } = require('./lib/commandService')
+import { compile } from './lib/commandService'
 
-function compileCmd (argv) {
+export function compileCmd (argv) {
   try {
     compile()
   } catch (e) {
@@ -8,5 +8,3 @@ function compileCmd (argv) {
     console.log('Execute cudo compile --help for more info.')
   }
 }
-
-module.exports.compileCmd = compileCmd

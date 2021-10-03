@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 
-const yargs = require('yargs')
-const { hideBin } = require('yargs/helpers')
+import yargs from 'yargs'
+import { hideBin } from 'yargs/helpers'
 
-const { initCmd, compileCmd, runCmd, testCmd, unitTestCmd } = require('./cmd')
+import { initCmd, compileCmd, runCmd, testCmd, unitTestCmd } from './cmd'
 
-const nodeCmd = require('./cmd/node')
-const keysCmd = require('./cmd/keys')
+import nodeCmd from './cmd/node'
+import keysCmd from './cmd/keys'
 
 async function main () {
   await yargs(hideBin(process.argv))

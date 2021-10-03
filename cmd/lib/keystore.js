@@ -1,12 +1,12 @@
-const os = require('os')
-const path = require('path')
-const { Buffer } = require('buffer')
-const { DirectSecp256k1Wallet } = require('@cosmjs/proto-signing')
-const { SigningCosmWasmClient } = require('@cosmjs/cosmwasm-stargate')
-const fsExtra = require('fs-extra')
-const keypair = require('./keypair')
+import os from 'os'
+import path from 'path'
+import { Buffer } from 'buffer'
+import { DirectSecp256k1Wallet } from '@cosmjs/proto-signing'
+import { SigningCosmWasmClient } from '@cosmjs/cosmwasm-stargate'
+import fsExtra from 'fs-extra'
+import keypair from './keypair'
 
-const { getEndpoint } = require('./config')
+import { getEndpoint } from './config'
 
 const KeyStore = class {
   constructor () {
@@ -97,8 +97,4 @@ const KeyStore = class {
   }
 }
 
-const ks = new KeyStore()
-
-module.exports = {
-  keystore: ks
-}
+export const keystore = new KeyStore()

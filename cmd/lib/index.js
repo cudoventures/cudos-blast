@@ -1,9 +1,9 @@
-const { exec, execSync } = require('child_process')
+import { exec, execSync } from 'child_process'
 
-const math = require('@cosmjs/math')
-const protoSigning = require('@cosmjs/proto-signing')
+import math from '@cosmjs/math'
+import protoSigning from '@cosmjs/proto-signing'
 
-const calculateFee = function calculateFee (gasLimit, { denom, amount: gasPriceAmount }) {
+export function calculateFee (gasLimit, { denom, amount: gasPriceAmount }) {
   const amount = Math.ceil(gasPriceAmount.multiply(new math.Uint53(gasLimit)).toFloatApproximation())
   return {
     amount: protoSigning.coins(amount, denom),
@@ -11,7 +11,7 @@ const calculateFee = function calculateFee (gasLimit, { denom, amount: gasPriceA
   }
 }
 
-const execCmd = function execCmd (cmd) {
+export function execCmd (cmd) {
   exec(cmd, function (error, stdout, stderr) {
     console.log(stdout)
     if (error !== null) {
@@ -25,7 +25,6 @@ const { keystore } = require('./keystore')
 
 const commandService = require('./commandService')
 
-module.exports.execCmd = execCmd
 module.exports.execSyncCmd = execSync
 module.exports.calculateFee = calculateFee
 exports.keypair = keypair

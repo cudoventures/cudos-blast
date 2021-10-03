@@ -1,5 +1,5 @@
-const { execSyncCmd } = require('./lib')
-const path = require('path')
+import { execSyncCmd } from './lib'
+import path from 'path'
 
 function runUnitTests () {
   try {
@@ -12,9 +12,7 @@ function runUnitTests () {
   }
 }
 
-async function unitTestCmd (argv) {
+export async function unitTestCmd (argv) {
   console.log('Running contract unit tests...')
   runUnitTests()
 }
-
-module.exports.unitTestCmd = unitTestCmd

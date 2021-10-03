@@ -1,10 +1,9 @@
-const fsExtra = require('fs-extra')
-const path = require('path')
-const fs = require('fs')
+import fsExtra from 'fs-extra'
+import path from 'path'
+import fs from 'fs'
+import { getPackageRoot } from './lib/packageInfo'
 
-const { getPackageRoot } = require('./lib/packageInfo')
-
-async function initCmd (argv) {
+export async function initCmd (argv) {
   if (argv.dir !== undefined && argv.dir !== '' && argv.dir !== '.') {
     handleCustomDirCreation(argv)
   }
@@ -24,5 +23,3 @@ function handleCustomDirCreation (argv) {
     }
   }
 }
-
-module.exports.initCmd = initCmd

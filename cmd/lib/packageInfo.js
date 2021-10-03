@@ -1,38 +1,29 @@
-const path = require('path')
-const findup = require('find-up')
+import path from 'path'
+import findup from 'find-up'
 
-function getDockerComposeFile () {
+export function getDockerComposeFile () {
   return path.join(getPackageRoot(), 'docker-compose.yaml')
 }
 
-function getDockerEnvFile () {
+export function getDockerEnvFile () {
   return path.join(getPackageRoot(), '.docker_env')
 }
 
-function getPackageJsonPath () {
+export function getPackageJsonPath () {
   return findClosestPackageJson(__filename)
 }
 
-function getProjectRootPath () {
+export function getProjectRootPath () {
   const pj = findClosestPackageJson('.')
   return path.dirname(pj)
 }
 
-function getPackageRoot () {
+export function getPackageRoot () {
   const packageJsonPath = getPackageJsonPath()
 
   return path.dirname(packageJsonPath)
 }
 
-function findClosestPackageJson (file) {
+export function findClosestPackageJson (file) {
   return findup.sync('package.json', { cwd: path.dirname(file) })
-}
-
-module.exports = {
-  findClosestPackageJson: findClosestPackageJson,
-  getPackageJsonPath: getPackageJsonPath,
-  getPackageRoot: getPackageRoot,
-  getProjectRootPath: getProjectRootPath,
-  getDockerComposeFile: getDockerComposeFile,
-  getDockerEnvFile: getDockerEnvFile
 }
