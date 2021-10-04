@@ -89,17 +89,19 @@ cudos init --d /Your/Location/Here
 ### `cudos compile`
 
 > Compiles all the smart contracts in alphabetical order. 
-> Please note that you have to call `cudo compile` from the root of your project and the contracts have to be in a folder named '/contracts' again in the root of the project or else the tool will not find them.
-> The contracts are compiled as Rust workspace - this means that if you want to add more folders for compile (ie dependent packages in a separate /packages folder ) all you have to do is go in the base Cargo.toml file ( located at project root) and add your folder under ```[members]```
+> Please note that you have to call `cudo compile` from the root of your project and the contracts have to be in a folder named '/contracts' again in the root of the project or else the tool will not find them.\
+> There is also an option to place your contracts in a folder name of your choosing - again in the root of your project. You can specify the folder with the optional flag --name (-n ). **Please note that if you change the default location of the contracts, you also have to update the main Cargo.toml( located in the root of the project ) and replace the default entry under ```[workspace] / [members]``` with the name of your folder**\
+> The contracts are compiled as Rust workspace - this means that if you want to add more folders for compile (ie dependent packages in a separate /packages folder ) all you have to do is go in the base Cargo.toml file ( located at project root) and add your folder under ```[workspace] / [members]```\
 > The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artefacts (projectRoot/artefacts folder) are optimized for deployment.
 
 - arguments: `none`
-- options: `none`
+- options: `name` `specify a custom folder name for the contracts` `required: false`
 
 **Example:**
 
 ```bash
 cudos compile
+cudos compile --name=myContractsFolderName
 ```
 
 ---
@@ -259,7 +261,7 @@ cudos keys ls
 **Example:**
 
 ```bash
-cudos keys fund accountName --token=10000000ucudos
+cudos keys fund accountName --tokens=10000000ucudos
 cudos keys fund --address=yourCosmosAddress --token=10000000ucudos
 
 ```
