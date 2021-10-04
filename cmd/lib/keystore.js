@@ -13,13 +13,13 @@ const fsExtra = require('fs-extra');
 const keypair = require('./keypair');
 
 const {
-    getEndpoint
+    getEndpoint, getConfig
 } = require('./config');
 
 const KeyStore = class {
-    constructor() {
-        this.network = 'cudos';
-        this.keyStoreDir = path.join(os.homedir(), '.cudos-cli', 'keystore');
+    constructor(network, keyStoreDir) {
+        this.network = network;
+        this.keyStoreDir = keyStoreDir;
         fsExtra.ensureDirSync(this.keyStoreDir);
     }
 
@@ -93,7 +93,7 @@ const KeyStore = class {
 
     async listWithBalance() {
         let accInfo = await this.list();
-        const endpoint = await getEndpoint();
+        const endpoint = await getEndpoint(await getConfig());
         const wallet = await this.getSigner(accInfo[0].name);
         const client = await SigningCosmWasmClient.connectWithSigner(endpoint, wallet);
 
@@ -110,7 +110,7 @@ const KeyStore = class {
     }
 }
 
-const ks = new KeyStore();
+const ks = new KeyStore('cudos', path.join(os.homedir(), '.cudos-cli', 'keystore'));
 
 module.exports = {
     keystore: ks

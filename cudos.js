@@ -34,6 +34,13 @@ async function main() {
         .command('compile',
             'Compiles in alphabetical order the smart contracts in the workspace',
             (yargs) => {
+                yargs
+                    .option('name', {
+                        alias: 'n',
+                        type: 'string',
+                        default: 'contracts',
+                        description: 'contracts folder name'
+                    })
             },
             compileCmd)
         .command(nodeCmd)

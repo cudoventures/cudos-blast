@@ -24,6 +24,8 @@ const {
     keystore
 } = require('./keystore');
 
+const configPath = path.join(process.cwd(), 'cudos.config.js');
+
 async function getContractSigner(contractAddress) {
     const client = await getClient();
     return await client.getContract(contractAddress);
@@ -32,7 +34,7 @@ async function getContractSigner(contractAddress) {
 async function getClient() {
     let {
         config
-    } = await getConfig();
+    } = await getConfig(configPath);
     let wallet;
 
     if (!config.hasOwnProperty('account')) {
@@ -42,7 +44,7 @@ async function getClient() {
 
     if (!config.account.hasOwnProperty('name')) {
         console.log('Provide account name in the cudos.config.js file.');
-	process.exit(1);
+        process.exit(1);
     }
 
     let name = config.account.name;
@@ -76,7 +78,7 @@ const Contract = class {
 
         let {
             config
-        } = await getConfig();
+        } = await getConfig(configPath);
         this.config = config;
 
         // check config file
@@ -87,8 +89,14 @@ const Contract = class {
         }
         this.gasPrice = GasPrice.fromString(config.gasPrice);
 
-        this.client = await getClient();
-	this.config.account.address0 = await keystore.getAccountAddress(config.account.name);
+        try {
+            this.client = await getClient();
+            this.config.account.address0 = await keystore.getAccountAddress(config.account.name);
+        }
+        catch (ex) {
+            console.error(ex.message)
+        }
+
 
         return this;
     }
@@ -141,15 +149,26 @@ const Contract = class {
 }
 
 async function getContractFactory(contractname, initMsg) {
-    let contract = new Contract(contractname, initMsg)
-    await contract.init();
+    try {
+        let contract = new Contract(contractname, initMsg)
+        await contract.init();
+    }
+    catch (ex) {
+        console.error(ex.message)
+    }
+
     return contract;
 }
 
 async function getContractFromAddress(contractAddress) {
-    let contract = new Contract();
-    contract.addAddress(contractAddress);
-    await contract.init();
+    try {
+        let contract = new Contract();
+        contract.addAddress(contractAddress);
+        await contract.init();
+    }
+    catch (ex) {
+        console.error(ex.message);
+    }
     return contract;
 }
 

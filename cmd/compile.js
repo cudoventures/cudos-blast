@@ -4,7 +4,7 @@ const {
 
 function compileCmd(argv) {
     try {
-        compile();
+        compile(argv.name);
     } catch (e) {
         console.error(`${e}`);
         console.log('Execute cudo compile --help for more info.');
