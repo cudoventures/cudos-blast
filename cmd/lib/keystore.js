@@ -5,10 +5,10 @@ const {
 } = require('buffer');
 const {
     DirectSecp256k1Wallet,
-} = require('@nikolakterziev/cudosjs');
+} = require('cudosjs');
 const {
     SigningCosmWasmClient
-} = require('@nikolakterziev/cudosjs');
+} = require('cudosjs');
 const fsExtra = require('fs-extra');
 const keypair = require('./keypair');
 

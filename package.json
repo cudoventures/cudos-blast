@@ -7,7 +7,7 @@
         "cudos": "./cudos.js"
     },
     "dependencies": {
-        "@nikolakterziev/cudosjs": "0.0.13",
+        "cudosjs": "0.0.14",
         "bech32": "^2.0.0",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
