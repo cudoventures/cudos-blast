@@ -55,10 +55,6 @@ npm install -g
  -  necessary step before we make production ready public cudos repo
 ```docker build -t cudos/node -f cudos-node.Dockerfile .```
 
-#### Apply patch file
-`cd ~/cudos-cli-install-directory`
-```patch -u node_modules/@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient.js -i fees.patch```
-
 ### Network selection
 
 todo
