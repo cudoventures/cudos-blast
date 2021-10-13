@@ -95,4 +95,5 @@ exports.builder = (yargs) => {
                     description: 'Ignore the prompt.',
                 })
         }, rm)
+        .demandCommand(1, "No command specified!") // user must specify atleast one command
 };
