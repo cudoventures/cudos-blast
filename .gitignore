@@ -5,5 +5,4 @@ cudos_data/
 template/**/artifacts/
 cudos_data/node/config/app.toml
 cudos_data/node/config/config.toml
-.DS_Store
-template/.DS_Store
+**/.DS_Store
