@@ -2,7 +2,8 @@ const prompt = require('prompt');
 
 const {
     keystore,
-    commandService
+    commandService,
+    client
 } = require('./lib');
 
 const list = async function() {
@@ -46,10 +47,10 @@ const fund = async function(argv) {
     if (argv.name) {
         const addr = await keystore.getAccountAddress(argv.name);
         console.log(`fund user account ${argv.name} ==> ${addr}`);
-        commandService.fundAccount(addr, argv.tokens);
+        await client.faucetSendTo(addr, argv.tokens);
     } else if (argv.address) {
         console.log('fund address');
-        commandService.fundAccount(argv.address, argv.tokens)
+        await client.faucetSendTo(argv.address, argv.tokens);
     } else {
         console.log('Provide account name or cudos address.');
     }

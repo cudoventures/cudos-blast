@@ -6,8 +6,8 @@ const {
 } = require('bech32');
 const createHash = require('create-hash');
 
-function createFromMnemonic(mnenonic, hdPath) {
-    if (!mnenonic) {
+function createFromMnemonic(mnemonic, hdPath) {
+    if (!mnemonic) {
         const mnemonic = bip39.generateMnemonic(256);
         const privateKey = seedToPrivateKey(mnemonic, hdPath);
         return {

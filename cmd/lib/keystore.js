@@ -16,11 +16,20 @@ const {
     getEndpoint
 } = require('./config');
 
+const FAUCET_MNEMONIC = 'excite identify move harvest grocery flat tank appear multiply early whisper bronze morning giggle pony genius normal priority truly assume false creek pulse twenty';
+
 const KeyStore = class {
     constructor() {
         this.network = 'cudos';
         this.keyStoreDir = path.join(os.homedir(), '.cudos-cli', 'keystore');
         fsExtra.ensureDirSync(this.keyStoreDir);
+    }
+
+    async initFaucetAccount() {
+        const accountPath = path.join(this.keyStoreDir, 'faucet')
+        if (!await fsExtra.pathExists(accountPath)) {
+            await this.createNewAccount('faucet', FAUCET_MNEMONIC);
+        }
     }
 
     async getAccountPath(name) {
@@ -31,8 +40,8 @@ const KeyStore = class {
         return accountPath;
     }
 
-    async createNewAccount(name) {
-        const kp = keypair.Create();
+    async createNewAccount(name, mnemonic) {
+        const kp = keypair.Create(mnemonic);
         await this.saveAccount(name, {
             privateKey: kp.privateKey
         });
@@ -101,7 +110,7 @@ const KeyStore = class {
 
         await accInfo.reduce(async (memo, acc) => {
             await memo;
-            let b = await client.getBalance(acc.addr, 'ucudos');
+            let b = await client.getBalance(acc.addr, 'acudos');
             acc.balance = b;
             _accInfo.push(acc);
         }, undefined);
@@ -111,6 +120,8 @@ const KeyStore = class {
 }
 
 const ks = new KeyStore();
+let p = ks.initFaucetAccount();
+p.then();
 
 module.exports = {
     keystore: ks

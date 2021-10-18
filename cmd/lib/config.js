@@ -33,7 +33,20 @@ async function getEndpoint() {
     return config.endpoint;
 }
 
+async function getGasPrice() {
+    let {
+        config
+    } = await getConfig();
+
+    if (!config.hasOwnProperty('gasPrice')) {
+        throw new Error('Missing [gasPrice in the config file.');
+    }
+
+    return config.gasPrice;
+}
+
 module.exports = {
     getConfig: getConfig,
-    getEndpoint: getEndpoint
+    getEndpoint: getEndpoint,
+    getGasPrice: getGasPrice
 }
