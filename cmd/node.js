@@ -45,4 +45,5 @@ exports.builder = (yargs) => {
         .command('stop', 'stopping node', () => {}, stopNodeCmd)
         .command('status', 'check node status', () => {}, statusNodeCmd)
         .command('keys', 'list keys', () => {}, keysNodeCmd)
+        .demandCommand(1, "No command specified!") // user must specify atleast one command
 };
