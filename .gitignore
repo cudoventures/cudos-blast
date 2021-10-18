@@ -5,3 +5,5 @@ cudos_data/
 template/**/artifacts/
 cudos_data/node/config/app.toml
 cudos_data/node/config/config.toml
+initFolder/
+**/.DS_Store

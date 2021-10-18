@@ -27,7 +27,11 @@ _Click on a command for more information and examples._
 
 1. Install `npm` and `node`.
 2. Clone the repo & and cd to the cloned directory
-3. Install `cudos-cli` globally by running: 
+3. Install `cudos-cli` globally by running both: 
+
+```bash
+npm install
+```
 ```bash
 npm install -g
 ```
@@ -42,8 +46,11 @@ npm install -g
 4. Change `npm` default directory [ [ click here ] ](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory)
    - This is to avoid any permission issues with `WSL`
 5. Open `WSL`, clone the repo and cd to its directory
-6. Run:
+6. Run both:
 
+```bash
+npm install
+```
 ```bash
 npm install -g
 ```
@@ -54,10 +61,6 @@ npm install -g
 
  -  necessary step before we make production ready public cudos repo
 ```docker build -t cudos/node -f cudos-node.Dockerfile .```
-
-#### Apply patch file
-`cd ~/cudos-cli-install-directory`
-```patch -u node_modules/@cosmjs/cosmwasm-stargate/build/signingcosmwasmclient.js -i fees.patch```
 
 ### Network selection
 
