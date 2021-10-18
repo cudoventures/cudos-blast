@@ -2,7 +2,7 @@ const {
     SigningStargateClient,
     calculateFee,
     GasPrice
-} = require('@cosmjs/stargate');
+} = require('cudosjs');
 
 const {
     keystore
