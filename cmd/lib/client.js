@@ -1,5 +1,5 @@
 const {
-    SigningStargateClient,
+    SigningCosmWasmClient,
     calculateFee,
     GasPrice
 } = require('cudosjs');
@@ -30,7 +30,7 @@ async function faucetSendTo(address, amount) {
 async function getClient(name) {
     let endpoint = await getEndpoint();
     let wallet = await keystore.getSigner(name);
-    return await SigningStargateClient.connectWithSigner(endpoint, wallet);
+    return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet);
 }
 
 module.exports = {
