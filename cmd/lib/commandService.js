@@ -50,10 +50,6 @@ const startNode = function(inBackground) {
     }
 }
 
-const statusNode = function() {
-    executeNode('status');
-}
-
 const keysNode = function() {
     executeNode('keys list  --output json');
 }
@@ -77,7 +73,6 @@ const compile = function() {
 module.exports = {
     stopNode: stopNode,
     startNode: startNode,
-    statusNode: statusNode,
     keysNode: keysNode,
     fundAccount: fundAccount,
     compile: compile

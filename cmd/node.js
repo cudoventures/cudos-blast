@@ -1,9 +1,12 @@
 const {
     stopNode,
     startNode,
-    statusNode,
     keysNode
 } = require("./lib/commandService");
+
+const {
+    isAvailable
+} = require("./lib/status")
 
 const startNodeCmd = async function(argv) {
     startNode(argv.daemon);
@@ -13,11 +16,10 @@ const stopNodeCmd = function() {
     stopNode();
 };
 
-const statusNodeCmd = function() {
-    try {
-        statusNode();
+const statusNodeCmd = async function() {
+    if (await isAvailable()) {
         console.log("Node is online!");
-    } catch (ex) {
+    } else {
         console.log("Node is offline!");
     }
 };
