@@ -3,32 +3,44 @@ const {
   getEndpoint
 } = require("./config")
 
-async function isUrlAvailable(url) {
-
+async function getStatusNodeByUrl(url) {
+  let nodeStatus = {};
   try {
-    const response = await axios.get(url);
+    const response = await axios.get(url + "/status");
+    nodeStatus.statusCode = response.status;
 
-    if (response.status == 200){
-      return true;
+    response.data.result.node_info = undefined;
+
+    if (nodeStatus.statusCode == 200 && typeof response.data.result.node_info != "undefined"){
+      nodeStatus.isConnected = true;
+      nodeStatus = attachAddidionalInfo(nodeStatus, response.data.result); 
     } else {
-      return false;
+      nodeStatus.isConnected = false;
     }
   } catch (ex) {
-    if (ex.code == "ENOTFOUND" || ex.code == "ECONNREFUSED"){
-      return false;
+    nodeStatus.isConnected = false;
+    if (ex.code != undefined){
+      nodeStatus.statusCode = ex.code;
     } else {
-      console.error("Exception trying to connect! \nError code: " + 
-      ex.code + "; Message: " + ex.message);
-      process.exit(1);
+      nodeStatus.statusCode = "UNKNOWN";
     }
   }
+  return nodeStatus;
 }
 
-async function isAvailable(){
-  let endpoint = await getEndpoint();
-  return await isUrlAvailable(endpoint);
+async function getStatusNode(){
+  let url = await getEndpoint();
+  return await getStatusNodeByUrl(url);
+}
+
+function attachAddidionalInfo(nodeStatus, infoObject){
+  nodeStatus.nodeInfo = {
+    nodeId: infoObject.node_info.id,
+    network: infoObject.node_info.network
+  }
+  return nodeStatus;
 }
 
 module.exports = {
-  isAvailable: isAvailable
+  getStatusNode: getStatusNode
 }

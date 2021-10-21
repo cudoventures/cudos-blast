@@ -5,7 +5,7 @@ const {
 } = require("./lib/commandService");
 
 const {
-    isAvailable
+    getStatusNode
 } = require("./lib/status")
 
 const startNodeCmd = async function(argv) {
@@ -17,10 +17,12 @@ const stopNodeCmd = function() {
 };
 
 const statusNodeCmd = async function() {
-    if (await isAvailable()) {
-        console.log("Node is online!");
+    let nodeStatus = await getStatusNode();
+    if (nodeStatus.isConnected == true) {
+        console.log("Connection to node is online.");
+        console.log("Node id: "+ nodeStatus.nodeInfo.nodeId + "\nNetwork: "+ nodeStatus.nodeInfo.network);
     } else {
-        console.log("Node is offline!");
+        console.log("Connection to node is offline. Status code: " + nodeStatus.statusCode);
     }
 };
 
