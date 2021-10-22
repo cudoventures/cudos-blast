@@ -9,8 +9,6 @@ async function getStatusNodeByUrl(url) {
     const response = await axios.get(url + "/status");
     nodeStatus.statusCode = response.status;
 
-    response.data.result.node_info = undefined;
-
     if (nodeStatus.statusCode == 200 && typeof response.data.result.node_info != "undefined"){
       nodeStatus.isConnected = true;
       nodeStatus = attachAddidionalInfo(nodeStatus, response.data.result); 
@@ -19,7 +17,7 @@ async function getStatusNodeByUrl(url) {
     }
   } catch (ex) {
     nodeStatus.isConnected = false;
-    if (ex.code != undefined){
+    if (typeof ex.code != "undefined"){
       nodeStatus.statusCode = ex.code;
     } else {
       nodeStatus.statusCode = "UNKNOWN";
