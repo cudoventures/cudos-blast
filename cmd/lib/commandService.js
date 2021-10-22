@@ -9,7 +9,7 @@ const {
     getProjectRootPath
 } = require('./packageInfo');
 
-const optimizerVer = '0.11.5';
+const optimizerVer = '0.12.3';
 
 const cudosNodeHomeDir = './cudos_data/node';
 
