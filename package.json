@@ -7,12 +7,12 @@
         "cudos": "./cudos.js"
     },
     "dependencies": {
+        "cudosjs": "0.0.18",
         "axios": "^0.23.0",
         "bech32": "^2.0.0",
         "bip32": "^2.0.6",
         "bip39": "^3.0.4",
         "chai": "^4.3.4",
-        "cudosjs": "0.0.18",
         "dockerode": "^3.3.0",
         "dockerode-compose": "^1.2.1",
         "file-regex": "^3.1.0",
