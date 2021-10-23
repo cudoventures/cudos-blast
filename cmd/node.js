@@ -1,9 +1,12 @@
 const {
     stopNode,
     startNode,
-    statusNode,
     keysNode
 } = require("./lib/commandService");
+
+const {
+    getStatusNode
+} = require("./lib/status")
 
 const startNodeCmd = async function(argv) {
     startNode(argv.daemon);
@@ -13,12 +16,13 @@ const stopNodeCmd = function() {
     stopNode();
 };
 
-const statusNodeCmd = function() {
-    try {
-        statusNode();
-        console.log("Node is online!");
-    } catch (ex) {
-        console.log("Node is offline!");
+const statusNodeCmd = async function() {
+    let nodeStatus = await getStatusNode();
+    if (nodeStatus.isConnected == true) {
+        console.log("Connection to node is online.");
+        console.log("Node id: "+ nodeStatus.nodeInfo.nodeId + "\nNetwork: "+ nodeStatus.nodeInfo.network);
+    } else {
+        console.log("Connection to node is offline. Status code: " + nodeStatus.statusCode);
     }
 };
 
