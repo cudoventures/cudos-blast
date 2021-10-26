@@ -18,11 +18,14 @@ const stopNodeCmd = function() {
 
 const statusNodeCmd = async function() {
     let nodeStatus = await getStatusNode();
-    if (nodeStatus.isConnected == true) {
+    if (nodeStatus.isConnected) {
         console.log("Connection to node is online.");
         console.log("Node id: "+ nodeStatus.nodeInfo.nodeId + "\nNetwork: "+ nodeStatus.nodeInfo.network);
     } else {
         console.log("Connection to node is offline. Status code: " + nodeStatus.statusCode);
+        if (typeof nodeStatus.errorMessage != "undefined"){
+            console.log("Error: " + nodeStatus.errorMessage);
+        }
     }
 };
 
