@@ -1,4 +1,5 @@
 const prompt = require('prompt');
+const VError = require('verror');
 
 const {
     keystore,
@@ -36,7 +37,7 @@ const rm = async function (argv) {
             }
         }
     } catch (error) {
-        throw new Error(`Can't remove account ${name}. Error: ${error.message}`)
+        throw new VError(`Can't remove account ${name}. Error: ${error.message}`)
     }
 }
 
@@ -47,11 +48,11 @@ const add = async function (argv) {
         console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
 
     } catch (error) {
-        throw new Error(`Can't add account ${argv.name}. Error: ${error.message}`)
+        throw new VError(`Can't add account ${argv.name}. Error: ${error.message}`)
     }
 }
 
-
+// Bad pattern: throw new Error in catch?
 const fund = async function (argv) {
     try {
         if (argv.name) {
@@ -65,7 +66,7 @@ const fund = async function (argv) {
             console.log('Provide account name or cudos address.');
         }
     } catch (error) {
-        throw new Error(`Can't fund account ${argv.name}. Error: ${error.message}`)
+        throw new VError(`Can't fund account ${argv.name}. Error: ${error.message}`)
     }
 }
 

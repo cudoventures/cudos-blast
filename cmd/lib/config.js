@@ -1,6 +1,7 @@
 const fsExstra = require('fs-extra');
 const process = require('process');
 const path = require('path');
+const VError = require('verror');
 
 let config = {};
 
@@ -27,7 +28,7 @@ async function getEndpoint() {
     } = await getConfig();
 
     if (!config.hasOwnProperty('endpoint')) {
-        throw new Error('Missing [endpoint] in the config file.');
+        throw new VError('Missing [endpoint] in the config file.');
     }
 
     return config.endpoint;
@@ -39,7 +40,7 @@ async function getGasPrice() {
     } = await getConfig();
 
     if (!config.hasOwnProperty('gasPrice')) {
-        throw new Error('Missing [gasPrice in the config file.');
+        throw new VError('Missing gasPrice in the config file.');
     }
 
     return config.gasPrice;
