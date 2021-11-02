@@ -1,4 +1,5 @@
 const fs = require('fs');
+const VError = require('verror');
 const {
     spawnSync
 } = require("child_process");
@@ -64,7 +65,7 @@ const compile = function() {
 
     console.log(`${projectRootPath}/contracts`);
     if (!fs.existsSync(`${projectRootPath}/contracts`)) {
-        throw new Error('No contracts folder found! Make sure to place your smart contracts in /contracts.');
+        throw new VError('No contracts folder found! Make sure to place your smart contracts in /contracts.');
     }
     doDocker(compileCmd);
 

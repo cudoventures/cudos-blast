@@ -1,5 +1,6 @@
 const os = require('os');
 const path = require('path');
+const VError = require('verror');
 const {
     Buffer
 } = require('buffer');
@@ -35,7 +36,7 @@ const KeyStore = class {
     async getAccountPath(name) {
         const accountPath = path.join(this.keyStoreDir, name)
         if (!await fsExtra.pathExists(accountPath)) {
-            throw new Error(`Account ${name} does not exist.`);
+            throw new VError(`Account ${name} does not exist.`);
         }
         return accountPath;
     }
@@ -54,7 +55,7 @@ const KeyStore = class {
     async saveAccount(name, account) {
         const accountPath = path.join(this.keyStoreDir, name)
         if (await fsExtra.pathExists(accountPath)) {
-            throw new Error('Account already exists in the keyStore.');
+            throw new VError('Account already exists in the keyStore.');
         }
         await fsExtra.writeJson(accountPath, account);
         return account;
@@ -85,7 +86,7 @@ const KeyStore = class {
     async list() {
         const accounts = await fsExtra.readdir(this.keyStoreDir);
         if (accounts.length == 0) {
-            throw new Error(`Empty keystore.`);
+            throw new VError(`Empty keystore.`);
         }
         let accInfo = [];
         await accounts.reduce(async (memo, acc) => {
