@@ -6,6 +6,10 @@
     "bin": {
         "cudos": "./cudos.js"
     },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/CudoVentures/cudos-cli"
+    },
     "scripts": {
         "pretest": "rm -rf tmp-project",
         "test": "mocha"
