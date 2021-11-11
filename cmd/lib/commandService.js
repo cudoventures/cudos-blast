@@ -1,4 +1,5 @@
 const fs = require('fs');
+const VError = require('verror');
 const {
     spawnSync
 } = require("child_process");
@@ -9,7 +10,7 @@ const {
     getProjectRootPath
 } = require('./packageInfo');
 
-const optimizerVer = '0.11.5';
+const optimizerVer = '0.12.3';
 
 const cudosNodeHomeDir = './cudos_data/node';
 
@@ -68,7 +69,7 @@ const compile = function (contractsFolderName) {
 
     console.log(`${projectRootPath}/contracts`);
     if (!fs.existsSync(`${projectRootPath}/${contractsFolderName}`)) {
-        throw new Error(`No contracts folder with name ${contractsFolderName} found! Make sure to place your smart contracts in /contracts.`);
+        throw new VError(`No contracts folder with name ${contractsFolderName} found! Make sure to place your smart contracts in /contracts.`);
     }
     doDocker(compileCmd);
 
@@ -77,7 +78,6 @@ const compile = function (contractsFolderName) {
 module.exports = {
     stopNode: stopNode,
     startNode: startNode,
-    statusNode: statusNode,
     keysNode: keysNode,
     fundAccount: fundAccount,
     compile: compile

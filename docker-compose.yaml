@@ -4,11 +4,11 @@ services:
     ports:
       - "1317:1317"
       - "26657:26657"
-    image: "cudos/node"
+    image: "veselinv/cudos-node"
     volumes:
-      - cudos_data:/apps/cudos-node/cudos_data
+      - cudos_data:/usr/cudos/cudos-data
     environment:
       APP_HOME: ${APP_HOME}
-    command: chain serve --home ./cudos_data/node
+    command: /usr/cudos/start-node.sh
 volumes:
   cudos_data:

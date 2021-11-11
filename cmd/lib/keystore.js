@@ -1,5 +1,6 @@
 const os = require('os');
 const path = require('path');
+const VError = require('verror');
 const {
     Buffer
 } = require('buffer');
@@ -16,6 +17,8 @@ const {
     getEndpoint, getConfig
 } = require('./config');
 
+const FAUCET_MNEMONIC = 'excite identify move harvest grocery flat tank appear multiply early whisper bronze morning giggle pony genius normal priority truly assume false creek pulse twenty';
+
 const KeyStore = class {
     constructor(network, keyStoreDir) {
         this.network = network;
@@ -23,16 +26,23 @@ const KeyStore = class {
         fsExtra.ensureDirSync(this.keyStoreDir);
     }
 
+    async initFaucetAccount() {
+        const accountPath = path.join(this.keyStoreDir, 'faucet')
+        if (!await fsExtra.pathExists(accountPath)) {
+            await this.createNewAccount('faucet', FAUCET_MNEMONIC);
+        }
+    }
+
     async getAccountPath(name) {
         const accountPath = path.join(this.keyStoreDir, name)
         if (!await fsExtra.pathExists(accountPath)) {
-            throw new Error(`Account ${name} does not exist.`);
+            throw new VError(`Account ${name} does not exist.`);
         }
         return accountPath;
     }
 
-    async createNewAccount(name) {
-        const kp = keypair.Create();
+    async createNewAccount(name, mnemonic) {
+        const kp = keypair.Create(mnemonic);
         await this.saveAccount(name, {
             privateKey: kp.privateKey
         });
@@ -45,7 +55,7 @@ const KeyStore = class {
     async saveAccount(name, account) {
         const accountPath = path.join(this.keyStoreDir, name)
         if (await fsExtra.pathExists(accountPath)) {
-            throw new Error('Account already exists in the keyStore.');
+            throw new VError('Account already exists in the keyStore.');
         }
         await fsExtra.writeJson(accountPath, account);
         return account;
@@ -76,7 +86,7 @@ const KeyStore = class {
     async list() {
         const accounts = await fsExtra.readdir(this.keyStoreDir);
         if (accounts.length == 0) {
-            throw new Error(`Empty keystore.`);
+            throw new VError(`Empty keystore.`);
         }
         let accInfo = [];
         await accounts.reduce(async (memo, acc) => {
@@ -101,7 +111,7 @@ const KeyStore = class {
 
         await accInfo.reduce(async (memo, acc) => {
             await memo;
-            let b = await client.getBalance(acc.addr, 'ucudos');
+            let b = await client.getBalance(acc.addr, 'acudos');
             acc.balance = b;
             _accInfo.push(acc);
         }, undefined);
@@ -110,7 +120,9 @@ const KeyStore = class {
     }
 }
 
-const ks = new KeyStore('cudos', path.join(os.homedir(), '.cudos-cli', 'keystore'));
+const ks = new KeyStore('cudos', path.join(os.homedir(), '.cudos-cli', 'keystore');
+let p = ks.initFaucetAccount();
+p.then();
 
 module.exports = {
     keystore: ks

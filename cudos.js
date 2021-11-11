@@ -44,7 +44,7 @@ async function main() {
             },
             compileCmd)
         .command(nodeCmd)
-        .command('run [scriptFilePath]', 'run script', (yargs) => {
+        .command('run <scriptFilePath>', 'run script', (yargs) => {
             yargs.positional('scriptFilePath', {
                 type: 'string',
                 describe: 'The path to to the script to run',
@@ -62,7 +62,7 @@ async function main() {
         .demandCommand(1, "No command specified!") // user must specify atleast one command 
         .recommendCommands()
         .strictCommands() // checks if the command is specified, if its not - user friendly error
-        .showHelpOnFail(false, 'Specify --help for available options') // does not show help automatically, just tells the user that he can call --help for available options
+        .showHelpOnFail(true) // show help automatically
         .help()
         .argv
 }

@@ -1,8 +1,10 @@
 const prompt = require('prompt');
+const VError = require('verror');
 
 const {
     keystore,
-    commandService
+    commandService,
+    client
 } = require('./lib');
 
 const list = async function() {
@@ -21,35 +23,43 @@ const list = async function() {
 
 const rm = async function(argv) {
     let name = argv.name;
-    if (argv.yes) {
-        await keystore.removeAccount(name);
-    } else {
-        prompt.start();
-        console.log(`Are you sure you want to delete ${argv.name} from the keystore? y/n`);
-        const {
-            answer
-        } = await prompt.get(['answer']);
-        if (answer === 'y') {
+    try {
+        if (argv.yes) {
             await keystore.removeAccount(name);
+        } else {
+            prompt.start();
+            console.log(`Are you sure you want to delete ${argv.name} from the keystore? y/n`);
+            const {
+                answer
+            } = await prompt.get(['answer']);
+            if (answer === 'y') {
+                await keystore.removeAccount(name);
+            }
         }
+    } catch (error) {
+        throw new VError(`Can't remove account ${name}. Error: ${error.message}`)
     }
 }
 
 const add = async function(argv) {
-    const acc = await keystore.createNewAccount(argv.name);
-    console.log(`Account ${argv.name} is created. ${acc.address}`);
-    console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
-}
+    try {
+        const acc = await keystore.createNewAccount(argv.name);
+        console.log(`Account ${argv.name} is created. ${acc.address}`);
+        console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
 
+    } catch (error) {
+        throw new VError(`Can't add account ${argv.name}. Error: ${error.message}`)
+    }
+}
 
 const fund = async function(argv) {
     if (argv.name) {
         const addr = await keystore.getAccountAddress(argv.name);
         console.log(`fund user account ${argv.name} ==> ${addr}`);
-        commandService.fundAccount(addr, argv.tokens);
+        await client.faucetSendTo(addr, argv.tokens);
     } else if (argv.address) {
         console.log('fund address');
-        commandService.fundAccount(argv.address, argv.tokens)
+        await client.faucetSendTo(argv.address, argv.tokens);
     } else {
         console.log('Provide account name or cudos address.');
     }
@@ -95,4 +105,5 @@ exports.builder = (yargs) => {
                     description: 'Ignore the prompt.',
                 })
         }, rm)
+        .demandCommand(1, "No command specified!") // user must specify atleast one command
 };

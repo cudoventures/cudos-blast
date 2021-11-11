@@ -6,12 +6,8 @@ const {
     DirectSecp256k1Wallet
 } = require('cudosjs');
 const {
-    GasPrice,
+    GasPrice, calculateFee
 } = require('cudosjs');
-
-const {
-    calculateFee
-} = require('./index.js');
 
 const path = require('path');
 const fs = require('fs');
