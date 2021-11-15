@@ -4,7 +4,7 @@ services:
     ports:
       - "1317:1317"
       - "26657:26657"
-    image: "veselinv/cudos-node"
+    image: "cudos/sdk"
     volumes:
       - cudos_data:/usr/cudos/cudos-data
     environment:
