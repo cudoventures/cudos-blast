@@ -1,14 +1,17 @@
 version: "3.9"
+
 services:
   cudos-node:
+    build:
+      dockerfile: cudos-node.dockerfile
+      context: ./
+      args:
+        INIT: 1
     ports:
       - "1317:1317"
       - "26657:26657"
-    image: "cudos/sdk"
     volumes:
       - cudos_data:/usr/cudos/cudos-data
-    environment:
-      APP_HOME: ${APP_HOME}
-    command: /usr/cudos/start-node.sh
+
 volumes:
   cudos_data:
