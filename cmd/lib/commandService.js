@@ -5,8 +5,8 @@ const {
 } = require("child_process");
 
 const {
-    getDockerComposeFile,
-    getDockerEnvFile,
+    getDockerComposeInitFile,
+    getDockerComposeStartFile,
     getProjectRootPath
 } = require('./packageInfo');
 
@@ -14,8 +14,7 @@ const optimizerVer = '0.12.3';
 
 const cudosNodeHomeDir = './cudos_data/node';
 
-const dockerComposeCmd = `docker-compose -f docker-compose-start.yaml -f docker-compose-init.yaml`;
-// const dockerComposeCmd = `docker-compose --env-file=${getDockerEnvFile()} -f ${getDockerComposeFile()} `; // OLD
+const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()}`;
 const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `;
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `;
 
