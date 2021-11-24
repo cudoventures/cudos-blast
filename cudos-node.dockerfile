@@ -1,4 +1,4 @@
-FROM binary-builder
+FROM cudos/binary:0.3
 
 ARG INIT=0
 
