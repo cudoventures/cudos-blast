@@ -14,8 +14,8 @@ const optimizerVer = '0.12.3'
 
 const cudosNodeHomeDir = './cudos_data/node'
 
-const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()}`
-const nodeCmd = `exec -T cudos-node cudos-noded --home ${cudosNodeHomeDir} `
+const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
+const nodeCmd = 'exec -T cudos-node cudos-noded '
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
 
 const doDocker = function (cmd) {
