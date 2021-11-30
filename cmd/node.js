@@ -1,7 +1,6 @@
 const {
   stopNode,
-  startNode,
-  keysNode
+  startNode
 } = require('./lib/commandService')
 
 const {
@@ -29,14 +28,6 @@ const statusNodeCmd = async function () {
   }
 }
 
-const keysNodeCmd = async function () {
-  try {
-    keysNode()
-  } catch {
-    console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
-  }
-}
-
 exports.command = 'node'
 exports.describe = 'manage cudo local node'
 
@@ -51,6 +42,5 @@ exports.builder = (yargs) => {
   }, startNodeCmd)
     .command('stop', 'stopping node', () => {}, stopNodeCmd)
     .command('status', 'check node status', () => {}, statusNodeCmd)
-    .command('keys', 'list keys', () => {}, keysNodeCmd)
     .demandCommand(1, 'No command specified!') // user must specify atleast one command
 }
