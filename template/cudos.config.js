@@ -1,10 +1,21 @@
+/* eslint-disable quote-props */
 module.exports.config = {
   name: 'template',
   network: 'local',
-  account: {
-    name: 'accountName'
-    // address0: 'cudos1wg3nt76pajxvjzep34msc8e4j5kaxpfc9lua9s',
-    // privKey: '4c7f7cc251bfd697f66c7569130ff7a3d60d544bafe448d397108b4906328d56',
+  defaultAccount: {
+    name: 'account_1'
+  },
+  accounts: {
+    'account_1':
+    {
+      address: 'cudos1yvtuaadhfhxf8ke7zm902z4rj382a8ayymq32s',
+      mnemonic: 'ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit'
+    },
+    'account_2':
+    {
+      address: 'cudos1xgejtl9heykzscska6cetsferpelygx8g9vxp9',
+      mnemonic: 'course hurdle stand heart rescue trap upset cousin dish embody business equip'
+    }
   },
   gasPrice: '250acudos',
   endpoint: 'http://localhost:26657'

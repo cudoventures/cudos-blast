@@ -1,9 +1,7 @@
 const os = require('os')
 const path = require('path')
 const VError = require('verror')
-const {
-  Buffer
-} = require('buffer')
+
 const {
   DirectSecp256k1Wallet
 } = require('cudosjs')
@@ -14,26 +12,27 @@ const fsExtra = require('fs-extra')
 const keypair = require('./keypair')
 
 const {
-  getEndpoint
+  getEndpoint,
+  getAccountByName
 } = require('./config')
 
 const FAUCET_MNEMONIC = 'excite identify move harvest grocery flat tank appear multiply early whisper bronze morning giggle pony genius normal priority truly assume false creek pulse twenty'
 
 const KeyStore = class {
-  constructor () {
+  constructor() {
     this.network = 'cudos'
     this.keyStoreDir = path.join(os.homedir(), '.cudos-cli', 'keystore')
     fsExtra.ensureDirSync(this.keyStoreDir)
   }
 
-  async initFaucetAccount () {
+  async initFaucetAccount() {
     const accountPath = path.join(this.keyStoreDir, 'faucet')
     if (!await fsExtra.pathExists(accountPath)) {
       await this.createNewAccount('faucet', FAUCET_MNEMONIC)
     }
   }
 
-  async getAccountPath (name) {
+  async getAccountPath(name) {
     const accountPath = path.join(this.keyStoreDir, name)
     if (!await fsExtra.pathExists(accountPath)) {
       throw new VError(`Account ${name} does not exist.`)
@@ -41,7 +40,7 @@ const KeyStore = class {
     return accountPath
   }
 
-  async createNewAccount (name, mnemonic) {
+  async createNewAccount(name, mnemonic) {
     const kp = keypair.Create(mnemonic)
     await this.saveAccount(name, {
       privateKey: kp.privateKey
@@ -52,7 +51,7 @@ const KeyStore = class {
     }
   }
 
-  async saveAccount (name, account) {
+  async saveAccount(name, account) {
     const accountPath = path.join(this.keyStoreDir, name)
     if (await fsExtra.pathExists(accountPath)) {
       throw new VError('Account already exists in the keyStore.')
@@ -61,29 +60,31 @@ const KeyStore = class {
     return account
   }
 
-  async loadAccount (name) {
-    const accountPath = await this.getAccountPath(name)
-    const acc = await fsExtra.readJson(accountPath)
-    acc.privateKey = Buffer.from(acc.privateKey)
+  async loadAccount(name) {
+    const acc = await getAccountByName(name)
+    acc.name = name
+    acc.privateKey = keypair.seedToPrivateKey(acc.mnemonic)
     return acc
   }
 
-  async removeAccount (name) {
+  async removeAccount(name) {
     const accountPath = await this.getAccountPath(name)
     return await fsExtra.remove(accountPath)
   }
 
-  async getAccountAddress (name) {
+  async getAccountAddress(name) {
     const account = await this.loadAccount(name)
-    return await keypair.getAddressFromPrivateKey(account.privateKey)
+    return account.address
+
+    // return await keypair.getAddressFromPrivateKey(account.privateKey)
   }
 
-  async getSigner (name) {
+  async getSigner(name) {
     const acc = await this.loadAccount(name)
     return await DirectSecp256k1Wallet.fromKey(acc.privateKey, this.network)
   }
 
-  async list () {
+  async list() {
     const accounts = await fsExtra.readdir(this.keyStoreDir)
     if (accounts.length === 0) {
       throw new VError('Empty keystore.')
@@ -101,7 +102,7 @@ const KeyStore = class {
     return accInfo
   }
 
-  async listWithBalance () {
+  async listWithBalance() {
     const accInfo = await this.list()
     const endpoint = await getEndpoint()
     const wallet = await this.getSigner(accInfo[0].name)

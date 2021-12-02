@@ -62,8 +62,8 @@ cudos-noded init $MONIKER --chain-id=$CHAIN_ID
 # gas price
 sed -i "s/minimum-gas-prices = \"\"/minimum-gas-prices = \"0${BOND_DENOM}\"/" "${CUDOS_HOME}/config/app.toml"
 
-# sed -i "104s/enable = false/enable = true/" "${CUDOS_HOME}/config/app.toml"
-# sed -i "s/laddr = \"tcp:\/\/127.0.0.1:26657\"/laddr = \"tcp:\/\/0.0.0.0:26657\"/" "${CUDOS_HOME}/config/config.toml"
+sed -i "104s/enable = false/enable = true/" "${CUDOS_HOME}/config/app.toml"
+sed -i "s/laddr = \"tcp:\/\/127.0.0.1:26657\"/laddr = \"tcp:\/\/0.0.0.0:26657\"/" "${CUDOS_HOME}/config/config.toml"
 
 # enable cors origin for local testing
 # sed -i "s/enabled-unsafe-cors = false/enabled-unsafe-cors = true/" ${CUDOS_HOME}/config/app.toml

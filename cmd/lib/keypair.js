@@ -6,7 +6,7 @@ const {
 } = require('bech32')
 const createHash = require('create-hash')
 
-function createFromMnemonic (mnemonic, hdPath) {
+function createFromMnemonic(mnemonic, hdPath) {
   if (!mnemonic) {
     const mnemonic = bip39.generateMnemonic(256)
     const privateKey = seedToPrivateKey(mnemonic, hdPath)
@@ -23,7 +23,7 @@ function createFromMnemonic (mnemonic, hdPath) {
   }
 }
 
-function getAddressFromPrivateKey (privateKey, network = 'cudos') {
+function getAddressFromPrivateKey(privateKey, network = 'cudos') {
   const publicKeyArr = secp256k1.publicKeyCreate(privateKey, true)
   const publicKey = Buffer.from(publicKeyArr)
   const sha256 = createHash('sha256')
@@ -34,7 +34,7 @@ function getAddressFromPrivateKey (privateKey, network = 'cudos') {
   return bech32.encode(network, bech32.toWords(rawAddr))
 }
 
-function seedToPrivateKey (mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
+function seedToPrivateKey(mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
   const seed = bip39.mnemonicToSeedSync(mnemonic)
   const masterKey = bip32.fromSeed(seed)
   const {
@@ -43,11 +43,12 @@ function seedToPrivateKey (mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
   return privateKey
 }
 
-function createKeyPair (mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
+function createKeyPair(mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
   return createFromMnemonic(mnemonic, hdPath)
 }
 
 module.exports = {
   Create: createKeyPair,
-  getAddressFromPrivateKey: getAddressFromPrivateKey
+  getAddressFromPrivateKey: getAddressFromPrivateKey,
+  seedToPrivateKey: seedToPrivateKey
 }
