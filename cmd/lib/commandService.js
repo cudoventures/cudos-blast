@@ -19,10 +19,13 @@ const nodeCmd = 'exec -T cudos-node cudos-noded '
 const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
 
 const doDocker = function (cmd) {
-  spawnSync(cmd, {
+  const childResult = spawnSync(cmd, {
     stdio: 'inherit',
     shell: true
   })
+  if (childResult.status !== 0) {
+    console.log('Command to the local node failed!')
+  }
 }
 
 const execute = function (arg) {
