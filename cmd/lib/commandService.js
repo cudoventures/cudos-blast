@@ -12,11 +12,8 @@ const {
 
 const optimizerVer = '0.12.3'
 
-const cudosNodeHomeDir = './cudos_data/node'
-
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
 const nodeCmd = 'exec -T cudos-node cudos-noded '
-const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
 
 const doDocker = function (cmd) {
   const childResult = spawnSync(cmd, {
@@ -37,10 +34,6 @@ const executeNode = function (arg) {
   execute(nodeCmd + arg)
 }
 
-const executeStarport = function (arg) {
-  execute(starportCmd + arg)
-}
-
 const stopNode = function () {
   execute(' down')
 }
@@ -55,10 +48,6 @@ const startNode = function (inBackground) {
 
 const keysListNode = function () {
   executeNode('keys list')
-}
-
-const fundAccount = function (address, tokens) {
-  executeStarport(`chain faucet ${address} ${tokens}`)
 }
 
 const compile = function () {
@@ -76,6 +65,5 @@ module.exports = {
   stopNode: stopNode,
   startNode: startNode,
   keysListNode: keysListNode,
-  fundAccount: fundAccount,
   compile: compile
 }
