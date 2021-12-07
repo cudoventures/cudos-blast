@@ -49,10 +49,10 @@ const fund = async function (argv) {
 }
 
 exports.command = 'keys'
-exports.describe = 'Manage keystore/accounts'
+exports.describe = 'Manage accounts/keys'
 
 exports.builder = (yargs) => {
-  yargs.command('add [name]', 'Add account to the keystore', () => {
+  yargs.command('add [name]', 'Add account to the node key storage', () => {
     yargs.positional('name', {
       type: 'string',
       describe: 'account name'
@@ -76,7 +76,7 @@ exports.builder = (yargs) => {
       })
     }, fund)
     .command('ls', 'List all accounts in the keystore', () => {}, list)
-    .command('rm [name]', 'Remove account from the keystore', () => {
+    .command('rm [name]', 'Remove account from the node key storage', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'
