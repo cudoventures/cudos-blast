@@ -1,9 +1,9 @@
-const prompt = require('prompt')
 const VError = require('verror')
 
 const {
   keysListNode,
-  addAccountNode
+  addAccountNode,
+  deleteAccountNode
 } = require('./lib/commandService')
 
 const {
@@ -19,31 +19,19 @@ const list = async function () {
   }
 }
 
-const rm = async function (argv) {
-  const name = argv.name
-  try {
-    if (argv.yes) {
-      await keystore.removeAccount(name)
-    } else {
-      prompt.start()
-      console.log(`Are you sure you want to delete ${argv.name} from the keystore? y/n`)
-      const {
-        answer
-      } = await prompt.get(['answer'])
-      if (answer === 'y') {
-        await keystore.removeAccount(name)
-      }
-    }
-  } catch (error) {
-    throw new VError(`Can't remove account ${name}. Error: ${error.message}`)
-  }
-}
-
 const add = async function (argv) {
   try {
     addAccountNode(argv.name)
   } catch (error) {
     throw new VError(`Could not add account ${argv.name}, \nError: ${error.message}`)
+  }
+}
+
+const rm = async function (argv) {
+  try {
+    deleteAccountNode(argv.name, argv.yes)
+  } catch (error) {
+    throw new VError(`Cannot remove account ${argv.name}. \nError: ${error.message}`)
   }
 }
 
