@@ -3,11 +3,11 @@ const VError = require('verror')
 const {
   keysListNode,
   addAccountNode,
-  deleteAccountNode
+  deleteAccountNode,
+  fundAccountNode
 } = require('./lib/commandService')
 
 const {
-  keystore,
   client
 } = require('./lib')
 
@@ -36,15 +36,10 @@ const rm = async function (argv) {
 }
 
 const fund = async function (argv) {
-  if (argv.name) {
-    const addr = await keystore.getAccountAddress(argv.name)
-    console.log(`fund user account ${argv.name} ==> ${addr}`)
-    await client.faucetSendTo(addr, argv.tokens)
-  } else if (argv.address) {
-    console.log('fund address')
-    await client.faucetSendTo(argv.address, argv.tokens)
-  } else {
-    console.log('Provide account name or cudos address.')
+  try {
+    fundAccountNode(argv.name, argv.tokens)
+  } catch (error) {
+    throw new VError(`Cannot fund account ${argv.name}. \nError: ${error.message}`)
   }
 }
 
@@ -52,31 +47,26 @@ exports.command = 'keys'
 exports.describe = 'Manage accounts/keys'
 
 exports.builder = (yargs) => {
-  yargs.command('add [name]', 'Add account to the node key storage', () => {
+  yargs.command('add <name>', 'Add account to the node key storage', () => {
     yargs.positional('name', {
       type: 'string',
       describe: 'account name'
     })
   }, add)
-    .command('fund [name]', 'Fund tokens', () => {
+    .command('fund <name>', 'Fund tokens', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'
-      })
-      yargs.option('address', {
-        alias: 'a',
-        type: 'string',
-        describe: 'address'
       })
       yargs.option('tokens', {
         alias: 't',
         type: 'string',
         required: true,
-        describe: 'amount of tokens in the format 10000000ucudos'
+        describe: 'amount of tokens in the format 10000000acudos'
       })
     }, fund)
-    .command('ls', 'List all accounts in the keystore', () => {}, list)
-    .command('rm [name]', 'Remove account from the node key storage', () => {
+    .command('ls', 'List all accounts in the node key storage', () => {}, list)
+    .command('rm <name>', 'Remove account from the node key storage', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'

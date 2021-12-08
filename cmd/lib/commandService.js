@@ -56,8 +56,7 @@ const keysListNode = function () {
 }
 
 const addAccountNode = function (name) {
-  MultiExecuteNode(`cudos-noded keys add ${name} && cudos-noded tx bank send faucet ` +
-    `$(cudos-noded keys show ${name} -a) 1000000000000000000acudos --chain-id cudos-network --yes`)
+  MultiExecuteNode(`cudos-noded keys add ${name} && ` + transferTokensByNameCommand('faucet', name, '1000000000000000000'))
 }
 
 const deleteAccountNode = function (name, confirm) {
@@ -66,6 +65,10 @@ const deleteAccountNode = function (name, confirm) {
   } else {
     executeNode(`keys delete ${name}`)
   }
+}
+
+const fundAccountNode = function (name, amount) {
+  MultiExecuteNode(transferTokensByNameCommand('faucet', name, amount))
 }
 
 const compile = function () {
@@ -79,11 +82,17 @@ const compile = function () {
   doDocker(compileCmd)
 }
 
+function transferTokensByNameCommand (fromName, toName, amount) {
+  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
+  '--chain-id cudos-network --yes'
+}
+
 module.exports = {
   stopNode: stopNode,
   startNode: startNode,
   keysListNode: keysListNode,
   addAccountNode: addAccountNode,
   deleteAccountNode: deleteAccountNode,
+  fundAccountNode: fundAccountNode,
   compile: compile
 }
