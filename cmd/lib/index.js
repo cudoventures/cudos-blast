@@ -35,7 +35,6 @@ const {
 } = require('./keystore')
 
 const commandService = require('./commandService')
-const client = require('./client')
 
 module.exports.execCmd = execCmd
 module.exports.execSyncCmd = execSync
@@ -43,4 +42,3 @@ module.exports.calculateFee = calculateFee
 exports.keypair = keypair
 exports.keystore = keystore
 exports.commandService = commandService
-exports.client = client
