@@ -21,7 +21,8 @@ _Click on a command for more information and examples._
 
 ### Installation
 
-> Make sure you have a current version of `npm` and `NodeJS` installed.
+> Make sure you have a current version of `npm` and `NodeJS` installed.  
+> A `Docker` installation is also required.
 
 #### Mac and Linux
 
@@ -56,11 +57,6 @@ npm install -g
 ```
 
 ---
-
-### Build Docker image
-
- -  necessary step before we make production ready public cudos repo
-```docker build -t cudos/node -f cudos-node.Dockerfile .```
 
 ### Network selection
 
@@ -174,16 +170,7 @@ cudos node stop
 **Example:**
 
 ```bash
-cudos node stop
-```
-
-### `cudos node keys`
-> List keys of a local CUDOS node
-
-**Example:**
-
-```bash
-cudos node keys
+cudos node status
 ```
 
 ---
@@ -191,7 +178,7 @@ cudos node keys
 ### `cudos run`
 > Runs a custom javascript file. 
 > Currently in the /scripts directory there are two files: deploy.js and interact.js
-> In the future it should be possibly to supply relevant info by the command line (smart contract name, user adress, etc) as option
+> In the future it should be possible to supply relevant info by the command line (smart contract name, user adress, etc) as option
 > 
 
 - arguments: `scriptFilePath` `string` `The script file to execute`
@@ -199,7 +186,7 @@ cudos node keys
   
 
   ###### How to deploy different smart contracts?
-  > For each of your smart contracts create a separate deploy file ( for example deploy_alpha.js and deploy_beta.js) and run it one by one. Do not forget to edit the contract name in the .js file ( line 4 in the supplied deploy.js file)
+  > For each smart contract create a separate deploy file ( for example deploy_alpha.js and deploy_beta.js) and run it one by one. Do not forget to edit the contract name in the .js file ( line 4 in the supplied deploy.js file)
 
 **Example:**
 
@@ -212,12 +199,12 @@ cudos run scripts/yourScriptFile.js
 ---
 
 ### `cudos keys`
-> Manages keystore/accounts
+> Manages accounts/keys in local node
 
 ### Subcommands:
 
 #### `cudos keys add accountName`
-> Add account to the keystore
+> Add account to the node key storage
 - arguments: `accountName` `string`
 - options: `none`
   
@@ -229,7 +216,7 @@ cudos keys add accountName
 ```
 
 #### `cudos keys rm accountName`
-> Removes account from keystore
+> Removes account from the node key storage
 - arguments: `accountName` `string`
 - options: `--yes, -y` `No confirmation when deleting a user`
 
@@ -240,7 +227,7 @@ cudos keys rm accountName
 ```
 
 #### `cudos keys ls`
-> List all accounts in the keystore
+> List all accounts in the node key storage
 - arguments: `None`
 - options: `None`
   
@@ -254,16 +241,13 @@ cudos keys ls
 #### `cudos keys fund accountName`
 > Fund account with tokens
 - arguments: `accountName` `string` 
-- options: 
-  - `--address, -a` `string` `The address of the account` `not required if accountName is supplied - only if we want to fund account which is not in the keystore`
-  - `--tokens, -t` `string` `The amount of tokens to give` `required`
+- options: `--tokens, -t` `string` `The amount of tokens to give` `required`
   
   
 **Example:**
 
 ```bash
-cudos keys fund accountName --token=10000000ucudos
-cudos keys fund --address=yourCosmosAddress --token=10000000ucudos
+cudos keys fund accountName --token=10000000acudos
 
 ```
 
