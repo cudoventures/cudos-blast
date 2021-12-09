@@ -60,6 +60,14 @@ const addAccountNode = function (name) {
     `$(cudos-noded keys show ${name} -a) 1000000000000000000acudos --chain-id cudos-network --yes`)
 }
 
+const deleteAccountNode = function (name, confirm) {
+  if (confirm) {
+    executeNode(`keys delete ${name} --yes`)
+  } else {
+    executeNode(`keys delete ${name}`)
+  }
+}
+
 const compile = function () {
   const projectRootPath = getProjectRootPath()
   const compileCmd = `docker run --rm -v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target  --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:${optimizerVer}`
@@ -76,5 +84,6 @@ module.exports = {
   startNode: startNode,
   keysListNode: keysListNode,
   addAccountNode: addAccountNode,
+  deleteAccountNode: deleteAccountNode,
   compile: compile
 }

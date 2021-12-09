@@ -61,11 +61,6 @@ const KeyStore = class {
     return acc
   }
 
-  async removeAccount (name) {
-    const accountPath = await this.getAccountPath(name)
-    return await fsExtra.remove(accountPath)
-  }
-
   async getAccountAddress (name) {
     const account = await this.loadAccount(name)
     return await keypair.getAddressFromPrivateKey(account.privateKey)

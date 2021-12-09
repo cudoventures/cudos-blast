@@ -1,9 +1,9 @@
-const prompt = require('prompt')
 const VError = require('verror')
 
 const {
   keysListNode,
-  addAccountNode
+  addAccountNode,
+  deleteAccountNode
 } = require('./lib/commandService')
 
 const {
@@ -19,31 +19,19 @@ const list = async function () {
   }
 }
 
-const rm = async function (argv) {
-  const name = argv.name
-  try {
-    if (argv.yes) {
-      await keystore.removeAccount(name)
-    } else {
-      prompt.start()
-      console.log(`Are you sure you want to delete ${argv.name} from the keystore? y/n`)
-      const {
-        answer
-      } = await prompt.get(['answer'])
-      if (answer === 'y') {
-        await keystore.removeAccount(name)
-      }
-    }
-  } catch (error) {
-    throw new VError(`Can't remove account ${name}. Error: ${error.message}`)
-  }
-}
-
 const add = async function (argv) {
   try {
     addAccountNode(argv.name)
   } catch (error) {
     throw new VError(`Could not add account ${argv.name}, \nError: ${error.message}`)
+  }
+}
+
+const rm = async function (argv) {
+  try {
+    deleteAccountNode(argv.name, argv.yes)
+  } catch (error) {
+    throw new VError(`Cannot remove account ${argv.name}. \nError: ${error.message}`)
   }
 }
 
@@ -61,10 +49,10 @@ const fund = async function (argv) {
 }
 
 exports.command = 'keys'
-exports.describe = 'Manage keystore/accounts'
+exports.describe = 'Manage accounts/keys'
 
 exports.builder = (yargs) => {
-  yargs.command('add [name]', 'Add account to the keystore', () => {
+  yargs.command('add [name]', 'Add account to the node key storage', () => {
     yargs.positional('name', {
       type: 'string',
       describe: 'account name'
@@ -88,7 +76,7 @@ exports.builder = (yargs) => {
       })
     }, fund)
     .command('ls', 'List all accounts in the keystore', () => {}, list)
-    .command('rm [name]', 'Remove account from the keystore', () => {
+    .command('rm [name]', 'Remove account from the node key storage', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'
