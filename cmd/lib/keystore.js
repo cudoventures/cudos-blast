@@ -5,14 +5,10 @@ const VError = require('verror')
 const {
   DirectSecp256k1Wallet
 } = require('cudosjs')
-const {
-  SigningCosmWasmClient
-} = require('cudosjs')
 const fsExtra = require('fs-extra')
 const keypair = require('./keypair')
 
 const {
-  getEndpoint,
   getAccountByName
 } = require('./config')
 
@@ -67,11 +63,6 @@ const KeyStore = class {
     return acc
   }
 
-  async removeAccount(name) {
-    const accountPath = await this.getAccountPath(name)
-    return await fsExtra.remove(accountPath)
-  }
-
   async getAccountAddress(name) {
     const account = await this.loadAccount(name)
     return account.address
@@ -82,42 +73,6 @@ const KeyStore = class {
   async getSigner(name) {
     const acc = await this.loadAccount(name)
     return await DirectSecp256k1Wallet.fromKey(acc.privateKey, this.network)
-  }
-
-  async list() {
-    const accounts = await fsExtra.readdir(this.keyStoreDir)
-    if (accounts.length === 0) {
-      throw new VError('Empty keystore.')
-    }
-    const accInfo = []
-    await accounts.reduce(async (memo, acc) => {
-      await memo
-      const addr = await this.getAccountAddress(acc)
-      accInfo.push({
-        name: acc,
-        addr: addr
-      })
-    }, undefined)
-
-    return accInfo
-  }
-
-  async listWithBalance() {
-    const accInfo = await this.list()
-    const endpoint = await getEndpoint()
-    const wallet = await this.getSigner(accInfo[0].name)
-    const client = await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
-
-    const _accInfo = []
-
-    await accInfo.reduce(async (memo, acc) => {
-      await memo
-      const b = await client.getBalance(acc.addr, 'acudos')
-      acc.balance = b
-      _accInfo.push(acc)
-    }, undefined)
-
-    return _accInfo
   }
 }
 

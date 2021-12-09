@@ -1,97 +1,72 @@
-const prompt = require('prompt')
 const VError = require('verror')
 
 const {
-  keystore,
+  keysListNode,
+  addAccountNode,
+  deleteAccountNode,
+  fundAccountNode
+} = require('./lib/commandService')
+
+const {
   client
 } = require('./lib')
 
 const list = async function () {
   try {
-    const accs = await keystore.listWithBalance()
-    console.log(accs)
-  } catch (err) {
-    if (err.code === 'ECONNREFUSED') {
-      const accs = await keystore.list()
-      console.log(accs)
-    } else {
-      console.log(err.message)
-    }
-  }
-}
-
-const rm = async function (argv) {
-  const name = argv.name
-  try {
-    if (argv.yes) {
-      await keystore.removeAccount(name)
-    } else {
-      prompt.start()
-      console.log(`Are you sure you want to delete ${argv.name} from the keystore? y/n`)
-      const {
-        answer
-      } = await prompt.get(['answer'])
-      if (answer === 'y') {
-        await keystore.removeAccount(name)
-      }
-    }
+    keysListNode()
   } catch (error) {
-    throw new VError(`Can't remove account ${name}. Error: ${error.message}`)
+    console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
   }
 }
 
 const add = async function (argv) {
   try {
-    const acc = await keystore.createNewAccount(argv.name)
-    console.log(`Account ${argv.name} is created. ${acc.address}`)
-    console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
+    addAccountNode(argv.name)
   } catch (error) {
-    throw new VError(`Can't add account ${argv.name}. Error: ${error.message}`)
+    throw new VError(`Could not add account ${argv.name}, \nError: ${error.message}`)
+  }
+}
+
+const rm = async function (argv) {
+  try {
+    deleteAccountNode(argv.name, argv.yes)
+  } catch (error) {
+    throw new VError(`Cannot remove account ${argv.name}. \nError: ${error.message}`)
   }
 }
 
 const fund = async function (argv) {
-  if (argv.name) {
-    const addr = await keystore.getAccountAddress(argv.name)
-    console.log(`fund user account ${argv.name} ==> ${addr}`)
-    await client.faucetSendTo(addr, argv.tokens)
-  } else if (argv.address) {
-    console.log('fund address')
-    await client.faucetSendTo(argv.address, argv.tokens)
-  } else {
-    console.log('Provide account name or cudos address.')
+  try {
+    fundAccountNode(argv.name, argv.tokens)
+  } catch (error) {
+    throw new VError(`Cannot fund account ${argv.name}. \nError: ${error.message}`)
   }
 }
 
 exports.command = 'keys'
-exports.describe = 'Manage keystore/accounts'
+exports.describe = 'Manage accounts/keys'
 
 exports.builder = (yargs) => {
-  yargs.command('add [name]', 'Add account to the keystore', () => {
+  yargs.command('add <name>', 'Add account to the node key storage', () => {
     yargs.positional('name', {
       type: 'string',
       describe: 'account name'
     })
   }, add)
-    .command('fund [name]', 'Fund tokens', () => {
+    .command('fund <name>', 'Fund tokens', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'
-      })
-      yargs.option('address', {
-        alias: 'a',
-        type: 'string',
-        describe: 'address'
       })
       yargs.option('tokens', {
         alias: 't',
         type: 'string',
         required: true,
-        describe: 'amount of tokens in the format 10000000ucudos'
+        describe: 'amount of tokens in the format 10000000acudos'
       })
     }, fund)
-    .command('ls', 'List all accounts in the keystore', () => {}, list)
-    .command('rm [name]', 'Remove account from the keystore', () => {
+    .command('ls', 'List all accounts in the node key storage', () => {}, list)
+    .command('rm <name>', 'Remove account from the node key storage', () => {
       yargs.positional('name', {
         type: 'string',
         describe: 'account name'

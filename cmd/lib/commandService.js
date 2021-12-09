@@ -12,17 +12,18 @@ const {
 
 const optimizerVer = '0.12.3'
 
-const cudosNodeHomeDir = './cudos_data/node'
-
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
-const nodeCmd = 'exec -T cudos-node cudos-noded '
-const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
+const nodeCmd = 'exec cudos-node cudos-noded '
+const nodeMultiCmd = 'exec cudos-node sh -c '
 
 const doDocker = function (cmd) {
-  spawnSync(cmd, {
+  const childResult = spawnSync(cmd, {
     stdio: 'inherit',
     shell: true
   })
+  if (childResult.status !== 0) {
+    console.log('Command to the local node failed!')
+  }
 }
 
 const execute = function (arg) {
@@ -34,8 +35,8 @@ const executeNode = function (arg) {
   execute(nodeCmd + arg)
 }
 
-const executeStarport = function (arg) {
-  execute(starportCmd + arg)
+const MultiExecuteNode = function (arg) {
+  execute(nodeMultiCmd + `'${arg}'`)
 }
 
 const stopNode = function () {
@@ -50,12 +51,24 @@ const startNode = function (inBackground) {
   }
 }
 
-const keysNode = function () {
-  executeNode('keys list  --output json')
+const keysListNode = function () {
+  executeNode('keys list')
 }
 
-const fundAccount = function (address, tokens) {
-  executeStarport(`chain faucet ${address} ${tokens}`)
+const addAccountNode = function (name) {
+  MultiExecuteNode(`cudos-noded keys add ${name} && ` + transferTokensByNameCommand('faucet', name, '1000000000000000000'))
+}
+
+const deleteAccountNode = function (name, confirm) {
+  if (confirm) {
+    executeNode(`keys delete ${name} --yes`)
+  } else {
+    executeNode(`keys delete ${name}`)
+  }
+}
+
+const fundAccountNode = function (name, amount) {
+  MultiExecuteNode(transferTokensByNameCommand('faucet', name, amount))
 }
 
 const compile = function () {
@@ -69,10 +82,17 @@ const compile = function () {
   doDocker(compileCmd)
 }
 
+function transferTokensByNameCommand (fromName, toName, amount) {
+  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
+  '--chain-id cudos-network --yes'
+}
+
 module.exports = {
   stopNode: stopNode,
   startNode: startNode,
-  keysNode: keysNode,
-  fundAccount: fundAccount,
+  keysListNode: keysListNode,
+  addAccountNode: addAccountNode,
+  deleteAccountNode: deleteAccountNode,
+  fundAccountNode: fundAccountNode,
   compile: compile
 }
