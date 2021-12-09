@@ -1,7 +1,10 @@
 const prompt = require('prompt')
 const VError = require('verror')
 
-const { keysListNode } = require('./lib/commandService')
+const {
+  keysListNode,
+  addAccountNode
+} = require('./lib/commandService')
 
 const {
   keystore,
@@ -38,11 +41,9 @@ const rm = async function (argv) {
 
 const add = async function (argv) {
   try {
-    const acc = await keystore.createNewAccount(argv.name)
-    console.log(`Account ${argv.name} is created. ${acc.address}`)
-    console.log(`Keep the mnemonic in a secure location. This is the only way to recover your account.\n${acc.mnemonic}`)
+    addAccountNode(argv.name)
   } catch (error) {
-    throw new VError(`Can't add account ${argv.name}. Error: ${error.message}`)
+    throw new VError(`Could not add account ${argv.name}, \nError: ${error.message}`)
   }
 }
 

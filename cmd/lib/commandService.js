@@ -13,7 +13,8 @@ const {
 const optimizerVer = '0.12.3'
 
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
-const nodeCmd = 'exec -T cudos-node cudos-noded '
+const nodeCmd = 'exec cudos-node cudos-noded '
+const nodeMultiCmd = 'exec cudos-node sh -c '
 
 const doDocker = function (cmd) {
   const childResult = spawnSync(cmd, {
@@ -34,6 +35,10 @@ const executeNode = function (arg) {
   execute(nodeCmd + arg)
 }
 
+const MultiExecuteNode = function (arg) {
+  execute(nodeMultiCmd + `'${arg}'`)
+}
+
 const stopNode = function () {
   execute(' down')
 }
@@ -48,6 +53,11 @@ const startNode = function (inBackground) {
 
 const keysListNode = function () {
   executeNode('keys list')
+}
+
+const addAccountNode = function (name) {
+  MultiExecuteNode(`cudos-noded keys add ${name} && cudos-noded tx bank send faucet ` +
+    `$(cudos-noded keys show ${name} -a) 1000000000000000000acudos --chain-id cudos-network --yes`)
 }
 
 const compile = function () {
@@ -65,5 +75,6 @@ module.exports = {
   stopNode: stopNode,
   startNode: startNode,
   keysListNode: keysListNode,
+  addAccountNode: addAccountNode,
   compile: compile
 }
