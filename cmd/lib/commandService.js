@@ -12,17 +12,17 @@ const {
 
 const optimizerVer = '0.12.3'
 
-const cudosNodeHomeDir = './cudos_data/node'
-
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
 const nodeCmd = 'exec -T cudos-node cudos-noded '
-const starportCmd = `exec -T cudos-node starport --home ${cudosNodeHomeDir} `
 
 const doDocker = function (cmd) {
-  spawnSync(cmd, {
+  const childResult = spawnSync(cmd, {
     stdio: 'inherit',
     shell: true
   })
+  if (childResult.status !== 0) {
+    console.log('Command to the local node failed!')
+  }
 }
 
 const execute = function (arg) {
@@ -32,10 +32,6 @@ const execute = function (arg) {
 
 const executeNode = function (arg) {
   execute(nodeCmd + arg)
-}
-
-const executeStarport = function (arg) {
-  execute(starportCmd + arg)
 }
 
 const stopNode = function () {
@@ -50,12 +46,8 @@ const startNode = function (inBackground) {
   }
 }
 
-const keysNode = function () {
-  executeNode('keys list  --output json')
-}
-
-const fundAccount = function (address, tokens) {
-  executeStarport(`chain faucet ${address} ${tokens}`)
+const keysListNode = function () {
+  executeNode('keys list')
 }
 
 const compile = function () {
@@ -72,7 +64,6 @@ const compile = function () {
 module.exports = {
   stopNode: stopNode,
   startNode: startNode,
-  keysNode: keysNode,
-  fundAccount: fundAccount,
+  keysListNode: keysListNode,
   compile: compile
 }

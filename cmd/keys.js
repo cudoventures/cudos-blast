@@ -1,6 +1,8 @@
 const prompt = require('prompt')
 const VError = require('verror')
 
+const { keysListNode } = require('./lib/commandService')
+
 const {
   keystore,
   client
@@ -8,15 +10,9 @@ const {
 
 const list = async function () {
   try {
-    const accs = await keystore.listWithBalance()
-    console.log(accs)
-  } catch (err) {
-    if (err.code === 'ECONNREFUSED') {
-      const accs = await keystore.list()
-      console.log(accs)
-    } else {
-      console.log(err.message)
-    }
+    keysListNode()
+  } catch (error) {
+    console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
   }
 }
 
