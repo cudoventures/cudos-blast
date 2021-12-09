@@ -2,9 +2,6 @@ const {
   SigningCosmWasmClient
 } = require('cudosjs')
 
-// const {
-//   DirectSecp256k1Wallet
-// } = require('cudosjs')
 const {
   GasPrice, calculateFee
 } = require('cudosjs')
@@ -13,6 +10,7 @@ const path = require('path')
 const fs = require('fs')
 
 const {
+  getEndpoint,
   getConfig
 } = require('./config')
 
@@ -20,45 +18,20 @@ const {
   keystore
 } = require('./keystore')
 
-// async function getContractSigner (contractAddress) {
-//   const client = await getClient()
-//   return await client.getContract(contractAddress)
-// }
-
-async function getClient () {
-  const {
-    config
-  } = await getConfig()
-
-  if (!config.account) {
-    console.log('Missing [account] in the config file.')
-    process.exit(1)
-  }
-
-  if (!config.account.name) {
-    console.log('Provide account name in the cudos.config.js file.')
-    process.exit(1)
-  }
-
-  const name = config.account.name
-  const wallet = await keystore.getSigner(name)
-
-  if (!config.endpoint) {
-    console.log('Missing [endpoint] in the config file.')
-    process.exit(1)
-  }
-  // return client
-  return await SigningCosmWasmClient.connectWithSigner(config.endpoint, wallet)
+async function getClient() {
+  const endpoint = await getEndpoint()
+  const wallet = await keystore.getSigner('account_1')
+  return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
 }
 
 const Contract = class {
-  constructor (contractname, initMsg, label) {
+  constructor(contractname, initMsg, label) {
     this.contractname = contractname
     this.initMsg = initMsg
     this.label = label || contractname
   }
 
-  async init () {
+  async init() {
     if (!this.deployed) {
       this.wasmPath = ''
       try {
@@ -73,8 +46,6 @@ const Contract = class {
     } = await getConfig()
     this.config = config
 
-    // check config file
-
     if (!config.gasPrice) {
       console.log('Missing [gasPrice] field in the config file.')
       process.exit(1)
@@ -82,12 +53,12 @@ const Contract = class {
     this.gasPrice = GasPrice.fromString(config.gasPrice)
 
     this.client = await getClient()
-    this.config.account.address0 = await keystore.getAccountAddress(config.account.name)
+    this.config.account.address0 = await keystore.getAccountAddress(config.defaultAccount.name)
 
     return this
   }
 
-  async deploy () {
+  async deploy() {
     const uploadReceipt = await this.uploadContract()
     console.log(uploadReceipt)
     const ic = await this.initContract(uploadReceipt.codeId)
@@ -96,7 +67,7 @@ const Contract = class {
     return ic.contractAddress
   }
 
-  async uploadContract () {
+  async uploadContract() {
     const uploadFee = calculateFee(1_500_000, this.gasPrice)
     const wasm = fs.readFileSync(this.wasmPath)
 
@@ -107,7 +78,7 @@ const Contract = class {
     )
   }
 
-  async initContract (codeId) {
+  async initContract(codeId) {
     const instantiateFee = calculateFee(500_000, this.gasPrice)
     return await this.client.instantiate(
       this.config.account.address0,
@@ -118,28 +89,28 @@ const Contract = class {
     )
   }
 
-  addAddress (contractAddress) {
+  addAddress(contractAddress) {
     this.deployed = true
     this.contractAddress = contractAddress
   }
 
-  async execute (msg) {
+  async execute(msg) {
     const fee = calculateFee(1_500_000, this.gasPrice)
     return await this.client.execute(this.config.account.address0, this.contractAddress, msg, fee)
   }
 
-  async querySmart (queryMsg) {
+  async querySmart(queryMsg) {
     return await this.client.queryContractSmart(this.contractAddress, queryMsg)
   }
 }
 
-async function getContractFactory (contractname, initMsg) {
+async function getContractFactory(contractname, initMsg) {
   const contract = new Contract(contractname, initMsg)
   await contract.init()
   return contract
 }
 
-async function getContractFromAddress (contractAddress) {
+async function getContractFromAddress(contractAddress) {
   const contract = new Contract()
   contract.addAddress(contractAddress)
   await contract.init()

@@ -7,11 +7,7 @@ let config = {}
 
 const configPath = path.join(process.cwd(), 'cudos.config.js')
 
-// async function checkConfig () {
-//   const config = await getConfig()
-// }
-
-async function getConfig () {
+async function getConfig() {
   if (await fsExstra.pathExists(configPath)) {
     config = require(configPath)
   } else {
@@ -22,19 +18,32 @@ async function getConfig () {
   return config
 }
 
-async function getEndpoint () {
+async function getAccountByName(name) {
+  const {
+    config
+  } = await getConfig()
+
+  if (!config.accounts[name]) {
+    throw new VError('Missing Account in the config file.')
+  }
+
+  return config.accounts[name]
+}
+
+async function getEndpoint() {
   const {
     config
   } = await getConfig()
 
   if (!config.endpoint) {
+    console.log('Missing [endpoint] in the config file.')
     throw new VError('Missing [endpoint] in the config file.')
   }
 
   return config.endpoint
 }
 
-async function getGasPrice () {
+async function getGasPrice() {
   const {
     config
   } = await getConfig()
@@ -48,6 +57,8 @@ async function getGasPrice () {
 
 module.exports = {
   getConfig: getConfig,
+  getAccountByName: getAccountByName,
   getEndpoint: getEndpoint,
   getGasPrice: getGasPrice
+
 }
