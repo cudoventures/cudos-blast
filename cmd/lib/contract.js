@@ -20,6 +20,7 @@ const {
 
 async function getClient() {
   const endpoint = await getEndpoint()
+  // TODO: pass account as a param
   const wallet = await keystore.getSigner('account_1')
   return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
 }
@@ -53,7 +54,7 @@ const Contract = class {
     this.gasPrice = GasPrice.fromString(config.gasPrice)
 
     this.client = await getClient()
-    this.config.account.address0 = await keystore.getAccountAddress(config.defaultAccount.name)
+    this.config.defaultAccount = await keystore.getAccountAddress(config.defaultAccount.name)
 
     return this
   }
@@ -72,7 +73,7 @@ const Contract = class {
     const wasm = fs.readFileSync(this.wasmPath)
 
     return await this.client.upload(
-      this.config.account.address0,
+      this.config.defaultAccount,
       wasm,
       uploadFee
     )
@@ -81,7 +82,7 @@ const Contract = class {
   async initContract(codeId) {
     const instantiateFee = calculateFee(500_000, this.gasPrice)
     return await this.client.instantiate(
-      this.config.account.address0,
+      this.config.defaultAccount,
       codeId,
       this.initMsg,
       this.label,
@@ -96,7 +97,7 @@ const Contract = class {
 
   async execute(msg) {
     const fee = calculateFee(1_500_000, this.gasPrice)
-    return await this.client.execute(this.config.account.address0, this.contractAddress, msg, fee)
+    return await this.client.execute(this.config.defaultAccount, this.contractAddress, msg, fee)
   }
 
   async querySmart(queryMsg) {
