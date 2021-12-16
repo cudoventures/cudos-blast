@@ -1,17 +1,13 @@
-#!/usr/bin/env node
-
 const yargs = require('yargs')
 
 const {
   initCmd,
-  runCmd,
-  testCmd,
-  unitTestCmd
+  runCmd
 } = require('../../cmd')
 
-const {
-  compileCmd
-} = require('./compile/compile.js')
+const { compileCmd } = require('./compile/compile.js')
+const { testCmd } = require('./test/test.js')
+const { unitTestCmd } = require('./unittest/unittest.js')
 
 const nodeCmd = require('../../cmd/node')
 const keysCmd = require('../../cmd/keys')

@@ -1,12 +1,7 @@
 const fs = require('fs')
 const VError = require('verror')
-const {
-  executeRun
-  // ugly story
-} = require('../../cudos-utilities/runDockerCommands')
-const {
-  getProjectRootPath
-} = require('../../cudos-utilities/packageInfo')
+const { executeRun } = require('../../cudos-utilities/runDockerCommands')
+const { getProjectRootPath } = require('../../cudos-utilities/packageInfo')
 
 const optimizerVer = '0.12.3'
 
