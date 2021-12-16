@@ -12,7 +12,7 @@ const dockerRunCmd = 'docker run --rm '
 const nodeCmd = 'exec cudos-node cudos-noded '
 const nodeMultiCmd = 'exec cudos-node sh -c '
 
-const doDocker = function(cmd) {
+const runCommand = function(cmd) {
   const childResult = spawnSync(cmd, {
     stdio: 'inherit',
     shell: true
@@ -23,19 +23,19 @@ const doDocker = function(cmd) {
 }
 
 const executeCompose = function(arg) {
-  doDocker(dockerComposeCmd + arg)
+  runCommand(dockerComposeCmd + arg)
 }
 
 const executeRun = function(arg) {
-  doDocker(dockerRunCmd + arg)
+  runCommand(dockerRunCmd + arg)
 }
 
 const executeNode = function(arg) {
-  doDocker(dockerComposeCmd + nodeCmd + arg)
+  runCommand(dockerComposeCmd + nodeCmd + arg)
 }
 
 const executeNodeMultiCmd = function(arg) {
-  doDocker(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
+  runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
 }
 
 module.exports = {
