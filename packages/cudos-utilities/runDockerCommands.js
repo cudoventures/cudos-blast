@@ -38,9 +38,15 @@ const executeNodeMultiCmd = function(arg) {
   runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
 }
 
+function transferTokensByNameCommand(fromName, toName, amount) {
+  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
+  '--chain-id cudos-network --yes'
+}
+
 module.exports = {
   executeCompose,
   executeRun,
   executeNode,
-  executeNodeMultiCmd
+  executeNodeMultiCmd,
+  transferTokensByNameCommand
 }

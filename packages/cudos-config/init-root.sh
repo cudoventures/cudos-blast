@@ -146,45 +146,45 @@ cudos-noded add-genesis-account $FAUCET_ADDRESS "1000000000000000000000000${BOND
 
 # add default accounts
 echo "Adding Default Accounts"
-echo "ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit" | cudos-noded keys add account_1 --recover
-ACCOUNT_1_ADDRESS=$(  cudos-noded keys show account_1 -a  )
-cudos-noded add-genesis-account $ACCOUNT_1_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit" | cudos-noded keys add account1 --recover
+ACCOUNT1_ADDRESS=$(  cudos-noded keys show account1 -a  )
+cudos-noded add-genesis-account $ACCOUNT1_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "course hurdle stand heart rescue trap upset cousin dish embody business equip" | cudos-noded keys add account_2 --recover
-ACCOUNT_2_ADDRESS=$(  cudos-noded keys show account_2 -a  )
-cudos-noded add-genesis-account $ACCOUNT_2_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "course hurdle stand heart rescue trap upset cousin dish embody business equip" | cudos-noded keys add account2 --recover
+ACCOUNT2_ADDRESS=$(  cudos-noded keys show account2 -a  )
+cudos-noded add-genesis-account $ACCOUNT2_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "warrior smoke melt opinion broccoli filter hole skate place cart ask alien" | cudos-noded keys add account_3 --recover
-ACCOUNT_3_ADDRESS=$(  cudos-noded keys show account_3 -a  )
-cudos-noded add-genesis-account $ACCOUNT_3_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "warrior smoke melt opinion broccoli filter hole skate place cart ask alien" | cudos-noded keys add account3 --recover
+ACCOUNT3_ADDRESS=$(  cudos-noded keys show account3 -a  )
+cudos-noded add-genesis-account $ACCOUNT3_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "debate result toward brick dutch unusual caught plunge honey ramp want update" | cudos-noded keys add account_4 --recover
-ACCOUNT_4_ADDRESS=$(  cudos-noded keys show account_4 -a  )
-cudos-noded add-genesis-account $ACCOUNT_4_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "debate result toward brick dutch unusual caught plunge honey ramp want update" | cudos-noded keys add account4 --recover
+ACCOUNT4_ADDRESS=$(  cudos-noded keys show account4 -a  )
+cudos-noded add-genesis-account $ACCOUNT4_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "tape soul absorb cabin luxury practice rally clerk love kiss throw avoid" | cudos-noded keys add account_5 --recover
-ACCOUNT_5_ADDRESS=$(  cudos-noded keys show account_5 -a  )
-cudos-noded add-genesis-account $ACCOUNT_5_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "tape soul absorb cabin luxury practice rally clerk love kiss throw avoid" | cudos-noded keys add account5 --recover
+ACCOUNT5_ADDRESS=$(  cudos-noded keys show account5 -a  )
+cudos-noded add-genesis-account $ACCOUNT5_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "write senior detail business try dirt sort rural donate way acid flame" | cudos-noded keys add account_6 --recover
-ACCOUNT_6_ADDRESS=$(  cudos-noded keys show account_6 -a  )
-cudos-noded add-genesis-account $ACCOUNT_6_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "write senior detail business try dirt sort rural donate way acid flame" | cudos-noded keys add account6 --recover
+ACCOUNT6_ADDRESS=$(  cudos-noded keys show account6 -a  )
+cudos-noded add-genesis-account $ACCOUNT6_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "debris beef trip coral victory boy picture lab best royal wrestle path" | cudos-noded keys add account_7 --recover
-ACCOUNT_7_ADDRESS=$(  cudos-noded keys show account_7 -a  )
-cudos-noded add-genesis-account $ACCOUNT_7_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "debris beef trip coral victory boy picture lab best royal wrestle path" | cudos-noded keys add account7 --recover
+ACCOUNT7_ADDRESS=$(  cudos-noded keys show account7 -a  )
+cudos-noded add-genesis-account $ACCOUNT7_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "damp bunker feed quit maze execute raccoon office error squirrel believe measure" | cudos-noded keys add account_8 --recover
-ACCOUNT_8_ADDRESS=$(  cudos-noded keys show account_8 -a  )
-cudos-noded add-genesis-account $ACCOUNT_8_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "damp bunker feed quit maze execute raccoon office error squirrel believe measure" | cudos-noded keys add account8 --recover
+ACCOUNT8_ADDRESS=$(  cudos-noded keys show account8 -a  )
+cudos-noded add-genesis-account $ACCOUNT8_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "sea prison zero sugar episode meadow neutral silly chronic creek danger flat" | cudos-noded keys add account_9 --recover
-ACCOUNT_9_ADDRESS=$(  cudos-noded keys show account_9 -a  )
-cudos-noded add-genesis-account $ACCOUNT_9_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "sea prison zero sugar episode meadow neutral silly chronic creek danger flat" | cudos-noded keys add account9 --recover
+ACCOUNT9_ADDRESS=$(  cudos-noded keys show account9 -a  )
+cudos-noded add-genesis-account $ACCOUNT9_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "save wear nature point april cage hybrid peasant penalty silver sadness friend" | cudos-noded keys add account_10 --recover
-ACCOUNT_10_ADDRESS=$(  cudos-noded keys show account_10 -a  )
-cudos-noded add-genesis-account $ACCOUNT_10_ADDRESS "1000000000000000000${BOND_DENOM}"
+echo "save wear nature point april cage hybrid peasant penalty silver sadness friend" | cudos-noded keys add account10 --recover
+ACCOUNT10_ADDRESS=$(  cudos-noded keys show account10 -a  )
+cudos-noded add-genesis-account $ACCOUNT10_ADDRESS "1000000000000000000${BOND_DENOM}"
 
 
 #cudos-noded gentx buidler-moniker '100000000000000000000acudos' --chain-id 'cudos-network' \
