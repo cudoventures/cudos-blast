@@ -33,4 +33,4 @@ function handleCustomDirCreation(argv) {
   }
 }
 
-module.exports.initCmd = initCmd
+module.exports = { initCmd: initCmd }
