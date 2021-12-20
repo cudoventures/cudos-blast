@@ -1,4 +1,4 @@
-const { executeRun } = require('../../cudos-utilities/runDockerCommands')
+const { executeRun } = require('../../cudos-utilities/run-docker-commands')
 
 const path = require('path')
 
@@ -20,4 +20,4 @@ async function unitTestCmd(argv) {
   runUnitTests()
 }
 
-module.exports.unitTestCmd = unitTestCmd
+module.exports = { unitTestCmd: unitTestCmd }

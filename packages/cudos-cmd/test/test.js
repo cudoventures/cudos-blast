@@ -27,4 +27,4 @@ async function testCmd(argv) {
   runTest()
 }
 
-module.exports.testCmd = testCmd
+module.exports = { testCmd: testCmd }
