@@ -11,7 +11,7 @@ async function initCmd(argv) {
   }
 
   try {
-    await fsExtra.copySync(
+    await fsExtra.copy(
       path.join(getPackageRoot(), 'template'),
       argv.dir
     )

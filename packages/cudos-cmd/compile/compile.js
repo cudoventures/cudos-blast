@@ -3,7 +3,7 @@ const VError = require('verror')
 const {
   executeRun
   // ugly story
-} = require('../../cudos-utilities/runDockerCommands')
+} = require('../../cudos-utilities/run-docker-commands')
 const {
   getProjectRootPath
 } = require('../../cudos-utilities/packageInfo')

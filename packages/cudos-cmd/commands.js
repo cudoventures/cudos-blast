@@ -1,9 +1,4 @@
-#!/usr/bin/env node
-
-const yargs = require('yargs')
-
 const {
-  runCmd,
   testCmd,
   unitTestCmd
 } = require('../../cmd')
@@ -16,52 +11,61 @@ const {
   compileCmd
 } = require('./compile/compile.js')
 
-const nodeCmd = require('../../cmd/node')
-const keysCmd = require('../../cmd/keys')
+const {
+  runCmd
+} = require('./run/run.js')
 
-async function commands(args) {
-  await yargs(args)
-    .scriptName('cudos')
-    .version()
-    .usage('$0 <cmd> [args]')
-    .command('init', 'create sample project', (yargs) => {
-      yargs
-        .option('dir', {
-          alias: 'd',
-          type: 'string',
-          default: '.',
-          description: 'project directory'
-        })
-    }, initCmd)
-    .command('compile',
-      'Compiles in alphabetical order the smart contracts in the workspace',
-      (yargs) => {
-      },
-      compileCmd)
-    .command(nodeCmd)
-    .command('run <scriptFilePath>', 'run script', (yargs) => {
-      yargs.positional('scriptFilePath', {
-        type: 'string',
-        describe: 'The path to to the script to run'
-      })
-    }, runCmd)
-    .command('test',
-      'run integration tests',
-      (yargs) => { },
-      testCmd)
-    .command('unittest',
-      'runs the unit tests of the smart contracts',
-      (yargs) => { },
-      unitTestCmd)
-    .command(keysCmd)
-    .demandCommand(1, 'No command specified!') // user must specify atleast one command
-    .recommendCommands()
-    .strictCommands() // checks if the command is specified, if its not - user friendly error
-    .showHelpOnFail(true) // show help automatically
-    .help()
-    .argv
+const initInfo = {
+  command: 'init',
+  describe: 'create sample project',
+  builder: (yargs) => {
+    yargs.option('dir', {
+      alias: 'd',
+      type: 'string',
+      default: '.',
+      description: 'project directory'
+    })
+  },
+  handler: initCmd
+}
+
+const compileInfo = {
+  command: 'compile',
+  describe: 'Compiles in alphabetical order the smart contracts in the workspace',
+  builder: (yargs) => { },
+  handler: compileCmd
+}
+
+const runInfo = {
+  command: 'run <scriptFilePath>',
+  describe: 'run script',
+  builder: (yargs) => {
+    yargs.positional('scriptFilePath', {
+      type: 'string',
+      describe: 'The path to to the script to run'
+    })
+  },
+  handler: runCmd
+}
+
+const testInfo = {
+  command: 'test',
+  describe: 'run integration tests',
+  builder: (yargs) => { },
+  handler: testCmd
+}
+
+const unitTestInfo = {
+  command: 'unittest',
+  describe: 'runs the unit tests of the smart contracts',
+  builder: (yargs) => { },
+  handler: unitTestCmd
 }
 
 module.exports = {
-  commands
+  initInfo: initInfo,
+  compileInfo: compileInfo,
+  testInfo: testInfo,
+  unitTestInfo: unitTestInfo,
+  runInfo: runInfo
 }
