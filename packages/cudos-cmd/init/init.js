@@ -3,7 +3,7 @@ const fs = require('fs')
 const fsExtra = require('fs-extra')
 const path = require('path')
 
-const { getPackageRoot } = require('../../cudos-utilities/packageInfo')
+const { getPackageRoot } = require('../../cudos-utilities/package-info')
 
 async function initCmd(argv) {
   if (argv.dir !== undefined && argv.dir !== '' && argv.dir !== '.') {
@@ -11,7 +11,7 @@ async function initCmd(argv) {
   }
 
   try {
-    await fsExtra.copySync(
+    await fsExtra.copy(
       path.join(getPackageRoot(), 'template'),
       argv.dir
     )
