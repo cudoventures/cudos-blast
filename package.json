@@ -2,9 +2,9 @@
     "name": "cudos-cli",
     "version": "0.8.1",
     "description": "",
-    "main": "cudos.js",
+    "main": "./packages/cudos-cmd/cudos-cmd.js",
     "bin": {
-        "cudos": "./cudos.js"
+        "cudos": "./packages/cudos-cmd/cudos-cmd.js"
     },
     "dependencies": {
         "cudosjs": "0.0.18",
