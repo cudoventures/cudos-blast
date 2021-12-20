@@ -3,11 +3,14 @@
 const yargs = require('yargs')
 
 const {
-  initCmd,
   runCmd,
   testCmd,
   unitTestCmd
 } = require('../../cmd')
+
+const {
+  initCmd
+} = require('./init/init.js')
 
 const {
   compileCmd
