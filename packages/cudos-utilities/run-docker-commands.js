@@ -5,7 +5,7 @@ const {
 const {
   getDockerComposeInitFile,
   getDockerComposeStartFile
-} = require('./packageInfo')
+} = require('./package-info')
 
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
 const dockerRunCmd = 'docker run --rm '
