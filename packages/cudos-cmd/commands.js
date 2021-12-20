@@ -5,16 +5,12 @@ const {
   runCmd
 } = require('../../cmd')
 
-const { keysListCmd } = require('./keys/keysList.js')
-const { keysAddCmd } = require('./keys/keysAdd.js')
-const { keysRmCmd } = require('./keys/keysRm.js')
-const { keysFundCmd } = require('./keys/keysFund.js')
+const keys = require('./keys/keys.js')
 const { compileCmd } = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
 
 const nodeCmd = require('../../cmd/node')
-// const keysCmd = require('../../cmd/keys')
 
 async function commands(args) {
   await yargs(args)
@@ -63,13 +59,13 @@ const keysCmd = {
   command: 'keys',
   describe: 'Manage accounts/keys',
   builder: (yargs) => {
-    yargs.command('ls', 'List all accounts in the node key storage', () => {}, keysListCmd)
+    yargs.command('ls', 'List all accounts in the node key storage', () => {}, keys.keysListCmd)
       .command('add <name>', 'Add account to the node key storage', () => {
         yargs.positional('name', {
           type: 'string',
           describe: 'account name'
         })
-      }, keysAddCmd)
+      }, keys.keysAddCmd)
       .command('rm <name>', 'Remove account from the node key storage', () => {
         yargs.positional('name', {
           type: 'string',
@@ -81,7 +77,7 @@ const keysCmd = {
           default: false,
           description: 'Ignore the prompt.'
         })
-      }, keysRmCmd)
+      }, keys.keysRmCmd)
       .command('fund <name>', 'Fund tokens', () => {
         yargs.positional('name', {
           type: 'string',
@@ -93,7 +89,7 @@ const keysCmd = {
           required: true,
           describe: 'amount of tokens in the format 10000000acudos'
         })
-      }, keysFundCmd)
+      }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
   }
 }
