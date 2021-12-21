@@ -3,7 +3,7 @@ const fs = require('fs')
 const fsExtra = require('fs-extra')
 const path = require('path')
 
-const { getPackageRoot } = require('../../cudos-utilities/packageInfo')
+const { getPackageRoot } = require('../../cudos-utilities/package-info')
 
 async function initCmd(argv) {
   if (argv.dir !== undefined && argv.dir !== '' && argv.dir !== '.') {
@@ -33,4 +33,4 @@ function handleCustomDirCreation(argv) {
   }
 }
 
-module.exports.initCmd = initCmd
+module.exports = { initCmd: initCmd }

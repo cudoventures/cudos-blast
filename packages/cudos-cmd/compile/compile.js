@@ -1,12 +1,7 @@
 const fs = require('fs')
 const VError = require('verror')
-const {
-  executeRun
-  // ugly story
-} = require('../../cudos-utilities/run-docker-commands')
-const {
-  getProjectRootPath
-} = require('../../cudos-utilities/packageInfo')
+const { executeRun } = require('../../cudos-utilities/run-docker-commands')
+const { getProjectRootPath } = require('../../cudos-utilities/package-info')
 
 const optimizerVer = '0.12.3'
 
@@ -29,4 +24,4 @@ function compileCmd(argv) {
   }
 }
 
-module.exports.compileCmd = compileCmd
+module.exports = { compileCmd: compileCmd }

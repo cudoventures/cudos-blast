@@ -16,4 +16,4 @@ async function runCmd(argv) {
   return await ds.runInThisContext()
 }
 
-module.exports.runCmd = runCmd
+module.exports = { runCmd: runCmd }
