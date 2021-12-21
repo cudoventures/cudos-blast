@@ -39,8 +39,8 @@ const executeNodeMultiCmd = function(arg) {
 }
 
 module.exports = {
-  executeCompose,
-  executeRun,
-  executeNode,
-  executeNodeMultiCmd
+  executeCompose: executeCompose,
+  executeRun: executeRun,
+  executeNode: executeNode,
+  executeNodeMultiCmd: executeNodeMultiCmd
 }

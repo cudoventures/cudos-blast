@@ -1,16 +1,11 @@
 const {
-  runCmd,
-  testCmd,
-  unitTestCmd
+  runCmd
 } = require('../../cmd')
 
-const {
-  initCmd
-} = require('./init/init.js')
-
-const {
-  compileCmd
-} = require('./compile/compile.js')
+const { initCmd } = require('./init/init.js')
+const { compileCmd } = require('./compile/compile.js')
+const { testCmd } = require('./test/test.js')
+const { unitTestCmd } = require('./unittest/unittest.js')
 
 const initInfo = {
   command: 'init',
