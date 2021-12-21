@@ -1,8 +1,8 @@
 const {
-  initCmd,
   runCmd
 } = require('../../cmd')
 
+const { initCmd } = require('./init/init.js')
 const { compileCmd } = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
