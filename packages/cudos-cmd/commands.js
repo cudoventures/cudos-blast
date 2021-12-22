@@ -21,7 +21,7 @@ const initInfo = {
 const compileInfo = {
   command: 'compile',
   describe: 'Compiles in alphabetical order the smart contracts in the workspace',
-  builder: (yargs) => { },
+  builder: (yargs) => {},
   handler: compileCmd
 }
 
@@ -40,14 +40,14 @@ const runInfo = {
 const testInfo = {
   command: 'test',
   describe: 'run integration tests',
-  builder: (yargs) => { },
+  builder: (yargs) => {},
   handler: testCmd
 }
 
 const unitTestInfo = {
   command: 'unittest',
   describe: 'runs the unit tests of the smart contracts',
-  builder: (yargs) => { },
+  builder: (yargs) => {},
   handler: unitTestCmd
 }
 
