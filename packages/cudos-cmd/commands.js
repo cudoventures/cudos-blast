@@ -1,7 +1,4 @@
-const {
-  runCmd
-} = require('../../cmd')
-
+const { runCmd } = require('./run/run.js')
 const { initCmd } = require('./init/init.js')
 const { compileCmd } = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
