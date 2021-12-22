@@ -41,13 +41,7 @@ const Contract = class {
       }
     }
 
-    const gasPrice = await getGasPrice()
-
-    if (!getGasPrice()) {
-      console.log('Missing [gasPrice] field in the config file.')
-      process.exit(1)
-    }
-    this.gasPrice = GasPrice.fromString(gasPrice)
+    this.gasPrice = GasPrice.fromString(await getGasPrice())
 
     this.client = await getClient()
     this.defaultAccount = await getAccountAddress('account_1')
