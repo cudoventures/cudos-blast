@@ -3,7 +3,7 @@ const VError = require('verror')
 const {
   executeNode,
   executeNodeMultiCmd
-} = require('../../cudos-utilities/runDockerCommands')
+} = require('../../cudos-utilities/run-docker-commands')
 
 const keysListCmd = async function() {
   try {

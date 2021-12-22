@@ -8,7 +8,6 @@ const commands = require('./commands')
 
 // TODO: refactor
 const nodeCmd = require('../../cmd/node')
-const keysCmd = require('../../cmd/keys')
 
 async function main() {
   await yargs(hideBin(process.argv))
@@ -21,7 +20,7 @@ async function main() {
     .command(commands.unitTestInfo)
     .command(nodeCmd)
     .command(commands.runInfo)
-    .command(keysCmd)
+    .command(commands.keysInfo)
     .demandCommand(1, 'No command specified!') // user must specify atleast one command
     .recommendCommands()
     .strictCommands() // checks if the command is specified, if its not - user friendly error
