@@ -1,9 +1,7 @@
 #!/usr/bin/env node
 
 const yargs = require('yargs')
-const {
-  hideBin
-} = require('yargs/helpers')
+const { hideBin } = require('yargs/helpers')
 const commands = require('./commands')
 
 // TODO: refactor
