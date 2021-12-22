@@ -2,7 +2,7 @@ const fs = require('fs')
 const vm = require('vm')
 const path = require('path')
 
-const { getContractFactory, getContractFromAddress } = require('../../cudos-utilities/contract-services')
+const { getContractFactory, getContractFromAddress } = require('../../cudos-utilities/contract-utils')
 
 global.getContractFactory = getContractFactory
 global.getContractFromAddress = getContractFromAddress
@@ -13,7 +13,7 @@ async function runCmd(argv) {
     return
   }
   const ds = new vm.Script(fs.readFileSync(argv.scriptFilePath))
-  return await ds.runInThisContext()
+  return ds.runInThisContext()
 }
 
 module.exports = { runCmd: runCmd }
