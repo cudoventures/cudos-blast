@@ -7,13 +7,13 @@ const keys = require('./keys/keys.js')
 
 const initInfo = {
   command: 'init',
-  describe: 'create sample project',
+  describe: 'Create a sample project',
   builder: (yargs) => {
     yargs.option('dir', {
       alias: 'd',
       type: 'string',
       default: '.',
-      description: 'project directory'
+      description: 'Project directory'
     })
   },
   handler: initCmd
@@ -28,25 +28,25 @@ const compileInfo = {
 
 const testInfo = {
   command: 'test',
-  describe: 'run integration tests',
+  describe: 'Run integration tests',
   builder: (yargs) => {},
   handler: testCmd
 }
 
 const unitTestInfo = {
   command: 'unittest',
-  describe: 'runs the unit tests of the smart contracts',
+  describe: 'Runs the unit tests of the smart contracts',
   builder: (yargs) => {},
   handler: unitTestCmd
 }
 
 const runInfo = {
   command: 'run <scriptFilePath>',
-  describe: 'run script',
+  describe: 'Run a script',
   builder: (yargs) => {
     yargs.positional('scriptFilePath', {
       type: 'string',
-      describe: 'The path to to the script to run'
+      describe: 'The path to the script to run'
     })
   },
   handler: runCmd
@@ -60,31 +60,31 @@ const keysInfo = {
       .command('add <name>', 'Add account to the node key storage', () => {
         yargs.positional('name', {
           type: 'string',
-          describe: 'account name'
+          describe: 'Account name to be added'
         })
       }, keys.keysAddCmd)
       .command('rm <name>', 'Remove account from the node key storage', () => {
         yargs.positional('name', {
           type: 'string',
-          describe: 'account name'
+          describe: 'Account name to be deleted'
         })
-        yargs.option('yes', {
-          alias: 'y',
+        yargs.option('force', {
+          alias: 'f',
           type: 'boolean',
           default: false,
-          description: 'Ignore the prompt.'
+          description: 'Delete without prompt.'
         })
       }, keys.keysRmCmd)
-      .command('fund <name>', 'Fund tokens', () => {
+      .command('fund <name>', 'Fund account with tokens', () => {
         yargs.positional('name', {
           type: 'string',
-          describe: 'account name'
+          describe: 'Account name to be funded'
         })
         yargs.option('tokens', {
           alias: 't',
           type: 'string',
           required: true,
-          describe: 'amount of tokens in the format 10000000acudos'
+          describe: 'Amount of tokens in the format 10000000acudos'
         })
       }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command

@@ -20,7 +20,7 @@ const {
 async function getClient() {
   const endpoint = await getEndpoint()
   // TODO: pass account and network as a param
-  const wallet = await getSigner('account_1', 'cudos')
+  const wallet = await getSigner('account1', 'cudos')
   return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
 }
 
@@ -44,7 +44,7 @@ const Contract = class {
     this.gasPrice = GasPrice.fromString(await getGasPrice())
 
     this.client = await getClient()
-    this.defaultAccount = await getAccountAddress('account_1')
+    this.defaultAccount = await getAccountAddress('account1')
 
     return this
   }

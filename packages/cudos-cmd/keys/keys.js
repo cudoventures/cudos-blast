@@ -48,8 +48,8 @@ function transferTokensByNameCommand(fromName, toName, amount) {
 }
 
 module.exports = {
-  keysListCmd,
-  keysAddCmd,
-  keysRmCmd,
-  keysFundCmd
+  keysListCmd: keysListCmd,
+  keysAddCmd: keysAddCmd,
+  keysRmCmd: keysRmCmd,
+  keysFundCmd: keysFundCmd
 }

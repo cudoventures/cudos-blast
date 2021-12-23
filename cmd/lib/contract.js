@@ -21,7 +21,7 @@ const {
 async function getClient() {
   const endpoint = await getEndpoint()
   // TODO: pass account as a param
-  const wallet = await keystore.getSigner('account_1')
+  const wallet = await keystore.getSigner('account1')
   return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
 }
 
