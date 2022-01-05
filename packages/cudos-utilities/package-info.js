@@ -31,10 +31,8 @@ function findClosestPackageJson(file) {
 }
 
 module.exports = {
-  findClosestPackageJson,
-  getPackageJsonPath,
-  getPackageRoot,
-  getProjectRootPath,
-  getDockerComposeInitFile,
-  getDockerComposeStartFile
+  getPackageRoot: getPackageRoot,
+  getProjectRootPath: getProjectRootPath,
+  getDockerComposeInitFile: getDockerComposeInitFile,
+  getDockerComposeStartFile: getDockerComposeStartFile
 }
