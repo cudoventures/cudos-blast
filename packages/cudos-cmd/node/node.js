@@ -13,7 +13,7 @@ const stopNodeCmd = async function() {
   const nodeStatus = await getStatusNode()
 
   if (!nodeStatus.isConnected) {
-    console.log('Node is offline.')
+    console.log('Node is stopped.')
     return
   }
   executeCompose('down')
