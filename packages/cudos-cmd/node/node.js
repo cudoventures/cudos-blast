@@ -5,7 +5,7 @@ const {
 
 const {
   getStatusNode
-} = require('../../../cmd/lib/status')
+} = require('../../cudos-utilities/nodeStatus')
 
 const startNodeCmd = async function(argv) {
   startNode(argv.daemon)
