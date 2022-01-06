@@ -7,15 +7,15 @@ const {
   getStatusNode
 } = require('./lib/status')
 
-const startNodeCmd = async function (argv) {
+const startNodeCmd = async function(argv) {
   startNode(argv.daemon)
 }
 
-const stopNodeCmd = function () {
+const stopNodeCmd = function() {
   stopNode()
 }
 
-const statusNodeCmd = async function () {
+const statusNodeCmd = async function() {
   const nodeStatus = await getStatusNode()
   if (nodeStatus.isConnected) {
     console.log('Connection to node is online.')

@@ -4,9 +4,6 @@ const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
 const commands = require('./commands')
 
-// TODO: refactor
-const nodeCmd = require('../../cmd/node')
-
 async function main() {
   await yargs(hideBin(process.argv))
     .scriptName('cudos')
@@ -16,7 +13,7 @@ async function main() {
     .command(commands.compileInfo)
     .command(commands.testInfo)
     .command(commands.unitTestInfo)
-    .command(nodeCmd)
+    .command(commands.nodeInfo)
     .command(commands.runInfo)
     .command(commands.keysInfo)
     .demandCommand(1, 'No command specified!') // user must specify atleast one command
