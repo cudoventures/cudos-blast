@@ -1,5 +1,5 @@
 const { executeCompose } = require('../../cudos-utilities/run-docker-commands')
-const { getStatusNode } = require('../../cudos-utilities/nodeStatus')
+const { getStatusNode } = require('../../cudos-utilities/get-node-status')
 
 const startNodeCmd = async function(argv) {
   if (argv.daemon) {
