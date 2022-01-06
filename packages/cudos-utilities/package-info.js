@@ -1,12 +1,14 @@
 const path = require('path')
 const findup = require('find-up')
 
+const PATH_TO_DOCKER_CONFIG = 'packages/cudos-config/'
+
 function getDockerComposeInitFile() {
-  return path.join(getPackageRoot(), 'docker-compose-init.yaml')
+  return path.join(getPackageRoot(), PATH_TO_DOCKER_CONFIG, 'docker-compose-init.yaml')
 }
 
 function getDockerComposeStartFile() {
-  return path.join(getPackageRoot(), 'docker-compose-start.yaml')
+  return path.join(getPackageRoot(), PATH_TO_DOCKER_CONFIG, 'docker-compose-start.yaml')
 }
 
 function getPackageJsonPath() {
