@@ -1,18 +1,16 @@
-const {
-  stopNode,
-  startNode
-} = require('../../../cmd/lib/commandService')
-
-const {
-  getStatusNode
-} = require('../../cudos-utilities/nodeStatus')
+const { executeCompose } = require('../../cudos-utilities/run-docker-commands')
+const { getStatusNode } = require('../../cudos-utilities/nodeStatus')
 
 const startNodeCmd = async function(argv) {
-  startNode(argv.daemon)
+  if (argv.daemon) {
+    executeCompose(' up --build -d')
+  } else {
+    executeCompose(' up --build')
+  }
 }
 
 const stopNodeCmd = function() {
-  stopNode()
+  executeCompose(' down')
 }
 
 const statusNodeCmd = async function() {
@@ -28,22 +26,6 @@ const statusNodeCmd = async function() {
   }
 }
 
-// exports.command = 'node'
-// exports.describe = 'manage cudo local node'
-
-// exports.builder = (yargs) => {
-//   yargs.command('start', 'start node', () => {
-//     yargs.option('daemon', {
-//       alias: 'd',
-//       type: 'boolean',
-//       default: false,
-//       description: 'Run Node in the background'
-//     })
-//   }, startNodeCmd)
-//     .command('stop', 'stopping node', () => {}, stopNodeCmd)
-//     .command('status', 'check node status', () => {}, statusNodeCmd)
-//     .demandCommand(1, 'No command specified!') // user must specify atleast one command
-// }
 module.exports = {
   startNodeCmd: startNodeCmd,
   stopNodeCmd: stopNodeCmd,
