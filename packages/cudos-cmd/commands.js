@@ -96,7 +96,7 @@ const nodeInfo = {
   command: 'node',
   describe: 'Manage cudos local node',
   builder: (yargs) => {
-    yargs.command('start', 'start node', () => {
+    yargs.command('start', 'starting node', () => {
       yargs.option('daemon', {
         alias: 'd',
         type: 'boolean',
@@ -110,6 +110,7 @@ const nodeInfo = {
   },
   handler: runCmd
 }
+
 module.exports = {
   initInfo: initInfo,
   compileInfo: compileInfo,

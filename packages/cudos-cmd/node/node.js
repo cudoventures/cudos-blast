@@ -3,14 +3,20 @@ const { getStatusNode } = require('../../cudos-utilities/nodeStatus')
 
 const startNodeCmd = async function(argv) {
   if (argv.daemon) {
-    executeCompose(' up --build -d')
-  } else {
-    executeCompose(' up --build')
+    executeCompose('up --build -d')
+    return
   }
+  executeCompose('up --build')
 }
 
-const stopNodeCmd = function() {
-  executeCompose(' down')
+const stopNodeCmd = async function() {
+  const nodeStatus = await getStatusNode()
+
+  if (!nodeStatus.isConnected) {
+    console.log('Node is offline.')
+    return
+  }
+  executeCompose('down')
 }
 
 const statusNodeCmd = async function() {
@@ -18,11 +24,11 @@ const statusNodeCmd = async function() {
   if (nodeStatus.isConnected) {
     console.log('Connection to node is online.')
     console.log('Node id: ' + nodeStatus.nodeInfo.nodeId + '\nNetwork: ' + nodeStatus.nodeInfo.network)
-  } else {
-    console.log('Connection to node is offline. Status code: ' + nodeStatus.statusCode)
-    if (typeof nodeStatus.errorMessage !== 'undefined') {
-      console.log('Error: ' + nodeStatus.errorMessage)
-    }
+    return
+  }
+  console.log('Connection to node is offline. Status code: ' + nodeStatus.statusCode)
+  if (typeof nodeStatus.errorMessage !== 'undefined') {
+    console.log('Error: ' + nodeStatus.errorMessage)
   }
 }
 

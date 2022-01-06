@@ -1,7 +1,5 @@
 const axios = require('axios').default
-const {
-  getEndpoint
-} = require('./config-utils')
+const { getEndpoint } = require('./config-utils')
 
 async function getStatusNodeByUrl(url) {
   let nodeStatus = {}
