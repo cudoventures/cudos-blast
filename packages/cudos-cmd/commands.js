@@ -4,6 +4,7 @@ const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
 const { runCmd } = require('./run/run.js')
 const keys = require('./keys/keys.js')
+const node = require('./node/node.js')
 
 const initInfo = {
   command: 'init',
@@ -91,11 +92,31 @@ const keysInfo = {
   }
 }
 
+const nodeInfo = {
+  command: 'node',
+  describe: 'Manage cudos local node',
+  builder: (yargs) => {
+    yargs.command('start', 'starting node', () => {
+      yargs.option('daemon', {
+        alias: 'd',
+        type: 'boolean',
+        default: false,
+        description: 'Run Node in the background'
+      })
+    }, node.startNodeCmd)
+      .command('stop', 'stopping node', () => {}, node.stopNodeCmd)
+      .command('status', 'check node status', () => {}, node.statusNodeCmd)
+      .demandCommand(1, 'No command specified!') // user must specify atleast one command
+  },
+  handler: runCmd
+}
+
 module.exports = {
   initInfo: initInfo,
   compileInfo: compileInfo,
   testInfo: testInfo,
   unitTestInfo: unitTestInfo,
   runInfo: runInfo,
-  keysInfo: keysInfo
+  keysInfo: keysInfo,
+  nodeInfo: nodeInfo
 }

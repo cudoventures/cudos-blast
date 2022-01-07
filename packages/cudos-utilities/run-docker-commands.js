@@ -5,9 +5,9 @@ const {
 } = require('./package-info')
 
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
-const dockerRunCmd = 'docker run --rm '
-const nodeCmd = 'exec cudos-node cudos-noded '
-const nodeMultiCmd = 'exec cudos-node sh -c '
+const DOCKER_RUN_CMD = 'docker run --rm '
+const NODE_CMD = 'exec cudos-node cudos-noded '
+const NODE_MULTI_CMD = 'exec cudos-node sh -c '
 
 const runCommand = function(cmd) {
   const childResult = spawnSync(cmd, {
@@ -24,15 +24,15 @@ const executeCompose = function(arg) {
 }
 
 const executeRun = function(arg) {
-  runCommand(dockerRunCmd + arg)
+  runCommand(DOCKER_RUN_CMD + arg)
 }
 
 const executeNode = function(arg) {
-  runCommand(dockerComposeCmd + nodeCmd + arg)
+  runCommand(dockerComposeCmd + NODE_CMD + arg)
 }
 
 const executeNodeMultiCmd = function(arg) {
-  runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
+  runCommand(dockerComposeCmd + NODE_MULTI_CMD + `'${arg}'`)
 }
 
 module.exports = {
