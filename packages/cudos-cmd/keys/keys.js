@@ -1,45 +1,27 @@
-const VError = require('verror')
-
 const {
   executeNode,
   executeNodeMultiCmd
 } = require('../../cudos-utilities/run-docker-commands')
 
 const keysListCmd = async function() {
-  try {
-    executeNode('keys list')
-  } catch (error) {
-    console.log("Could not fetch keys, is your node online? Execute 'cudo node status' for more info")
-  }
+  executeNode('keys list')
 }
 
 const keysAddCmd = async function(argv) {
-  try {
-    executeNodeMultiCmd(`cudos-noded keys add ${argv.name} && ` + transferTokensByNameCommand(
-      'faucet', argv.name, '1000000000000000000'))
-  } catch (error) {
-    throw new VError(`Could not add account ${argv.name}, \nError: ${error.message}`)
-  }
+  executeNodeMultiCmd(`cudos-noded keys add ${argv.name} && ` + transferTokensByNameCommand(
+    'faucet', argv.name, '1000000000000000000'))
 }
 
 const keysRmCmd = async function(argv) {
-  try {
-    if (argv.yes) {
-      executeNode(`keys delete ${argv.name} --yes`)
-    } else {
-      executeNode(`keys delete ${argv.name}`)
-    }
-  } catch (error) {
-    throw new VError(`Cannot remove account ${argv.name}. \nError: ${error.message}`)
+  if (argv.yes) {
+    executeNode(`keys delete ${argv.name} --yes`)
+  } else {
+    executeNode(`keys delete ${argv.name}`)
   }
 }
 
 const keysFundCmd = async function(argv) {
-  try {
-    executeNodeMultiCmd(transferTokensByNameCommand('faucet', argv.name, argv.tokens))
-  } catch (error) {
-    throw new VError(`Cannot fund account ${argv.name}. \nError: ${error.message}`)
-  }
+  executeNodeMultiCmd(transferTokensByNameCommand('faucet', argv.name, argv.tokens))
 }
 
 function transferTokensByNameCommand(fromName, toName, amount) {

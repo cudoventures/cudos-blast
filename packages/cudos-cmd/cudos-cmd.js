@@ -3,6 +3,7 @@
 const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
 const commands = require('./commands')
+const CudosError = require('../cudos-utilities/cudos-error')
 
 async function main() {
   await yargs(hideBin(process.argv))
@@ -21,12 +22,28 @@ async function main() {
     .strict() // checks if the command or optional parameters are specified, if not - user friendly error
     .showHelpOnFail(true) // show help automatically
     .help()
+    .fail((message, error) => {
+      // yargs error message goes here so this is a way to check if error is from yargs
+      if (message) {
+        // Do we want to show help on any error?
+        yargs.showHelp()
+        process.stderr.write(message + '\n')
+      } else {
+        return setImmediate(() => { throw error })
+      }
+      process.exit(1)
+    })
     .argv
 }
 
 main()
   .then(() => process.exit(0))
   .catch(error => {
-    console.error(`${error}`)
+    if (error instanceof CudosError) {
+      console.error(`${error}`)
+    } else {
+      console.error('Unexpected exception occured!')
+      console.error(error.stack)
+    }
     process.exit(1)
   })
