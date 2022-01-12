@@ -1,7 +1,7 @@
 class CudosError extends Error {
-  constructor(args) {
-    super(args)
-    this.name = 'CudosError'
+  constructor(message) {
+    super(message)
+    this.name = this.constructor.name
   }
 }
 

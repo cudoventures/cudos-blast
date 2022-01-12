@@ -2,17 +2,21 @@ const {
   executeNode,
   executeNodeMultiCmd
 } = require('../../cudos-utilities/run-docker-commands')
+const { checkNodeOnline } = require('../../cudos-utilities/get-node-status')
 
 const keysListCmd = async function() {
+  await checkNodeOnline()
   executeNode('keys list')
 }
 
 const keysAddCmd = async function(argv) {
+  await checkNodeOnline()
   executeNodeMultiCmd(`cudos-noded keys add ${argv.name} && ` + transferTokensByNameCommand(
     'faucet', argv.name, '1000000000000000000'))
 }
 
 const keysRmCmd = async function(argv) {
+  await checkNodeOnline()
   if (argv.yes) {
     executeNode(`keys delete ${argv.name} --yes`)
   } else {
@@ -21,6 +25,7 @@ const keysRmCmd = async function(argv) {
 }
 
 const keysFundCmd = async function(argv) {
+  await checkNodeOnline()
   executeNodeMultiCmd(transferTokensByNameCommand('faucet', argv.name, argv.tokens))
 }
 
