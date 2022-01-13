@@ -1,54 +1,50 @@
-const fsExstra = require('fs-extra')
+const fsExtra = require('fs-extra')
 const process = require('process')
 const path = require('path')
-const VError = require('verror')
+const CudosError = require('./cudos-error')
 
 let config = {}
 
 const configPath = path.join(process.cwd(), 'cudos.config.js')
 
-async function getConfig() {
-  if (await fsExstra.pathExists(configPath)) {
+function getConfig() {
+  if (fsExtra.pathExistsSync(configPath)) {
     config = require(configPath)
     return config
   }
-  console.log(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
-  process.exit(1)
+  throw new CudosError(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
 }
 
-async function getAccountByName(name) {
+function getAccountByName(name) {
   const {
     config
-  } = await getConfig()
-  if (!config.accounts[name]) {
-    throw new VError('Missing Account in the config file.')
-  }
+  } = getConfig()
 
+  if (!config.accounts[name]) {
+    throw new CudosError('Missing Account in the config file.')
+  }
   return config.accounts[name]
 }
 
-async function getEndpoint() {
+function getEndpoint() {
   const {
     config
-  } = await getConfig()
+  } = getConfig()
 
   if (!config.endpoint) {
-    console.log('Missing [endpoint] in the config file.')
-    throw new VError('Missing [endpoint] in the config file.')
+    throw new CudosError('Missing [endpoint] in the config file.')
   }
-
   return config.endpoint
 }
 
-async function getGasPrice() {
+function getGasPrice() {
   const {
     config
-  } = await getConfig()
+  } = getConfig()
 
   if (!config.gasPrice) {
-    throw new VError('Missing gasPrice in the config file.')
+    throw new CudosError('Missing gasPrice in the config file.')
   }
-
   return config.gasPrice
 }
 

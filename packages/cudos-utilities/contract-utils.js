@@ -18,7 +18,7 @@ const {
 } = require('./keypair.js')
 
 async function getClient() {
-  const endpoint = await getEndpoint()
+  const endpoint = getEndpoint()
   // TODO: pass account and network as a param
   const wallet = await getSigner('account1', 'cudos')
   return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)

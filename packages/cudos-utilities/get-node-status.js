@@ -17,7 +17,7 @@ async function checkNodeOffline() {
 }
 
 async function getStatusNode() {
-  const url = await getEndpoint()
+  const url = getEndpoint()
   return await getStatusNodeByUrl(url)
 }
 
@@ -28,35 +28,33 @@ async function getStatusNodeByUrl(url) {
     nodeStatus.statusCode = response.status
 
     if (nodeStatus.statusCode === 200) {
-      if (typeof response.data.result.node_info === 'undefined') {
-        nodeStatus.isConnected = false
-        nodeStatus.errorMessage = 'Missing data from node response. Are you sure you connected a node?'
+      if (response.data.result && response.data.result.node_info) {
+        // node is up and running
+        nodeStatus.isConnected = true
+        nodeStatus = attachAddidionalInfo(nodeStatus, response.data.result)
         return nodeStatus
       }
-      // node is up and running
-      nodeStatus.isConnected = true
-      nodeStatus = attachAddidionalInfo(nodeStatus, response.data.result)
+      // probably connected to something other than node
+      nodeStatus.isConnected = false
+      nodeStatus.message = 'Missing data from node response. Are you sure you connected a node?'
       return nodeStatus
     }
     // status is not 200
     nodeStatus.isConnected = false
+    nodeStatus.message = 'Unusual node response. Status code should be 200.'
     return nodeStatus
   } catch (ex) {
-    nodeStatus.isConnected = false
-    if (typeof ex.code !== 'undefined') {
-      nodeStatus.statusCode = ex.code
-      return nodeStatus
+    if (!ex.isAxiosError) {
+      throw ex
     }
-    nodeStatus.statusCode = 'UNKNOWN'
+    nodeStatus.isConnected = false
+    nodeStatus.statusCode = ex.code
     return nodeStatus
   }
 }
 
 function attachAddidionalInfo(nodeStatus, infoObject) {
-  nodeStatus.nodeInfo = {
-    nodeId: infoObject.node_info.id,
-    network: infoObject.node_info.network
-  }
+  nodeStatus.message = 'Node id: ' + infoObject.node_info.id + '\nNetwork: ' + infoObject.node_info.network
   return nodeStatus
 }
 
