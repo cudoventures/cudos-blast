@@ -24,7 +24,7 @@ const keysAddCmd = async function(argv) {
 
 const keysRmCmd = async function(argv) {
   try {
-    if (argv.yes) {
+    if (argv.force) {
       executeNode(`keys delete ${argv.name} --yes`)
     } else {
       executeNode(`keys delete ${argv.name}`)

@@ -1,10 +1,10 @@
-echo cudos init TEST
-
-mkdir test-cudos-init
-cd test-cudos-init
-cudos init
-
-EXPECTED="Cargo.lock
+export INIT_FOLDER='./test-cudos-init'
+export CONTAINER_NAME='cudos-config_cudos-node'
+export COMPILE_FILES='alpha.wasm
+beta.wasm
+checksums.txt
+checksums_intermediate.txt'
+export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
 contracts
 cudos.config.js
@@ -70,10 +70,4 @@ alpha.test.js
 
 ./scripts:
 deploy.js
-interaction.js"
-RESULT=$(ls -R)
-if [[ ! "$RESULT" == $EXPECTED ]]; then
-    echo cudos init FAILED
-    exit 1
-fi
-echo cudos init SUCCESS
+interaction.js'

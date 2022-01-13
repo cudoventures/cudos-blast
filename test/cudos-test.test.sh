@@ -1,8 +1,7 @@
+source ./test/_vars.test.sh
+
 echo cudos test TEST
-
 cd test-cudos-init
-#todo is cudos test working
-
 EXPECTED="run tests
 run test:  alpha.test.js"
 RESULT=$(cudos test)
