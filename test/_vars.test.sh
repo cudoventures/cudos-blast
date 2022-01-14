@@ -1,5 +1,6 @@
 export INIT_FOLDER='./test-cudos-init'
 export CONTAINER_NAME='cudos-config_cudos-node'
+export COMPOSE='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node'
 export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
