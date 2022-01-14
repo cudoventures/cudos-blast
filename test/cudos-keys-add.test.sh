@@ -1,11 +1,11 @@
-echo TEST cudos keys add
-cudos keys add test
+alias CLEANUP='cudos keys rm test -f'
 
-if [[ ! `cudos keys ls` =~ 'name: test' ]]; then
-    cudos keys rm test -f
-    echo 'TEST cudos keys add FAILED' 1>&2
-    exit 1
+echo 'TEST cudos keys add'
+cudos keys add test
+EXPECTED='name: test'
+if [[ ! `cudos keys ls` =~ $EXPECTED ]]; then
+    echo "TEST cudos keys add FAILED\n\nEXPECTED cudos keys ls to contain $EXPECTED" 1>&2
+    CLEANUP && exit 1
 fi
-cudos keys rm test -f
 echo 'TEST cudos keys add SUCCESS'
-exit 0
+CLEANUP && exit 0

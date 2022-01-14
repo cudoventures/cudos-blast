@@ -1,12 +1,15 @@
 source ./test/_vars.test.sh
 
-echo cudos test TEST
-cd test-cudos-init
-EXPECTED="run tests
-run test:  alpha.test.js"
-RESULT=$(cudos test)
-if [[ ! "$RESULT" == $EXPECTED ]]; then
-    echo cudos test FAILED
-    exit 1
+alias CLEANUP="rm -r ../$INIT_FOLDER"
+
+echo 'TEST cudos test'
+cudos init -d $INIT_FOLDER
+cd $INIT_FOLDER
+cudos compile
+RESULT=`cudos test`
+if [[ ! $RESULT == $TEST_RESULT ]]; then
+    echo "TEST cudos test FAILED\n\nEXPECTED: $TEST_RESULT\n\nACTUAL: $RESULT" 1>&2
+    CLEANUP && exit 1
 fi
-echo cudos test S
+echo 'TEST cudos test SUCCESS'
+CLEANUP && exit 0

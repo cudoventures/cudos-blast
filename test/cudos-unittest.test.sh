@@ -1,12 +1,15 @@
 source ./test/_vars.test.sh
 
-echo cudos unittest TEST
-cd test-cudos-init
-#todo parameterize number of tests
-EXPECTED="test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out"
-RESULT=$(cudos unittest)
-if [[ ! "$RESULT" =~ $EXPECTED ]]; then
-    echo cudos unittest FAILED
-    exit 1
+alias CLEANUP="rm -r ../$INIT_FOLDER"
+
+echo 'TEST cudos unittest'
+cudos init -d $INIT_FOLDER
+cd $INIT_FOLDER
+cudos compile
+RESULT=`cudos unittest`
+if [[ ! $RESULT =~ $UNITTEST_RESULT ]]; then
+    echo "TEST cudos unittest FAILED\n\nEXPECTED: $UNITTEST_RESULT\n\nACTUAL: $RESULT" 1>&2
+    CLEANUP && exit 1
 fi
-echo cudos unittest SUCCESS
+echo 'TEST cudos unittest SUCCESS'
+CLEANUP && exit 0

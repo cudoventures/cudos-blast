@@ -1,10 +1,13 @@
 export INIT_FOLDER='./test-cudos-init'
 export CONTAINER_NAME='cudos-config_cudos-node'
 export COMPOSE='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node'
+export UNITTEST_RESULT='test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out'
 export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
 checksums_intermediate.txt'
+export TEST_RESULT="run tests
+run test:  alpha.test.js"
 export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
 contracts
