@@ -8,17 +8,15 @@ let config = {}
 const configPath = path.join(process.cwd(), 'cudos.config.js')
 
 function getConfig() {
-  if (fsExtra.pathExistsSync(configPath)) {
-    config = require(configPath)
-    return config
+  if (!fsExtra.pathExistsSync(configPath)) {
+    throw new CudosError(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
   }
-  throw new CudosError(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
+  config = require(configPath)
+  return config
 }
 
 function getAccountByName(name) {
-  const {
-    config
-  } = getConfig()
+  const { config } = getConfig()
 
   if (!config.accounts[name]) {
     throw new CudosError('Missing Account in the config file.')
@@ -27,9 +25,7 @@ function getAccountByName(name) {
 }
 
 function getEndpoint() {
-  const {
-    config
-  } = getConfig()
+  const { config } = getConfig()
 
   if (!config.endpoint) {
     throw new CudosError('Missing [endpoint] in the config file.')
@@ -38,9 +34,7 @@ function getEndpoint() {
 }
 
 function getGasPrice() {
-  const {
-    config
-  } = getConfig()
+  const { config } = getConfig()
 
   if (!config.gasPrice) {
     throw new CudosError('Missing gasPrice in the config file.')
