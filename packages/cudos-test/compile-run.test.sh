@@ -21,4 +21,3 @@ else
     echo "cudos run $PASSED"
 fi
 cleanup &> /dev/null && exit $exit_status
-
