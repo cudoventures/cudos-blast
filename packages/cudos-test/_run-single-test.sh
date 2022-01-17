@@ -31,7 +31,7 @@ if [[ $1 == 'node-start.test.sh' ]]; then
 fi
 
 if [[ ! `docker ps` =~ $CONTAINER_NAME && ($1 =~ 'keys' || $1 =~ 'node-stop') ]]; then
-    echo 'Node is not started. Your will be started and stopped after the test is executed.'
+    echo 'Node is not started. Your node will be started and stopped after the test is executed.'
     start_node
     node_started=true
 fi
