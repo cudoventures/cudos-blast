@@ -37,7 +37,14 @@ const testInfo = {
 const unitTestInfo = {
   command: 'unittest',
   describe: 'Runs the unit tests of the smart contracts',
-  builder: (yargs) => {},
+  builder: (yargs) => {
+    yargs.option('quiet', {
+      alias: 'q',
+      type: 'boolean',
+      default: false,
+      description: 'Do not print cargo log messages.'
+    })
+  },
   handler: unitTestCmd
 }
 
