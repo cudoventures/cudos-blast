@@ -3,9 +3,12 @@ const VError = require('verror')
 const { executeRun } = require('../../cudos-utilities/run-docker-commands')
 const { getProjectRootPath } = require('../../cudos-utilities/package-info')
 
-const OPTIMIZER_VER = '0.12.3'
+let OPTIMIZER_VER = '0.12.3'
 
 function compileCmd(argv) {
+  if (argv.optimizer) {
+    OPTIMIZER_VER = argv.optimizer
+  }
   try {
     const projectRootPath = getProjectRootPath()
     const compileCmd = `-v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target` +
