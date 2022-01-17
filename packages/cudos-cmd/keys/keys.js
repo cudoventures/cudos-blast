@@ -17,11 +17,11 @@ const keysAddCmd = async function(argv) {
 
 const keysRmCmd = async function(argv) {
   await checkNodeOnline()
-  if (argv.yes) {
+  if (argv.force) {
     executeNode(`keys delete ${argv.name} --yes`)
-  } else {
-    executeNode(`keys delete ${argv.name}`)
+    return
   }
+  executeNode(`keys delete ${argv.name}`)
 }
 
 const keysFundCmd = async function(argv) {
