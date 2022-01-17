@@ -58,6 +58,19 @@ npm install -g
 
 ---
 
+### Running tests
+
+```bash
+# Run all tests
+npm run test
+```
+```bash
+# Run specific test
+npm run test -- init.test.sh
+```
+
+---
+
 ### Network selection
 
 todo
