@@ -25,9 +25,8 @@ async function main() {
     .fail((message, error) => {
       // yargs error message goes here so this is a way to check if error is from yargs
       if (message) {
-        // Do we want to show help on any error?
         yargs.showHelp()
-        process.stderr.write(message + '\n')
+        console.error(message)
       } else {
         return setImmediate(() => { throw error })
       }
