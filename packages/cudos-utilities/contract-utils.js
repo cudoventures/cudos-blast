@@ -9,7 +9,9 @@ const fs = require('fs')
 
 const {
   getEndpoint,
-  getGasPrice
+  getGasPrice,
+  getNetwork,
+  getDefaultAccount
 } = require('./config-utils.js')
 
 const {
@@ -17,11 +19,20 @@ const {
   getAccountAddress
 } = require('./keypair.js')
 
-async function getClient() {
+let client
+
+async function getClient(accountName, network) {
+  if (!accountName) {
+    accountName = await getDefaultAccount()
+  }
+  if (!network) {
+    network = await getNetwork()
+  }
+
   const endpoint = await getEndpoint()
-  // TODO: pass account and network as a param
-  const wallet = await getSigner('account1', 'cudos')
-  return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
+  const wallet = await getSigner(accountName, network)
+  client = await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
+  client.name = accountName
 }
 
 const Contract = class {
@@ -42,9 +53,7 @@ const Contract = class {
     }
 
     this.gasPrice = GasPrice.fromString(await getGasPrice())
-
-    this.client = await getClient()
-    this.defaultAccount = await getAccountAddress('account1')
+    this.defaultAccount = await getAccountAddress(client.name)
 
     return this
   }
@@ -63,7 +72,7 @@ const Contract = class {
     const uploadFee = calculateFee(1_500_000, this.gasPrice)
     const wasm = fs.readFileSync(this.wasmPath)
 
-    return await this.client.upload(
+    return await client.upload(
       this.defaultAccount,
       wasm,
       uploadFee
@@ -72,7 +81,7 @@ const Contract = class {
 
   async initContract(codeId) {
     const instantiateFee = calculateFee(500_000, this.gasPrice)
-    return await this.client.instantiate(
+    return await client.instantiate(
       this.defaultAccount,
       codeId,
       this.initMsg,
@@ -88,11 +97,11 @@ const Contract = class {
 
   async execute(msg) {
     const fee = calculateFee(1_500_000, this.gasPrice)
-    return await this.client.execute(this.defaultAccount, this.contractAddress, msg, fee)
+    return await client.execute(this.defaultAccount, this.contractAddress, msg, fee)
   }
 
   async querySmart(queryMsg) {
-    return await this.client.queryContractSmart(this.contractAddress, queryMsg)
+    return await client.queryContractSmart(this.contractAddress, queryMsg)
   }
 }
 
@@ -111,5 +120,6 @@ async function getContractFromAddress(contractAddress) {
 
 module.exports = {
   getContractFactory: getContractFactory,
-  getContractFromAddress: getContractFromAddress
+  getContractFromAddress: getContractFromAddress,
+  getClient: getClient
 }
