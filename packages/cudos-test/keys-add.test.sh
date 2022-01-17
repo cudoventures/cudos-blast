@@ -1,8 +1,8 @@
 source ./packages/cudos-test/_vars.sh
-alias cleanup="$COMPOSE cudos-noded keys delete $TEST_ACC -y"
+alias cleanup="$COMPOSE cudos-noded keys delete $TEST_KEY -y"
 
 echo "Executing cudos keys add..."
-cudos keys add $TEST_ACC &> /dev/null
+cudos keys add $TEST_KEY &> /dev/null
 
 if [[ ! `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then
     echo "cudos keys add $FAILED\nThe key was not added successfuly!" 1>&2
