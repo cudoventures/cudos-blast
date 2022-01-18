@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias cleanup="$COMPOSE cudos-noded keys delete $TEST_KEY -y"
 
-echo "Executing cudos keys add..."
+echo "Running cudos keys add..."
 cudos keys add $TEST_KEY &> /dev/null
 
 if [[ ! `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then

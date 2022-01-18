@@ -35,7 +35,7 @@ if [[ ! `docker ps` =~ $CONTAINER_NAME && ($1 =~ 'keys' || $1 =~ 'node-stop') ]]
     start_node
     node_started=true
 fi
-
+echo "Running $1"
 ./packages/cudos-test/$1
 exit_status=$?
 

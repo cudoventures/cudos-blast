@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias block_status="$COMPOSE cudos-noded q block"
 
-echo "Executing cudos node start..."
+echo "Running cudos node start..."
 cudos node start -d &> /dev/null
 sleep 45;
 timer=30
@@ -15,7 +15,7 @@ until [[ `block_status` =~ $VALID_BLOCK_STATUS ]]; do
 done;
 echo "cudos node start $PASSED"
 
-echo "Executing cudos node status..."
+echo "Running cudos node status..."
 cd template
 if [[ ! `cudos node status` =~ 'online' ]]; then
     echo "cudos node status $FAILED"

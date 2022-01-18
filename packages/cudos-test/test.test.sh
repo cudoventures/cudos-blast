@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias cleanup="rm -r ../$INIT_FOLDER"
 
-echo "Executing cudos test..."
+echo "Running cudos test..."
 cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
 RESULT=`cudos test`
 

@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias cleanup="rm -r ../../$INIT_FOLDER"
 
-echo "Executing cudos compile..."
+echo "Running cudos compile..."
 cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
 cudos compile &> /dev/null && cd artifacts
 
@@ -12,7 +12,7 @@ else
     echo "cudos compile $PASSED"
 fi
 
-echo 'Executing cudos run...'
+echo 'Running cudos run...'
 if [[ ! `cudos run ../scripts/deploy.js` =~ 'cudos' ]]; then
     echo "cudos run $FAILED"
     exit_status=1

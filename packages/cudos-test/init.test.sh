@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias cleanup="cd .. && rm -r $INIT_FOLDER"
 
-echo "Executing cudos init..."
+echo "Running cudos init..."
 mkdir $INIT_FOLDER && cd $INIT_FOLDER
 cudos init &> /dev/null
 

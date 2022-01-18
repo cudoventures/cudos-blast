@@ -1,7 +1,7 @@
 source ./packages/cudos-test/_vars.sh
 alias cleanup="$COMPOSE cudos-noded keys delete $TEST_KEY -y"
 
-echo "Executing cudos keys rm..."
+echo "Running cudos keys rm..."
 $COMPOSE keys add $TEST_KEY &> /dev/null
 cudos keys rm $TEST_KEY -f &> /dev/null
 

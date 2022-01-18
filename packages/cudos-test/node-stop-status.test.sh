@@ -1,6 +1,6 @@
 source ./packages/cudos-test/_vars.sh
 
-echo "Executing cudos node stop..."
+echo "Running cudos node stop..."
 cd template
 cudos node stop &> /dev/null
 TIMER=3
@@ -15,7 +15,7 @@ until [[ ! `docker ps` =~ $CONTAINER_NAME ]]; do
 done;
 echo "cudos node stop $PASSED"
 
-echo "Executing cudos node status..."
+echo "Running cudos node status..."
 if [[ ! `cudos node status` =~ 'offline' ]]; then
     echo "cudos node status $FAILED"
     exit 1

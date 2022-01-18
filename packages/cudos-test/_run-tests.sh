@@ -21,6 +21,7 @@ if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
     node_stopped=true
 fi
 
+echo "Executing node-start-status.test.sh"
 ./packages/cudos-test/node-start-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1
@@ -30,6 +31,7 @@ if [[ ! `docker ps` =~ $CONTAINER_NAME ]]; then
 fi
 
 for test in ./packages/cudos-test/*.test.sh; do
+    echo "Executing $test"
     if [[ ! $test =~ 'node' ]]; then
         $test
         if [[ $? == 1 ]]; then
@@ -38,6 +40,7 @@ for test in ./packages/cudos-test/*.test.sh; do
     fi
 done
 
+echo "Executing node-stop-status.test.sh"
 ./packages/cudos-test/node-stop-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1
