@@ -15,7 +15,6 @@ fi
 echo 'Executing cudos run...'
 if [[ ! `cudos run ../scripts/deploy.js` =~ 'cudos' ]]; then
     echo "cudos run $FAILED"
-    pwd
     exit_status=1
 else
     echo "cudos run $PASSED"
