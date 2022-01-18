@@ -1,5 +1,25 @@
 const axios = require('axios').default
 const { getEndpoint } = require('./config-utils')
+const CudosError = require('./cudos-error')
+
+async function checkNodeOnline() {
+  const nodeStatus = await getStatusNode()
+  if (!nodeStatus.isConnected) {
+    throw new CudosError('Local node is not running.')
+  }
+}
+
+async function checkNodeOffline() {
+  const nodeStatus = await getStatusNode()
+  if (nodeStatus.isConnected) {
+    throw new CudosError('Local node is already running.')
+  }
+}
+
+async function getStatusNode() {
+  const url = await getEndpoint()
+  return await getStatusNodeByUrl(url)
+}
 
 async function getStatusNodeByUrl(url) {
   let nodeStatus = {}
@@ -32,11 +52,6 @@ async function getStatusNodeByUrl(url) {
   }
 }
 
-async function getStatusNode() {
-  const url = await getEndpoint()
-  return await getStatusNodeByUrl(url)
-}
-
 function attachAddidionalInfo(nodeStatus, infoObject) {
   nodeStatus.nodeInfo = {
     nodeId: infoObject.node_info.id,
@@ -46,5 +61,7 @@ function attachAddidionalInfo(nodeStatus, infoObject) {
 }
 
 module.exports = {
-  getStatusNode: getStatusNode
+  getStatusNode: getStatusNode,
+  checkNodeOnline: checkNodeOnline,
+  checkNodeOffline: checkNodeOffline
 }
