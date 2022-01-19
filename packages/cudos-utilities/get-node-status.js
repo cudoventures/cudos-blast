@@ -43,12 +43,12 @@ async function getStatusNodeByUrl(url) {
     nodeStatus.isConnected = false
     nodeStatus.message = 'Unusual node response. Status code should be 200.'
     return nodeStatus
-  } catch (ex) {
-    if (!ex.isAxiosError) {
-      throw ex
+  } catch (error) {
+    if (!error.isAxiosError) {
+      throw error
     }
     nodeStatus.isConnected = false
-    nodeStatus.statusCode = ex.code
+    nodeStatus.statusCode = error.code
     return nodeStatus
   }
 }
