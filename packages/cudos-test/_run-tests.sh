@@ -31,8 +31,10 @@ if [[ ! `docker ps` =~ $CONTAINER_NAME ]]; then
 fi
 
 for test in ./packages/cudos-test/*.test.sh; do
-    echo "Executing $test"
     if [[ ! $test =~ 'node' ]]; then
+        split=(${test//// })
+        file_name=${split[3]}
+        echo "Executing $file_name"
         $test
         if [[ $? == 1 ]]; then
             exit_status=1
