@@ -114,8 +114,7 @@ const nodeInfo = {
       .command('stop', 'stopping node', () => {}, node.stopNodeCmd)
       .command('status', 'check node status', () => {}, node.statusNodeCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
-  },
-  handler: runCmd
+  }
 }
 
 module.exports = {
