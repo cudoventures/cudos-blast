@@ -25,40 +25,46 @@ async function getStatusNodeByUrl(url) {
   let nodeStatus = {}
   try {
     const response = await axios.get(url + '/status')
-    nodeStatus.statusCode = response.status
 
-    if (nodeStatus.statusCode === 200) {
+    if (response.status === 200) {
       if (response.data.result && response.data.result.node_info) {
         // node is up and running
-        nodeStatus.isConnected = true
-        nodeStatus = attachAddidionalInfo(nodeStatus, response.data.result)
+        nodeStatus = attachOnlineInfo(nodeStatus, response.data.result)
         return nodeStatus
       }
       // probably connected to something other than node
-      nodeStatus.isConnected = false
+      nodeStatus = attachOfflineInfo(nodeStatus, response.status)
       nodeStatus.message = 'Missing data from node response. Are you sure you connected a node?'
       return nodeStatus
     }
     // status is not 200
-    nodeStatus.isConnected = false
+    nodeStatus = attachOfflineInfo(nodeStatus, response.status)
     nodeStatus.message = 'Unusual node response. Status code should be 200.'
     return nodeStatus
   } catch (error) {
     if (!error.isAxiosError) {
       throw error
     }
-    nodeStatus.isConnected = false
+    // get node status cods either from axios response or axios error
     if (typeof error.response !== 'undefined') {
-      nodeStatus.statusCode = error.response.status
+      nodeStatus = attachOfflineInfo(nodeStatus, error.response.status)
       return nodeStatus
     }
-    nodeStatus.statusCode = error.code
+    nodeStatus = attachOfflineInfo(nodeStatus, error.code)
     return nodeStatus
   }
 }
 
-function attachAddidionalInfo(nodeStatus, infoObject) {
+function attachOnlineInfo(nodeStatus, infoObject) {
+  nodeStatus.isConnected = true
+  nodeStatus.info = 'Node is online.'
   nodeStatus.message = 'Node id: ' + infoObject.node_info.id + '\nNetwork: ' + infoObject.node_info.network
+  return nodeStatus
+}
+
+function attachOfflineInfo(nodeStatus, statusCode) {
+  nodeStatus.isConnected = false
+  nodeStatus.info = 'Node is offline.\nStatus code: ' + statusCode
   return nodeStatus
 }
 
