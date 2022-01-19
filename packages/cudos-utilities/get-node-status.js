@@ -48,6 +48,10 @@ async function getStatusNodeByUrl(url) {
       throw error
     }
     nodeStatus.isConnected = false
+    if (typeof error.response !== 'undefined') {
+      nodeStatus.statusCode = error.response.status
+      return nodeStatus
+    }
     nodeStatus.statusCode = error.code
     return nodeStatus
   }
