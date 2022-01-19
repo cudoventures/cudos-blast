@@ -18,12 +18,12 @@ function compileCmd(argv) {
     if (!fs.existsSync(`${projectRootPath}/contracts`)) {
       throw new VError('No contracts folder found! Make sure to place your smart contracts in /contracts.')
     }
-    console.log(`Contracts path: ${projectRootPath}/contracts`)
+    console.log(`Compiling contracts at: "${projectRootPath}/contracts" with ${OPTIMIZER_VER} version`)
 
     executeRun(compileCmd)
   } catch (e) {
     console.error(`${e}`)
-    console.log('Execute cudo compile --help for more info.')
+    console.log('Execute cudos compile --help for more info.')
   }
 }
 
