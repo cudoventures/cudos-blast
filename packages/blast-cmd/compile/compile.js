@@ -1,7 +1,7 @@
 const fs = require('fs')
-const { executeRun } = require('../../cudos-utilities/run-docker-commands')
-const { getProjectRootPath } = require('../../cudos-utilities/package-info')
-const CudosError = require('../../cudos-utilities/cudos-error')
+const { executeRun } = require('../../blast-utilities/run-docker-commands')
+const { getProjectRootPath } = require('../../blast-utilities/package-info')
+const BlastError = require('../../blast-utilities/blast-error')
 
 const OPTIMIZER_VER = '0.12.3'
 
@@ -12,7 +12,7 @@ function compileCmd(argv) {
     ` cosmwasm/workspace-optimizer:${OPTIMIZER_VER}`
 
   if (!fs.existsSync(`${projectRootPath}/contracts`)) {
-    throw new CudosError('No contracts folder found! Make sure to place your smart contracts in /contracts.')
+    throw new BlastError('No contracts folder found! Make sure to place your smart contracts in /contracts.')
   }
   console.log(`Contracts path: ${projectRootPath}/contracts`)
 

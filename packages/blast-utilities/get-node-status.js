@@ -1,18 +1,18 @@
 const axios = require('axios').default
 const { getEndpoint } = require('./config-utils')
-const CudosError = require('./cudos-error')
+const BlastError = require('./blast-error')
 
 async function checkNodeOnline() {
   const nodeStatus = await getStatusNode()
   if (!nodeStatus.isConnected) {
-    throw new CudosError('Local node is not running.')
+    throw new BlastError('Local node is not running.')
   }
 }
 
 async function checkNodeOffline() {
   const nodeStatus = await getStatusNode()
   if (nodeStatus.isConnected) {
-    throw new CudosError('Local node is already running.')
+    throw new BlastError('Local node is already running.')
   }
 }
 

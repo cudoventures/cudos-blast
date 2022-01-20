@@ -1,7 +1,7 @@
-# CUDOS CLI (command line interface)
+# CUDOS BLAST
 
-CUDOS CLI is a Node.js framework for working with the CUDOS blockchain. Using it you can scaffold, compile, test (both unit & integration) your smart contracts.
-Utilizing [`cudos.js`](https://github.com/CudoVentures/cudos.js) it offers the possibility to deploy and interact with them on a specified network ( local, test or public).
+CUDOS BLAST is a Node.js CLI (command line interface) tool for working with the CUDOS blockchain. You can scaffold, compile, test (both unit & integration) your smart contracts.
+Utilizing [`blast.config.js`] it provides a possibility for deploying and interacting with them on a specified network (local, test or public).
 By using this tool you can also spin up a local [`cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
 
 ## Overview

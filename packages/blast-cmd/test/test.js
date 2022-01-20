@@ -2,7 +2,7 @@ const Mocha = require('mocha')
 const path = require('path')
 const fs = require('fs')
 
-const CudosError = require('../../cudos-utilities/cudos-error')
+const BlastError = require('../../blast-utilities/blast-error')
 
 const mocha = new Mocha()
 const INTEGRATION_TESTS_FOLDER_NAME = 'integration_tests'
@@ -27,7 +27,7 @@ function runTest() {
 
 async function testCmd(argv) {
   if (!fs.existsSync(testDir)) {
-    throw new CudosError('No integration tests folder found! Make sure to place your integration tests in /' +
+    throw new BlastError('No integration tests folder found! Make sure to place your integration tests in /' +
       INTEGRATION_TESTS_FOLDER_NAME)
   }
   console.log('Running integration tests...')

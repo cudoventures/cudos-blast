@@ -3,11 +3,11 @@
 const yargs = require('yargs')
 const { hideBin } = require('yargs/helpers')
 const commands = require('./commands')
-const CudosError = require('../cudos-utilities/cudos-error')
+const BlastError = require('../blast-utilities/blast-error')
 
 async function main() {
   await yargs(hideBin(process.argv))
-    .scriptName('cudos')
+    .scriptName('blast')
     .version()
     .usage('$0 <cmd> [args]')
     .command(commands.initInfo)
@@ -38,7 +38,7 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch(error => {
-    if (error instanceof CudosError) {
+    if (error instanceof BlastError) {
       console.error(`${error}`)
     } else {
       console.error('Unexpected exception occured!')

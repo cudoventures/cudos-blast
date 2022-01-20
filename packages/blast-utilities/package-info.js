@@ -1,7 +1,7 @@
 const path = require('path')
 const findup = require('find-up')
 
-const PATH_TO_DOCKER_CONFIG = 'packages/cudos-config/'
+const PATH_TO_DOCKER_CONFIG = 'packages/blast-config/'
 
 function getDockerComposeInitFile() {
   return path.join(getPackageRootPath(), PATH_TO_DOCKER_CONFIG, 'docker-compose-init.yaml')

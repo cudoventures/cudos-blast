@@ -1,10 +1,10 @@
 {
-    "name": "cudos-cli",
+    "name": "cudos-blast",
     "version": "0.8.1",
     "description": "",
-    "main": "./packages/cudos-cmd/cudos-cmd.js",
+    "main": "./packages/blast-cmd/blast-cmd.js",
     "bin": {
-        "cudos": "./packages/cudos-cmd/cudos-cmd.js"
+        "blast": "./packages/blast-cmd/blast-cmd.js"
     },
     "dependencies": {
         "cudosjs": "0.0.18",

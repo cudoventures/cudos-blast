@@ -1,8 +1,6 @@
 node_modules/
 .idea/
-cudos_data/
 .vscode
 template/**/artifacts/
-cudos_data/node/config/app.toml
-cudos_data/node/config/config.toml
 **/.DS_Store
+package-lock.json

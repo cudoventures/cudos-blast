@@ -1,8 +1,8 @@
-class CudosError extends Error {
+class BlastError extends Error {
   constructor(...args) {
     super(...args)
     this.name = this.constructor.name
   }
 }
 
-module.exports = CudosError
+module.exports = BlastError

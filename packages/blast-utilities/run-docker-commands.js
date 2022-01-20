@@ -1,5 +1,5 @@
 const { spawnSync } = require('child_process')
-const CudosError = require('./cudos-error')
+const BlastError = require('./blast-error')
 const {
   getDockerComposeInitFile,
   getDockerComposeStartFile
@@ -16,7 +16,7 @@ const runCommand = function(cmd) {
     shell: true
   })
   if (childResult.status !== 0) {
-    throw new CudosError(`An error occured while executing a command in docker container/local node: ${cmd}`)
+    throw new BlastError(`An error occured while executing a command in docker container/local node: ${cmd}`)
   }
 }
 

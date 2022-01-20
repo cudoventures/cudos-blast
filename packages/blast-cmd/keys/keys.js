@@ -1,8 +1,8 @@
 const {
   executeNode,
   executeNodeMultiCmd
-} = require('../../cudos-utilities/run-docker-commands')
-const { checkNodeOnline } = require('../../cudos-utilities/get-node-status')
+} = require('../../blast-utilities/run-docker-commands')
+const { checkNodeOnline } = require('../../blast-utilities/get-node-status')
 
 const keysListCmd = async function() {
   await checkNodeOnline()

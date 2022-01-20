@@ -1,9 +1,9 @@
-const { executeCompose } = require('../../cudos-utilities/run-docker-commands')
+const { executeCompose } = require('../../blast-utilities/run-docker-commands')
 const {
   getStatusNode,
   checkNodeOnline,
   checkNodeOffline
-} = require('../../cudos-utilities/get-node-status')
+} = require('../../blast-utilities/get-node-status')
 
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()

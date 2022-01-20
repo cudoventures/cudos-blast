@@ -14,7 +14,7 @@ const {
   getSigner,
   getAccountAddress
 } = require('./keypair.js')
-const CudosError = require('./cudos-error')
+const BlastError = require('./blast-error')
 
 async function getClient() {
   const endpoint = getEndpoint()
@@ -34,7 +34,7 @@ const Contract = class {
     if (!this.deployed) {
       this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`)
       if (!fs.existsSync(this.wasmPath)) {
-        throw new CudosError(`Contract with name ${this.contractname} was not found, did you compile it?`)
+        throw new BlastError(`Contract with name ${this.contractname} was not found, did you compile it?`)
       }
     }
 

@@ -1,6 +1,6 @@
 const path = require('path')
 
-const { executeRun } = require('../../cudos-utilities/run-docker-commands')
+const { executeRun } = require('../../blast-utilities/run-docker-commands')
 
 function runUnitTests() {
   // TODO: the slimbuster img is 604 mb, can we reuse the rust-optimizer to call the test? - So far could not make it
