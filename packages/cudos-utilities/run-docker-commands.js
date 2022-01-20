@@ -16,7 +16,7 @@ const runCommand = function(cmd) {
     shell: true
   })
   if (childResult.status !== 0) {
-    throw new CudosError(`An error occured while executing a command to the local node: ${cmd}`)
+    throw new CudosError(`An error occured while executing a command in docker container/local node: ${cmd}`)
   }
 }
 
