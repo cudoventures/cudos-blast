@@ -21,11 +21,7 @@ const stopNodeCmd = async function() {
 
 const statusNodeCmd = async function() {
   const nodeStatus = await getStatusNode()
-  if (nodeStatus.isConnected) {
-    console.log('Node is online.')
-  } else {
-    console.log('Node is offline.\nStatus code: ' + nodeStatus.statusCode)
-  }
+  console.log(nodeStatus.info)
   if (typeof nodeStatus.message !== 'undefined') {
     console.log(nodeStatus.message)
   }
