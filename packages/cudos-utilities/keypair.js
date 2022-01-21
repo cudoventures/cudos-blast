@@ -37,9 +37,7 @@ function getAddressFromPrivateKey(privateKey, network = 'cudos') {
 function seedToPrivateKey(mnemonic, hdPath = 'm/44\'/118\'/0\'/0/0') {
   const seed = bip39.mnemonicToSeedSync(mnemonic)
   const masterKey = bip32.fromSeed(seed)
-  const {
-    privateKey
-  } = masterKey.derivePath(hdPath)
+  const { privateKey } = masterKey.derivePath(hdPath)
   return privateKey
 }
 

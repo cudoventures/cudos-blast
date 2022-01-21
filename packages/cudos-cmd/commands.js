@@ -23,7 +23,14 @@ const initInfo = {
 const compileInfo = {
   command: 'compile',
   describe: 'Compiles in alphabetical order the smart contracts in the workspace',
-  builder: (yargs) => {},
+  builder: (yargs) => {
+    yargs.option('optimizer', {
+      alias: 'o',
+      type: 'string',
+      default: false,
+      description: 'The version of the cargo optimizer'
+    })
+  },
   handler: compileCmd
 }
 
@@ -119,8 +126,7 @@ const nodeInfo = {
       .command('stop', 'stopping node', () => {}, node.stopNodeCmd)
       .command('status', 'check node status', () => {}, node.statusNodeCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
-  },
-  handler: runCmd
+  }
 }
 
 module.exports = {

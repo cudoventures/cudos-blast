@@ -2,17 +2,16 @@ const {
   GasPrice,
   calculateFee
 } = require('cudosjs')
-
 const path = require('path')
 const fs = require('fs')
 
 const {
   getGasPrice
 } = require('./config-utils.js')
-
 const {
   getAccountAddress
 } = require('./keypair.js')
+const CudosError = require('./cudos-error')
 
 const { getClient } = require('./client.js')
 
@@ -28,11 +27,9 @@ const Contract = class {
     this.client = getClient()
 
     if (!this.deployed) {
-      this.wasmPath = ''
-      try {
-        this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`)
-      } catch (ex) {
-        console.error(`Contract with name ${this.contractname} was not found, did you compile it ? \n run cudo --help for more available commands`)
+      this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`)
+      if (!fs.existsSync(this.wasmPath)) {
+        throw new CudosError(`Contract with name ${this.contractname} was not found, did you compile it?`)
       }
     }
 

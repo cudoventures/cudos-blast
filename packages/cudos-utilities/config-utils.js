@@ -1,45 +1,44 @@
-const fsExstra = require('fs-extra')
+const fsExtra = require('fs-extra')
 const process = require('process')
 const path = require('path')
-const VError = require('verror')
+const CudosError = require('./cudos-error')
+
+let config = {}
 
 const configPath = path.join(process.cwd(), 'cudos.config.js')
 
-async function getConfig() {
-  if (await fsExstra.pathExists(configPath)) {
-    return require(configPath)
+function getConfig() {
+  if (!fsExtra.pathExistsSync(configPath)) {
+    throw new CudosError(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
   }
-  console.log(`Config file was not found! Make sure that cudos.config.js exists at ${configPath}`)
-  process.exit(1)
+  config = require(configPath)
+  return config
 }
 
-async function getAccountByName(name) {
-  const { config } = await getConfig()
-  if (!config.accounts[name]) {
-    throw new VError('Missing Account in the config file.')
-  }
+function getAccountByName(name) {
+  const { config } = getConfig()
 
+  if (!config.accounts[name]) {
+    throw new CudosError('Missing Account in the config file.')
+  }
   return config.accounts[name]
 }
 
-async function getEndpoint() {
-  const { config } = await getConfig()
+function getEndpoint() {
+  const { config } = getConfig()
 
   if (!config.endpoint) {
-    console.log('Missing [endpoint] in the config file.')
-    throw new VError('Missing [endpoint] in the config file.')
+    throw new CudosError('Missing [endpoint] in the config file.')
   }
-
   return config.endpoint
 }
 
-async function getGasPrice() {
-  const { config } = await getConfig()
+function getGasPrice() {
+  const { config } = getConfig()
 
   if (!config.gasPrice) {
-    throw new VError('Missing gasPrice in the config file.')
+    throw new CudosError('Missing gasPrice in the config file.')
   }
-
   return config.gasPrice
 }
 
@@ -47,7 +46,7 @@ async function getNetwork() {
   const { config } = await getConfig()
 
   if (!config.network) {
-    throw new VError('Missing network in the config file.')
+    throw new CudosError('Missing network in the config file.')
   }
 
   return config.network
@@ -57,7 +56,7 @@ async function getDefaultAccount() {
   const { config } = await getConfig()
 
   if (!config.defaultAccount) {
-    throw new VError('Missing defaultAccount in the config file.')
+    throw new CudosError('Missing defaultAccount in the config file.')
   }
 
   return config.defaultAccount
