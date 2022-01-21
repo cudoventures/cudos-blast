@@ -1,4 +1,3 @@
-const { SigningCosmWasmClient } = require('cudosjs')
 const {
   GasPrice,
   calculateFee
@@ -8,41 +7,26 @@ const path = require('path')
 const fs = require('fs')
 
 const {
-  getEndpoint,
-  getGasPrice,
-  getNetwork,
-  getDefaultAccount
+  getGasPrice
 } = require('./config-utils.js')
 
 const {
-  getSigner,
   getAccountAddress
 } = require('./keypair.js')
 
-let client
-
-async function getClient(accountName, network) {
-  if (!accountName) {
-    accountName = await getDefaultAccount()
-  }
-  if (!network) {
-    network = await getNetwork()
-  }
-
-  const endpoint = await getEndpoint()
-  const wallet = await getSigner(accountName, network)
-  client = await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
-  client.name = accountName
-}
+const { getClient } = require('./client.js')
 
 const Contract = class {
   constructor(contractname, initMsg, label) {
     this.contractname = contractname
     this.initMsg = initMsg
     this.label = label || contractname
+    this.client = {}
   }
 
   async init() {
+    this.client = getClient()
+
     if (!this.deployed) {
       this.wasmPath = ''
       try {
@@ -53,7 +37,7 @@ const Contract = class {
     }
 
     this.gasPrice = GasPrice.fromString(await getGasPrice())
-    this.defaultAccount = await getAccountAddress(client.name)
+    this.defaultAccount = await getAccountAddress(this.client.name)
 
     return this
   }
@@ -72,7 +56,7 @@ const Contract = class {
     const uploadFee = calculateFee(1_500_000, this.gasPrice)
     const wasm = fs.readFileSync(this.wasmPath)
 
-    return await client.upload(
+    return await this.client.upload(
       this.defaultAccount,
       wasm,
       uploadFee
@@ -81,7 +65,7 @@ const Contract = class {
 
   async initContract(codeId) {
     const instantiateFee = calculateFee(500_000, this.gasPrice)
-    return await client.instantiate(
+    return await this.client.instantiate(
       this.defaultAccount,
       codeId,
       this.initMsg,
@@ -97,11 +81,11 @@ const Contract = class {
 
   async execute(msg) {
     const fee = calculateFee(1_500_000, this.gasPrice)
-    return await client.execute(this.defaultAccount, this.contractAddress, msg, fee)
+    return await this.client.execute(this.defaultAccount, this.contractAddress, msg, fee)
   }
 
   async querySmart(queryMsg) {
-    return await client.queryContractSmart(this.contractAddress, queryMsg)
+    return await this.client.queryContractSmart(this.contractAddress, queryMsg)
   }
 }
 
@@ -120,6 +104,5 @@ async function getContractFromAddress(contractAddress) {
 
 module.exports = {
   getContractFactory: getContractFactory,
-  getContractFromAddress: getContractFromAddress,
-  getClient: getClient
+  getContractFromAddress: getContractFromAddress
 }
