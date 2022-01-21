@@ -5,15 +5,10 @@ const {
 const path = require('path')
 const fs = require('fs')
 
-const {
-  getGasPrice
-} = require('./config-utils.js')
-const {
-  getAccountAddress
-} = require('./keypair.js')
-const CudosError = require('./cudos-error')
-
+const { getGasPrice } = require('./config-utils.js')
+const { getAccountAddress } = require('./keypair.js')
 const { getClient } = require('./client.js')
+const CudosError = require('./cudos-error')
 
 const Contract = class {
   constructor(contractname, initMsg, label) {
