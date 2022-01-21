@@ -92,7 +92,7 @@ const keysInfo = {
           alias: 't',
           type: 'string',
           required: true,
-          describe: 'Amount of tokens in the format 10000000acudos'
+          describe: 'Amount of tokens in acudos'
         })
       }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
