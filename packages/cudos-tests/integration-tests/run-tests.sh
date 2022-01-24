@@ -30,7 +30,7 @@ fi
 
 for test in $TESTS_FOLDER/*.test.sh; do
     if [[ ! $test =~ 'node' ]]; then
-        split=(${test////})
+        split=(${test//// })
         file_name=${split[5]}
         echo "Executing $file_name..."
         $test
