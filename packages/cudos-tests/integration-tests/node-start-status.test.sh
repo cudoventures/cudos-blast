@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-test/_vars.sh
+source ./packages/cudos-tests/integration-tests/_vars.sh
 
 echo -n 'cudos node start...'
 cd template

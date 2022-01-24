@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-test/_vars.sh
+source ./packages/cudos-tests/integration-tests/_vars.sh
 alias block_status='$COMPOSE cudos-noded q block'
 compose='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml'
 start_node() {
@@ -12,7 +12,7 @@ start_node() {
 }
 
 if [[ $1 ]]; then
-    ./packages/cudos-test/_run-single-test.sh $1
+    $TESTS_FOLDER/_run-single-test.sh $1
     exit $?
 fi
 
@@ -23,16 +23,16 @@ if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
 fi
 
 echo 'Executing node-start-status.test.sh...'
-./packages/cudos-test/node-start-status.test.sh
+$TESTS_FOLDER/node-start-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1
     start_node
 fi
 
-for test in ./packages/cudos-test/*.test.sh; do
+for test in $TESTS_FOLDER/*.test.sh; do
     if [[ ! $test =~ 'node' ]]; then
         split=(${test//// })
-        file_name=${split[3]}
+        file_name=${split[4]}
         echo "Executing $file_name..."
         $test
         if [[ $? == 1 ]]; then
@@ -42,7 +42,7 @@ for test in ./packages/cudos-test/*.test.sh; do
 done
 
 echo 'Executing node-stop-status.test.sh...'
-./packages/cudos-test/node-stop-status.test.sh
+$TESTS_FOLDER/node-stop-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1
 fi

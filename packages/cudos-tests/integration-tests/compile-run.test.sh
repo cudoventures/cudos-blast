@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-test/_vars.sh
+source ./packages/cudos-tests/integration-tests/_vars.sh
 
 echo -n 'cudos compile...'
 cp -R template $INIT_FOLDER &> /dev/null

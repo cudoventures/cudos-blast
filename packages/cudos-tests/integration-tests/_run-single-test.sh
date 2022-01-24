@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-test/_vars.sh
+source ./packages/cudos-tests/integration-tests/_vars.sh
 compose='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml'
 start_node() {
     $compose up --build -d &> /dev/null
@@ -10,7 +10,7 @@ start_node() {
     done;
 }
 
-if [[ ! `ls -a ./packages/cudos-test` =~ $1 ]]; then
+if [[ ! `ls -a $TESTS_FOLDER` =~ $1 ]]; then
     echo 'Invalid test file!'
     exit 1
 fi
@@ -21,7 +21,7 @@ if [[ $1 == 'node-start-status.test.sh' ]]; then
         $compose down &> /dev/null && sleep 5
         node_stopped=true
     fi
-    ./packages/cudos-test/$1
+    $TESTS_FOLDER/$1
     exit_status=$?
     if [[ $node_stopped == true && $exit_status == 1 ]]; then
         echo 'Getting your node back up...'
@@ -40,7 +40,7 @@ if [[ $1 =~ 'node-stop' && ! $node_started == true ]]; then
     node_stopped=true
 fi
 echo "Executing $1..."
-./packages/cudos-test/$1
+$TESTS_FOLDER/$1
 exit_status=$?
 
 if [[ $node_started == true && `docker ps` =~ $CONTAINER_NAME ]]; then
