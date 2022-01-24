@@ -1,23 +1,32 @@
+#!/bin/bash
 source ./packages/cudos-test/_vars.sh
 
-echo "Running cudos node stop..."
+echo -n 'cudos node stop...'
 cd template
 cudos node stop &> /dev/null
-TIMER=3
-sleep $TIMER;
+timer=3
+sleep $timer
 until [[ ! `docker ps` =~ $CONTAINER_NAME ]]; do
-    if (( $TIMER > 5 )); then
-        echo "cudos node stop $FAILED\nNode was not stopped successfuly!\n'docker ps' should not contain $CONTAINER_NAME" 1>&2
-        exit 1
+    if [[ $timer > 5 ]]; then
+        echo -e "$FAILED\nNode was not stopped successfuly!\n'docker ps' should not contain $CONTAINER_NAME" 1>&2
+        exit_status=1
     fi
-    sleep $TIMER
-    ((TIMER=TIMER+1))
+    sleep $timer
+    ((timer=timer+1))
 done;
-echo "cudos node stop $PASSED"
-
-echo "Running cudos node status..."
-if [[ ! `cudos node status` =~ 'offline' ]]; then
-    echo "cudos node status $FAILED"
-    exit 1
+if [[ ! $exit_status == 1 ]]; then
+    echo -e $PASSED
 fi
-echo "cudos node status $PASSED"
+
+echo -n 'cudos node status...'
+if [[ $exit_status == 1 ]]; then
+    $compose down &> /dev/null && sleep 5
+fi
+if [[ ! `cudos node status` =~ 'offline' ]]; then
+    echo -e $FAILED
+    exit_status=1
+else
+    echo -e $PASSED
+fi
+
+exit $exit_status

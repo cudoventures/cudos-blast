@@ -1,11 +1,17 @@
+#!/bin/bash
 source ./packages/cudos-test/_vars.sh
-alias cleanup="$COMPOSE cudos-noded keys delete $TEST_KEY -y"
 
-echo "Running cudos keys add..."
+echo -n 'cudos keys add...'
+cd template
 cudos keys add $TEST_KEY &> /dev/null
+cd ..
 
 if [[ ! `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then
-    echo "cudos keys add $FAILED\nThe key was not added successfuly!" 1>&2
-    cleanup &> /dev/null && exit 1
+    echo -e "$FAILED\nThe key was not added successfuly!" 1>&2
+    exit_status=1
+else
+    echo -e $PASSED
 fi
-cleanup &> /dev/null && echo "cudos keys add $PASSED"
+
+$COMPOSE cudos-noded keys delete $TEST_KEY -y &> /dev/null
+exit $exit_status

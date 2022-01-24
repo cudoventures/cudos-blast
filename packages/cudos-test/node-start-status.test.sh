@@ -1,24 +1,39 @@
+#!/bin/bash
 source ./packages/cudos-test/_vars.sh
-alias block_status="$COMPOSE cudos-noded q block"
 
-echo "Running cudos node start..."
+echo -n 'cudos node start...'
+cd template
 cudos node start -d &> /dev/null
-sleep 45;
+cd ..
+sleep 45
 timer=30
-until [[ `block_status` =~ $VALID_BLOCK_STATUS ]]; do
+until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     if (( $timer > 34 )); then
-        echo "cudos node start $FAILED\nNode was not started successfuly!\n'cudos noded q block' does not contain height!" 1>&2
-        exit 1
+        echo -e "$FAILED\nNode was not started successfuly!\n'cudos noded q block' does not contain height!" 1>&2
+        exit_status=1
     fi
-    sleep $timer;
+    sleep $timer
     ((timer=timer+1))
 done;
-echo "cudos node start $PASSED"
+if [[ ! $exit_status == 1 ]]; then
+    echo -e $PASSED
+fi
 
-echo "Running cudos node status..."
+echo -n 'cudos node status...'
+if [[ $exit_status == 1 ]]; then
+    $compose up --build -d &> /dev/null
+    timer=45
+    sleep $timer
+    until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
+        sleep $timer
+    done;
+fi
 cd template
 if [[ ! `cudos node status` =~ 'online' ]]; then
-    echo "cudos node status $FAILED"
-    exit 1
+    echo -e $FAILED
+    exit_status=1
+else
+    echo -e $PASSED
 fi
-echo "cudos node status $PASSED"
+
+exit $exit_status

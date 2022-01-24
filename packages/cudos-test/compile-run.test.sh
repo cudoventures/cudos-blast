@@ -1,22 +1,29 @@
+#!/bin/bash
 source ./packages/cudos-test/_vars.sh
-alias cleanup="rm -r ../../$INIT_FOLDER"
 
-echo "Running cudos compile..."
-cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
-cudos compile &> /dev/null && cd artifacts
+echo -n 'cudos compile...'
+cp -R template $INIT_FOLDER &> /dev/null
+cd $INIT_FOLDER
+cudos compile &> /dev/null
+cd artifacts
 
 if [[ ! `ls -R` == $COMPILE_FILES ]]; then
-    echo "cudos compile $FAILED\nInvalid artifacts!" 1>&2
+    echo -e "$FAILED\nInvalid artifacts!" 1>&2
     exit_status=1
 else
-    echo "cudos compile $PASSED"
+    echo -e $PASSED
 fi
 
-echo 'Running cudos run...'
+echo -n 'cudos run...'
+if [[ $exit_status == 1 ]]; then
+    docker run --rm -v "$INIT_FOLDER":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3
+fi
 if [[ ! `cudos run ../scripts/deploy.js` =~ 'cudos' ]]; then
-    echo "cudos run $FAILED"
+    echo -e $FAILED
     exit_status=1
 else
-    echo "cudos run $PASSED"
+    echo -e $PASSED
 fi
-cleanup &> /dev/null && exit $exit_status
+
+rm -r ../../$INIT_FOLDER &> /dev/null
+exit $exit_status

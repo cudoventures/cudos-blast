@@ -1,12 +1,16 @@
+#!/bin/bash
 source ./packages/cudos-test/_vars.sh
-alias cleanup="rm -r ../$INIT_FOLDER"
 
-echo "Running cudos test..."
+echo -n 'cudos test...'
 cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
-RESULT=`cudos test`
 
-if [[ ! $RESULT == $TEST_RESULT ]]; then
-    echo "cudos test $FAILED\n$EXPECTED\n$TEST_RESULT\n$ACTUAL\n$RESULT" 1>&2
-    cleanup &> /dev/null && exit 1
+result=`cudos test`
+if [[ ! $result == $TEST_RESULT ]]; then
+    echo -e "$FAILED\n$EXPECTED\n$TEST_RESULT\n$ACTUAL\n$result" 1>&2
+    exit_status=1
+else
+    echo -e $PASSED
 fi
-cleanup &> /dev/null && echo "cudos test $PASSED"
+
+rm -r ../$INIT_FOLDER
+exit $exit_status
