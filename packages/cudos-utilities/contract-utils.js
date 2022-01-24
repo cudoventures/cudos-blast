@@ -1,4 +1,3 @@
-const { SigningCosmWasmClient } = require('cudosjs')
 const {
   GasPrice,
   calculateFee
@@ -6,31 +5,22 @@ const {
 const path = require('path')
 const fs = require('fs')
 
-const {
-  getEndpoint,
-  getGasPrice
-} = require('./config-utils.js')
-const {
-  getSigner,
-  getAccountAddress
-} = require('./keypair.js')
+const { getGasPrice } = require('./config-utils.js')
+const { getAccountAddress } = require('./keypair.js')
+const { getClient } = require('./client.js')
 const CudosError = require('./cudos-error')
-
-async function getClient() {
-  const endpoint = getEndpoint()
-  // TODO: pass account and network as a param
-  const wallet = await getSigner('account1', 'cudos')
-  return await SigningCosmWasmClient.connectWithSigner(endpoint, wallet)
-}
 
 const Contract = class {
   constructor(contractname, initMsg, label) {
     this.contractname = contractname
     this.initMsg = initMsg
     this.label = label || contractname
+    this.client = {}
   }
 
   async init() {
+    this.client = getClient()
+
     if (!this.deployed) {
       this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`)
       if (!fs.existsSync(this.wasmPath)) {
@@ -39,9 +29,7 @@ const Contract = class {
     }
 
     this.gasPrice = GasPrice.fromString(await getGasPrice())
-
-    this.client = await getClient()
-    this.defaultAccount = await getAccountAddress('account1')
+    this.defaultAccount = await getAccountAddress(this.client.name)
 
     return this
   }
