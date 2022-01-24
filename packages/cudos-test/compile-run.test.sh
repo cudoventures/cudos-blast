@@ -15,15 +15,16 @@ else
 fi
 
 echo -n 'cudos run...'
+cd ..
 if [[ $exit_status == 1 ]]; then
     docker run --rm -v "$INIT_FOLDER":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3
 fi
-if [[ ! `cudos run ../scripts/deploy.js` =~ 'cudos' ]]; then
+if [[ ! `cudos run ./scripts/deploy.js` =~ 'cudos' ]]; then
     echo -e $FAILED
     exit_status=1
 else
     echo -e $PASSED
 fi
 
-rm -r ../../$INIT_FOLDER &> /dev/null
+rm -r ../$INIT_FOLDER &> /dev/null
 exit $exit_status

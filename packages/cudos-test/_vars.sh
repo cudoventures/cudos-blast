@@ -15,7 +15,7 @@ export TEST_KEY='testtest'
 export KEY_REMOVED_MSG='Key deleted forever'
 export BALANCE_AFTER_FUND='amount: "1"'
 export UNITTEST_RESULT='test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out'
-export TEST_RESULT="run tests
+export TEST_RESULT="Running integration tests...
 run test:  alpha.test.js"
 export COMPILE_FILES='alpha.wasm
 beta.wasm
