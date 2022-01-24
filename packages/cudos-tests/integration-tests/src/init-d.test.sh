@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/_vars.sh
+source ./packages/cudos-tests/integration-tests/vars.sh
 
 echo -n 'cudos init -d...'
 cudos init -d $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER

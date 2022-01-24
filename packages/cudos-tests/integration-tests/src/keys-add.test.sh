@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/_vars.sh
+source ./packages/cudos-tests/integration-tests/vars.sh
 
 echo -n 'cudos keys add...'
 cd template

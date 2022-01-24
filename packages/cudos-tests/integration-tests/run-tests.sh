@@ -1,6 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/_vars.sh
-alias block_status='$COMPOSE cudos-noded q block'
+source ./packages/cudos-tests/integration-tests/vars.sh
 compose='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml'
 start_node() {
     $compose up --build -d &> /dev/null
@@ -12,7 +11,7 @@ start_node() {
 }
 
 if [[ $1 ]]; then
-    $TESTS_FOLDER/_run-single-test.sh $1
+    ./packages/cudos-tests/integration-tests/run-single-test.sh $1
     exit $?
 fi
 
@@ -31,8 +30,8 @@ fi
 
 for test in $TESTS_FOLDER/*.test.sh; do
     if [[ ! $test =~ 'node' ]]; then
-        split=(${test//// })
-        file_name=${split[4]}
+        split=(${test////})
+        file_name=${split[5]}
         echo "Executing $file_name..."
         $test
         if [[ $? == 1 ]]; then
