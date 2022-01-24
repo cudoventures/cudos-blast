@@ -1,6 +1,6 @@
 source ./packages/cudos-test/_vars.sh
 
-printf 'cudos unittest...'
+echo -n 'cudos unittest...'
 cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
 result=`cudos unittest -q`
 

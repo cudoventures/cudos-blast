@@ -11,6 +11,7 @@ function runUnitTests(argv) {
   if (argv.quiet) {
     cmd += ' -q'
   }
+  
   executeRun(cmd)
 }
 
