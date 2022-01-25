@@ -21,7 +21,7 @@ if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
     node_stopped=true
 fi
 
-echo 'Executing node-start-status.test.sh...'
+echo '- Executing node-start-status.test.sh...'
 $TESTS_FOLDER/node-start-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1
@@ -32,7 +32,7 @@ for test in $TESTS_FOLDER/*.test.sh; do
     if [[ ! $test =~ 'node' ]]; then
         split=(${test//// })
         file_name=${split[5]}
-        echo "Executing $file_name..."
+        echo "- Executing $file_name..."
         $test
         if [[ $? == 1 ]]; then
             exit_status=1
@@ -40,7 +40,7 @@ for test in $TESTS_FOLDER/*.test.sh; do
     fi
 done
 
-echo 'Executing node-stop-status.test.sh...'
+echo '- Executing node-stop-status.test.sh...'
 $TESTS_FOLDER/node-stop-status.test.sh
 if [[ $? == 1 ]]; then
     exit_status=1

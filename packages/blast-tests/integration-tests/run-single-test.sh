@@ -39,7 +39,7 @@ if [[ $1 =~ 'node-stop' && ! $node_started == true ]]; then
     echo 'Node is started. Your node will be stopped and started after the test is executed'
     node_stopped=true
 fi
-echo "Executing $1..."
+echo "- Executing $1..."
 $TESTS_FOLDER/$1
 exit_status=$?
 

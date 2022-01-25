@@ -22,9 +22,9 @@ export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
 checksums_intermediate.txt'
-export TEMPLATE_FILES='blast.config.js
-Cargo.lock
+export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
+blast.config.js
 contracts
 integration_tests
 package.json

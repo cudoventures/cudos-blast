@@ -19,7 +19,7 @@ cd ..
 if [[ $exit_status == 1 ]]; then
     docker run --rm -v "$INIT_FOLDER":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3
 fi
-if [[ ! `blast run ./scripts/deploy.js` =~ 'blast' ]]; then
+if [[ ! `blast run ./scripts/deploy.js` =~ 'cudos' ]]; then
     echo -e $FAILED
     exit_status=1
 else
