@@ -183,7 +183,7 @@ blast compile
 > The command have to be called from the project root (or the main Cargo.toml file directory).
 
 - arguments: `none`
-- options: `none`
+- options: `--quiet (-q)` `optional` `Hide test log messages`
 
 **Example:**
 
