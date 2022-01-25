@@ -44,7 +44,14 @@ const testInfo = {
 const unitTestInfo = {
   command: 'unittest',
   describe: 'Runs the unit tests of the smart contracts',
-  builder: (yargs) => {},
+  builder: (yargs) => {
+    yargs.option('quiet', {
+      alias: 'q',
+      type: 'boolean',
+      default: false,
+      description: 'Do not print cargo log messages.'
+    })
+  },
   handler: unitTestCmd
 }
 
@@ -55,6 +62,18 @@ const runInfo = {
     yargs.positional('scriptFilePath', {
       type: 'string',
       describe: 'The path to the script to run'
+    })
+    yargs.option('network', {
+      alias: 'n',
+      type: 'string',
+      default: false,
+      description: 'Option to set a custom network.'
+    })
+    yargs.option('account', {
+      alias: 'a',
+      type: 'string',
+      default: false,
+      description: 'Option to set a custom account for signer. Account name is expected.'
     })
   },
   handler: runCmd

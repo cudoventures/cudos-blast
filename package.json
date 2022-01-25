@@ -3,6 +3,9 @@
     "version": "0.8.1",
     "description": "",
     "main": "./packages/blast-cmd/blast-cmd.js",
+    "scripts": {
+        "test": "./packages/cudos-tests/integration-tests/run-tests.sh"
+    },
     "bin": {
         "blast": "./packages/blast-cmd/blast-cmd.js"
     },

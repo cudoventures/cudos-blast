@@ -42,8 +42,30 @@ function getGasPrice() {
   return config.gasPrice
 }
 
+async function getNetwork() {
+  const { config } = await getConfig()
+
+  if (!config.network) {
+    throw new CudosError('Missing network in the config file.')
+  }
+
+  return config.network
+}
+
+async function getDefaultAccount() {
+  const { config } = await getConfig()
+
+  if (!config.defaultAccount) {
+    throw new CudosError('Missing defaultAccount in the config file.')
+  }
+
+  return config.defaultAccount
+}
+
 module.exports = {
   getAccountByName: getAccountByName,
   getEndpoint: getEndpoint,
-  getGasPrice: getGasPrice
+  getGasPrice: getGasPrice,
+  getNetwork: getNetwork,
+  getDefaultAccount: getDefaultAccount
 }
