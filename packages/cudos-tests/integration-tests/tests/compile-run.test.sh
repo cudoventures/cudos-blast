@@ -1,10 +1,10 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos compile...'
+echo -n 'blast compile...'
 cp -R template $INIT_FOLDER &> /dev/null
 cd $INIT_FOLDER
-cudos compile &> /dev/null
+blast compile &> /dev/null
 cd artifacts
 
 if [[ ! `ls -R` == $COMPILE_FILES ]]; then
@@ -14,12 +14,12 @@ else
     echo -e $PASSED
 fi
 
-echo -n 'cudos run...'
+echo -n 'blast run...'
 cd ..
 if [[ $exit_status == 1 ]]; then
     docker run --rm -v "$INIT_FOLDER":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3
 fi
-if [[ ! `cudos run ./scripts/deploy.js` =~ 'cudos' ]]; then
+if [[ ! `blast run ./scripts/deploy.js` =~ 'blast' ]]; then
     echo -e $FAILED
     exit_status=1
 else

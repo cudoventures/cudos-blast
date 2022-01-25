@@ -1,9 +1,9 @@
 #!/bin/bash
 
-export TESTS_FOLDER='./packages/cudos-tests/integration-tests/tests'
-export INIT_FOLDER='./test-cudos-init'
-export CONTAINER_NAME='cudos-config_cudos-node'
-export COMPOSE='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node'
+export TESTS_FOLDER='./packages/blast-tests/integration-tests/tests'
+export INIT_FOLDER='./test-blast-init'
+export CONTAINER_NAME='blast-config_cudos-node'
+export COMPOSE='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml exec cudos-node'
 red='\033[0;31m'
 green='\033[0;32m'
 reset_color='\033[m'
@@ -22,10 +22,10 @@ export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
 checksums_intermediate.txt'
-export TEMPLATE_FILES='Cargo.lock
+export TEMPLATE_FILES='blast.config.js
+Cargo.lock
 Cargo.toml
 contracts
-cudos.config.js
 integration_tests
 package.json
 scripts
@@ -88,4 +88,4 @@ alpha.test.js
 
 ./scripts:
 deploy.js
-interaction.js'
+interact.js'

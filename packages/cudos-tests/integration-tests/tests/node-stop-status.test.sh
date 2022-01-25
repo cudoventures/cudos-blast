@@ -1,9 +1,9 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos node stop...'
+echo -n 'blast node stop...'
 cd template
-cudos node stop &> /dev/null
+blast node stop &> /dev/null
 timer=3
 sleep $timer
 until [[ ! `docker ps` =~ $CONTAINER_NAME ]]; do
@@ -19,11 +19,11 @@ if [[ ! $exit_status == 1 ]]; then
     echo -e $PASSED
 fi
 
-echo -n 'cudos node status...'
+echo -n 'blast node status...'
 if [[ $exit_status == 1 ]]; then
     $compose down &> /dev/null && sleep 5
 fi
-if [[ ! `cudos node status` =~ 'offline' ]]; then
+if [[ ! `blast node status` =~ 'offline' ]]; then
     echo -e $FAILED
     exit_status=1
 else

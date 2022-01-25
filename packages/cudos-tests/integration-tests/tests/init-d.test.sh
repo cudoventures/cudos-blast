@@ -1,8 +1,8 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos init -d...'
-cudos init -d $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
+echo -n 'blast init -d...'
+blast init -d $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
 
 if [[ ! `ls -R` == $TEMPLATE_FILES ]]; then
     echo -e "$FAILED\nGenerated folder is invalid!" 1>&2

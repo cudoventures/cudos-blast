@@ -1,10 +1,10 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos keys rm...'
+echo -n 'blast keys rm...'
 $COMPOSE keys add $TEST_KEY &> /dev/null
 cd template
-cudos keys rm $TEST_KEY -f &> /dev/null
+blast keys rm $TEST_KEY -f &> /dev/null
 cd ..
 
 if [[ `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then

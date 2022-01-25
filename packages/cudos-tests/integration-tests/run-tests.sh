@@ -1,6 +1,6 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
-compose='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml'
+source ./packages/blast-tests/integration-tests/vars.sh
+compose='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml'
 start_node() {
     $compose up --build -d &> /dev/null
     timer=45
@@ -11,7 +11,7 @@ start_node() {
 }
 
 if [[ $1 ]]; then
-    ./packages/cudos-tests/integration-tests/run-single-test.sh $1
+    ./packages/blast-tests/integration-tests/run-single-test.sh $1
     exit $?
 fi
 

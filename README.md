@@ -85,11 +85,11 @@ npm run test -- init.test.sh
 
 # source lets you use the content of a file
 # ex. INIT_FOLDER, TEMPLATE_FILES
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
 # echo prints out the strings that are passed to it
 # -n flag tells your terminal to stay on the same line after printing out the message
-echo -n 'cudos init...'
+echo -n 'blast init...'
 
 # ARRANGE
 # mkdir creates a folder at the path specified in INIT_FOLDER variable
@@ -99,7 +99,7 @@ mkdir $INIT_FOLDER && cd $INIT_FOLDER
 
 # ACT
 # &> /dev/null hides the output of the command
-cudos init &> /dev/null
+blast init &> /dev/null
 
 # ASSERT
 # ls -R lists directory content.

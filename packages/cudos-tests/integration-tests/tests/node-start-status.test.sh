@@ -1,9 +1,9 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos node start...'
+echo -n 'blast node start...'
 cd template
-cudos node start -d &> /dev/null
+blast node start -d &> /dev/null
 cd ..
 sleep 45
 timer=30
@@ -20,7 +20,7 @@ if [[ ! $exit_status == 1 ]]; then
     echo -e $PASSED
 fi
 
-echo -n 'cudos node status...'
+echo -n 'blast node status...'
 if [[ $exit_status == 1 ]]; then
     $compose up --build -d &> /dev/null
     timer=45
@@ -30,7 +30,7 @@ if [[ $exit_status == 1 ]]; then
     done;
 fi
 cd template
-if [[ ! `cudos node status` =~ 'online' ]]; then
+if [[ ! `blast node status` =~ 'online' ]]; then
     echo -e $FAILED
     exit_status=1
 else

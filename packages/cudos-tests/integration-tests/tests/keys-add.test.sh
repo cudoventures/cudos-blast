@@ -1,9 +1,9 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
-echo -n 'cudos keys add...'
+echo -n 'blast keys add...'
 cd template
-cudos keys add $TEST_KEY &> /dev/null
+blast keys add $TEST_KEY &> /dev/null
 cd ..
 
 if [[ ! `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then
