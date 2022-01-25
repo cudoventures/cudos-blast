@@ -1,10 +1,8 @@
 /* eslint-disable quote-props */
 module.exports.config = {
   name: 'template',
-  network: 'local',
-  defaultAccount: {
-    name: 'account1'
-  },
+  network: 'cudos',
+  defaultAccount: 'account1',
   accounts: {
     'account1':
     {
