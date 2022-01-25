@@ -3,6 +3,9 @@
     "version": "0.8.1",
     "description": "",
     "main": "./packages/cudos-cmd/cudos-cmd.js",
+    "scripts": {
+        "test": "./packages/cudos-tests/integration-tests/run-tests.sh"
+    },
     "bin": {
         "cudos": "./packages/cudos-cmd/cudos-cmd.js"
     },
