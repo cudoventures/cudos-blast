@@ -10,6 +10,7 @@ until [[ ! `docker ps` =~ $CONTAINER_NAME ]]; do
     if [[ $timer > 5 ]]; then
         echo -e "$FAILED\nNode was not stopped successfuly!\n'docker ps' should not contain $CONTAINER_NAME" 1>&2
         exit_status=1
+        break
     fi
     sleep $timer
     ((timer=timer+1))

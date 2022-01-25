@@ -11,6 +11,7 @@ until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     if (( $timer > 34 )); then
         echo -e "$FAILED\nNode was not started successfuly!\n'cudos noded q block' does not contain height!" 1>&2
         exit_status=1
+        break
     fi
     sleep $timer
     ((timer=timer+1))
