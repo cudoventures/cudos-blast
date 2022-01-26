@@ -22,9 +22,6 @@ const stopNodeCmd = async function() {
 const statusNodeCmd = async function() {
   const nodeStatus = await getStatusNode()
   console.log(nodeStatus.info)
-  if (typeof nodeStatus.message !== 'undefined') {
-    console.log(nodeStatus.message)
-  }
 }
 
 module.exports = {
