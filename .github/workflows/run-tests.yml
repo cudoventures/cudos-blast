@@ -1,0 +1,19 @@
+on: pull_request
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    name: run-tests
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: 16.x
+      - run: npm install && npm install -g
+      - run: npm run test
+
+      #- run: docker-compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec -T cudos-node cudos-noded keys add testtest
+      #- run: docker-compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec -T cudos-node cudos-noded keys add testtest
+
+
+      #- run: docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node cudos-noded q block
