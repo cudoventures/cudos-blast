@@ -3,7 +3,7 @@
 export TESTS_FOLDER='./packages/cudos-tests/integration-tests/tests'
 export INIT_FOLDER='./test-cudos-init'
 export CONTAINER_NAME='cudos-config_cudos-node'
-export COMPOSE='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node'
+export COMPOSE='docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec -T cudos-node'
 red='\033[0;31m'
 green='\033[0;32m'
 reset_color='\033[m'

@@ -3,7 +3,7 @@ source ./packages/cudos-tests/integration-tests/vars.sh
 
 echo -n 'cudos keys add...'
 cd template
-cudos keys add $TEST_KEY &> /dev/null
+cudos keys add $TEST_KEY -t &> /dev/null
 cd ..
 
 if [[ ! `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then

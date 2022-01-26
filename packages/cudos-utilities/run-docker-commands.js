@@ -7,8 +7,11 @@ const {
 
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
 const DOCKER_RUN_CMD = 'docker run --rm '
-const NODE_CMD = 'exec cudos-node cudos-noded '
-const NODE_MULTI_CMD = 'exec cudos-node sh -c '
+const NODE_CMD = 'exec -T cudos-node cudos-noded '
+const NODE_CMD_NO_TTY = 'exec cudos-node cudos-noded '
+const NODE_MULTI_CMD = 'exec -T cudos-node sh -c '
+const NODE_MULTI_CMD_NO_TTY = 'exec cudos-node sh -c '
+
 
 const runCommand = function(cmd) {
   const childResult = spawnSync(cmd, {
@@ -28,12 +31,14 @@ const executeRun = function(arg) {
   runCommand(DOCKER_RUN_CMD + arg)
 }
 
-const executeNode = function(arg) {
-  runCommand(dockerComposeCmd + NODE_CMD + arg)
+const executeNode = function(arg, tty = true) {
+  let nodeCmd = tty ? NODE_CMD : NODE_CMD_NO_TTY
+  runCommand(dockerComposeCmd + nodeCmd + arg)
 }
 
-const executeNodeMultiCmd = function(arg) {
-  runCommand(dockerComposeCmd + NODE_MULTI_CMD + `'${arg}'`)
+const executeNodeMultiCmd = function(arg, tty = true) {
+  let nodeMultiCmd = tty ? NODE_MULTI_CMD : NODE_MULTI_CMD_NO_TTY
+  runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
 }
 
 module.exports = {
