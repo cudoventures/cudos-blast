@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 echo -n 'blast compile...'
