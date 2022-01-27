@@ -1,7 +1,7 @@
-# CUDOS CLI (command line interface)
+# CUDOS BLAST
 
-CUDOS CLI is a Node.js framework for working with the CUDOS blockchain. Using it you can scaffold, compile, test (both unit & integration) your smart contracts.
-Utilizing [`cudos.js`](https://github.com/CudoVentures/cudos.js) it offers the possibility to deploy and interact with them on a specified network ( local, test or public).
+CUDOS BLAST is a Node.js CLI (command line interface) tool for working with the CUDOS blockchain. You can scaffold, compile, test (both unit & integration) your smart contracts.
+Utilizing `blast.config.js` it provides a possibility for deploying and interacting with them on a specified network (local, test or public).
 By using this tool you can also spin up a local [`cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
 
 ## Overview
@@ -11,13 +11,13 @@ _Click on a command for more information and examples._
 
 | Command                                               | Description                                                                                                                            |
 | ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [`cudos init`](#cudos-init)                           | Initializes a sample project                                                   |
-| [`cudos compile`](#cudos-compile)                             | Compiles all the smart contracts in the project in alphabetical order                                                                           |
-| [`cudos unittest`](#cudos-unittest)             | Runs the unit tests for the smart contracts   |
-| [`cudos test`](#cudos-test)                        | Runs the integration tests for the smart contracts                                                                                                    |
-| [`cudos node`](#cudos-node)                  | Base command for interacting with a local node. Subcommands: 'start', 'stop', 'status', 'keys'.                                                                                               |
-| [`cudos run`](#cudos-run)                        |  Runs a custom javascript file - for deployment and interaction                                                                                                 |
-| [`cudos keys`](#cudos-keys)                 | Base comand for maneging keystore/accounts. Subcommands: 'add', 'rm', 'fund', 'ls'.                                                                              |
+| [`blast init`](#blast-init)                           | Initialize a sample project                                                   |
+| [`blast compile`](#blast-compile)                             | Compile all smart contracts in the project in alphabetical order                                                                           |
+| [`blast unittest`](#blast-unittest)             | Run unit tests for the smart contracts   |
+| [`blast test`](#blast-test)                        | Run integration tests for the smart contracts                                                                                                    |
+| [`blast node`](#blast-node)                  | Base command for interaction with a local node. Subcommands: 'start', 'stop', 'status'.                                                                                               |
+| [`blast run`](#blast-run)                        |  Run a custom javascript file - for deployment or interaction                                                                                                 |
+| [`blast keys`](#blast-keys)                 | Base command for keystore/accounts management. Subcommands: 'ls', 'add', 'fund', 'rm'.                                                                              |
 
 ### Installation
 
@@ -28,7 +28,7 @@ _Click on a command for more information and examples._
 
 1. Install `npm` and `node`.
 2. Clone the repo & and cd to the cloned directory
-3. Install `cudos-cli` globally by running both: 
+3. Install `cudos-blast` globally by running both: 
 
 ```bash
 npm install
@@ -85,11 +85,11 @@ npm run test -- init.test.sh
 
 # source lets you use the content of a file
 # ex. INIT_FOLDER, TEMPLATE_FILES
-source ./packages/cudos-tests/integration-tests/vars.sh
+source ./packages/blast-tests/integration-tests/vars.sh
 
 # echo prints out the strings that are passed to it
 # -n flag tells your terminal to stay on the same line after printing out the message
-echo -n 'cudos init...'
+echo -n 'blast init...'
 
 # ARRANGE
 # mkdir creates a folder at the path specified in INIT_FOLDER variable
@@ -99,7 +99,7 @@ mkdir $INIT_FOLDER && cd $INIT_FOLDER
 
 # ACT
 # &> /dev/null hides the output of the command
-cudos init &> /dev/null
+blast init &> /dev/null
 
 # ASSERT
 # ls -R lists directory content.
@@ -140,47 +140,64 @@ todo
 
 ## Full commands info
 
-### `cudos init`
+### `blast init`
 
-> Scaffolds a sample project that is ready to work with the CUDOS blockchain. Contains smart contracts and scripts to deploy and interact with them. Optionally you specify the directory of the project. If not specified - gets created in the current working directory.
+> Scaffolds a sample project that is ready to work with the CUDOS blockchain. Contains sample smart contracts and scripts to deploy or interact. Optionally you can specify the directory of the project. If not specified - project is created in the current working directory.
 
 - arguments: `none`
-- options: `-dir (--d)` `string` `Specify a path to install` `not required`
+- options: `--dir (-d)` `string, optional` `Specify a path to install`
 
 **Example:**
 
 ```bash
-cudos init
+blast init
 ```
 
 ```bash
-cudos init --d /Your/Location/Here
+blast init --d /Your/Location/Here
 ```
 
 ---
 
-### `cudos compile`
+### `blast compile`
 
-> Compiles all the smart contracts in alphabetical order. 
-> Please note that you have to call `cudo compile` from the root of your project and the contracts have to be in a folder named '/contracts' again in the root of the project or else the tool will not find them.
-> The contracts are compiled as Rust workspace - this means that if you want to add more folders for compile (ie dependent packages in a separate /packages folder ) all you have to do is go in the base Cargo.toml file ( located at project root) and add your folder under ```[members]```
-> The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artefacts (projectRoot/artefacts folder) are optimized for deployment.
+> Compiles all smart contracts in alphabetical order. 
+> Please note that you have to call `blast compile` from the root of your project and the contracts have to be in a folder `{project_root}/contracts` or else the tool will not find them. 
+> The contracts are compiled as a Rust workspace and therefore if you want to add more folders to compile (i.e. dependent packages in a separate /packages folder) all you have to do is edit the base `{project_root}/Cargo.toml` file and add your folder under ```[members]```. 
+> The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artifacts in `{project_root}/artifacts` folder are optimized for deployment.
 
 - arguments: `none`
-- options: `none`
+- options: `--optimizer (-o)` `string, optional` `Specify the cargo optimizer version`
 
 **Example:**
 
 ```bash
-cudos compile
+blast compile
 ```
 
 ---
 
-### `cudos unittest`
+### `blast unittest`
 
 > Runs the unit tests of the smart contracts. 
-> In order for the command to find the tests - please call it from the root of your project or wherever you main Cargo.toml file is located.
+> The command have to be called from the project root (or the main Cargo.toml file directory).
+
+- arguments: `none`
+- options: `--quiet (-q)` `optional` `Hide test log messages`
+
+**Example:**
+
+```bash
+blast unittest
+```
+
+---
+
+### `blast test`
+
+`It is not working correctly. Only for demo purpose!`
+> Runs the integration tests of the smart contracts - by default located in the `integration_test` folder. 
+> The command have to be called from the project root directory.
 
 - arguments: `none`
 - options: `none`
@@ -188,119 +205,103 @@ cudos compile
 **Example:**
 
 ```bash
-cudos unittest
-```
-
----
-
-### `cudos test`
-
-`Currently its not working correctly, only for demo purpose !`
-> Runs the integration tests of the smart contracts - by default located in the `integration_test` folder
-> In order for the command to find the tests - please call it from the root of your project.
-
-- arguments: `none`
-- options: `none`
-
-**Example:**
-
-```bash
-cudos test
+blast test
 ```
 
 ---
 
 
-### `cudos node`
+### `blast node`
 
-> Base command for interaction with a local node ([`cudos node`](https://github.com/CudoVentures/cudos-node) )
-> Run ```cudo node --help``` for info
+> Base command for interaction with a local node ([`cudos node`](https://github.com/CudoVentures/cudos-node)). 
+> Run ```blast node --help``` for more information.
 
-### `cudos node start`
+### `blast node start`
 > Starts a local CUDOS node
 
 - arguments: `none`
-- options: `--daemon` `--d` `runs the node as a daemon and leaves the current console window free and usable` `not required`
+- options: `--daemon (-d)` `optional` `Run the node as a daemon and leaves the current console window free and usable`
 
 **Example:**
 
 ```bash
-cudos node start
-cudos node start --d
+blast node start
+blast node start -d
 ```
 
-### `cudos node stop`
+### `blast node stop`
 > Stops a local CUDOS node
 
 **Example:**
 
 ```bash
-cudos node stop
+blast node stop
 ```
 
-### `cudos node status`
+### `blast node status`
 > Gives a status of a local CUDOS node - online/offline
 
 **Example:**
 
 ```bash
-cudos node status
+blast node status
 ```
 
 ---
 
-### `cudos run`
+### `blast run`
 > Runs a custom javascript file. 
-> Currently in the /scripts directory there are two files: deploy.js and interact.js
-> In the future it should be possible to supply relevant info by the command line (smart contract name, user adress, etc) as option
-> 
+> Currently in the /scripts directory there are two files: `deploy.js` and `interact.js`. 
+> In the future it should be possible to supply relevant info by the command line (smart contract name, user adress, etc) as option 
 
-- arguments: `scriptFilePath` `string` `The script file to execute`
-- options: `none`
+- arguments: `scriptFilePath` `string` `The script file to be executed`
+- options: `--network (-n)` `string, optional` `Specify a custom network`  
+&emsp;`--account (-a)` `string, optional` `Specified account name becomes signer`  
   
 
   ###### How to deploy different smart contracts?
-  > For each smart contract create a separate deploy file ( for example deploy_alpha.js and deploy_beta.js) and run it one by one. Do not forget to edit the contract name in the .js file ( line 4 in the supplied deploy.js file)
+  > For each smart contract create a separate deploy file (e.g. deploy_alpha.js and deploy_beta.js) and run it one by one. Do not forget to edit the contract name in the .js file (line 4 in the supplied deploy.js file)
 
 **Example:**
 
 ```bash
-cudos run scripts/deploy.js
-cudos run scripts/interact.js
-cudos run scripts/yourScriptFile.js
+blast run scripts/deploy.js
+blast run scripts/interact.js
+blast run scripts/yourScriptFile.js
 ```
 
 ---
 
-### `cudos keys`
-> Manages accounts/keys in local node
+### `blast keys`
+> Manages accounts/keys in local node. 
+> Run ```blast keys --help``` for more information.
 
 ### Subcommands:
 
-#### `cudos keys add accountName`
-> Add account to the node key storage
-- arguments: `accountName` `string`
+#### `blast keys add`
+> Add an account to the node key storage
+- arguments: `accountName` `string, required`
 - options: `none`
   
   
 **Example:**
 
 ```bash
-cudos keys add accountName
+blast keys add myAccount1
 ```
 
-#### `cudos keys rm accountName`
-> Removes account from the node key storage
-- arguments: `accountName` `string`
-- options: `--yes, -y` `No confirmation when deleting a user`
+#### `blast keys rm`
+> Removes an account from the node key storage
+- arguments: `accountName` `string, required`
+- options: `--force, -f` `Delete without confirmation`
 
 **Example:**
 
 ```bash
-cudos keys rm accountName
+blast keys rm myAccount1
 ```
 
-#### `cudos keys ls`
+#### `blast keys ls`
 > List all accounts in the node key storage
 - arguments: `None`
 - options: `None`
@@ -309,20 +310,19 @@ cudos keys rm accountName
 **Example:**
 
 ```bash
-cudos keys ls
+blast keys ls
 ```
 
-#### `cudos keys fund accountName`
+#### `blast keys fund`
 > Fund account with tokens
-- arguments: `accountName` `string` 
-- options: `--tokens, -t` `string` `The amount of tokens to give` `required`
+- arguments: `accountName` `string, required` `The account to be supplied with tokens`
+- options: `--tokens (-t)` `string, required` `The amount of tokens in acudos. They are transferred from the default local node faucet`
   
   
 **Example:**
 
 ```bash
-cudos keys fund accountName --token=10000000acudos
-
+blast keys fund myAccount1 --tokens 1000000
 ```
 
 ---
