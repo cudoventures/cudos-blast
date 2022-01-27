@@ -13,5 +13,5 @@ else
     echo -e $PASSED
 fi
 
-rm -r ../$init_folder &> /dev/null
+rm -r ../$init_folder &> /dev/null || true
 exit $exit_status
