@@ -1,8 +1,9 @@
 #!/bin/bash
 source ./packages/cudos-tests/integration-tests/vars.sh
+init_folder="$INIT_FOLDER-unittest"
 
 echo -n 'cudos unittest...'
-cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
+cp -R template $init_folder &> /dev/null && cd $init_folder
 
 result=`cudos unittest -q`
 if [[ ! $result =~ $UNITTEST_RESULT ]]; then
@@ -12,5 +13,5 @@ else
     echo -e $PASSED
 fi
 
-rm -r ../$INIT_FOLDER
+rm -r ../$init_folder &> /dev/null
 exit $exit_status
