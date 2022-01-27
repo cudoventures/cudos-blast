@@ -1,4 +1,4 @@
-on: pull_request
+on: push
 
 jobs:
   run-tests:
@@ -11,9 +11,3 @@ jobs:
           node-version: 16.x
       - run: npm install && npm install -g
       - run: npm run test
-
-      #- run: docker-compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec -T cudos-node cudos-noded keys add testtest
-      #- run: docker-compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec -T cudos-node cudos-noded keys add testtest
-
-
-      #- run: docker compose -f ./packages/cudos-config/docker-compose-start.yaml -f ./packages/cudos-config/docker-compose-init.yaml exec cudos-node cudos-noded q block

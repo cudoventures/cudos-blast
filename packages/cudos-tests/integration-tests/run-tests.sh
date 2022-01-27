@@ -12,7 +12,11 @@ start_node() {
 
 if [[ $1 ]]; then
     ./packages/cudos-tests/integration-tests/run-single-test.sh $1
-    exit $?
+    if [[ $? == 1 ]]; then
+        exit 1
+    else
+        exit 0
+    fi
 fi
 
 if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
@@ -52,4 +56,6 @@ elif [[ $node_stopped == true && ! `docker ps` =~ $CONTAINER_NAME ]]; then
     start_node
 fi
 
-exit $exit_status
+if [[ $exit_status == 1 ]]; then
+    exit 1
+fi
