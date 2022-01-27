@@ -3,33 +3,36 @@ const { getEndpoint } = require('./config-utils')
 const BlastError = require('./blast-error')
 
 async function checkNodeOnline() {
-  const nodeStatus = await getStatusNode()
+  const nodeStatus = await getNodeStatus()
   if (!nodeStatus.isConnected) {
     throw new BlastError('Local node is not running.')
   }
 }
 
 async function checkNodeOffline() {
-  const nodeStatus = await getStatusNode()
+  const nodeStatus = await getNodeStatus()
   if (nodeStatus.isConnected) {
     throw new BlastError('Local node is already running.')
   }
 }
 
-async function getStatusNode() {
+async function getNodeStatus() {
   const url = getEndpoint()
-  return await getStatusNodeByUrl(url)
+  return await getNodeStatusByUrl(url)
 }
 
-async function getStatusNodeByUrl(url) {
+async function getNodeStatusByUrl(url) {
   try {
     const response = await axios.get(url + '/status')
 
     if (response.status === 200) {
       if (response.data.result && response.data.result.node_info) {
         // node is up and running
-        return nodeInfoOnline('Node id: ' + response.data.result.node_info.id + '\nNetwork: ' +
-          response.data.result.node_info.network)
+        const nodeStatus = {}
+        nodeStatus.isConnected = true
+        nodeStatus.info = 'Node is online.\n' + 'Node id: ' + response.data.result.node_info.id + '\nNetwork: ' +
+          response.data.result.node_info.network
+        return nodeStatus
       }
       // probably connected to something other than node
       return nodeInfoOffline(response.status, 'Missing data from node response. Are you sure you connected a node?')
@@ -48,13 +51,6 @@ async function getStatusNodeByUrl(url) {
   }
 }
 
-function nodeInfoOnline(additionalInfo) {
-  const nodeStatus = {}
-  nodeStatus.isConnected = true
-  nodeStatus.info = 'Node is online.\n' + additionalInfo
-  return nodeStatus
-}
-
 function nodeInfoOffline(statusCode, additionalInfo) {
   const nodeStatus = {}
   nodeStatus.isConnected = false
@@ -66,7 +62,7 @@ function nodeInfoOffline(statusCode, additionalInfo) {
 }
 
 module.exports = {
-  getStatusNode: getStatusNode,
+  getNodeStatus: getNodeStatus,
   checkNodeOnline: checkNodeOnline,
   checkNodeOffline: checkNodeOffline
 }

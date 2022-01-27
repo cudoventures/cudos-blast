@@ -131,7 +131,7 @@ const nodeInfo = {
       })
     }, node.startNodeCmd)
       .command('stop', 'stopping node', () => {}, node.stopNodeCmd)
-      .command('status', 'check node status', () => {}, node.statusNodeCmd)
+      .command('status', 'check node status', () => {}, node.nodeStatusCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
   }
 }
