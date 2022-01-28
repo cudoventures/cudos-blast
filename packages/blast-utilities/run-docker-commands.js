@@ -12,8 +12,6 @@ const NODE_CMD_TTY = 'exec -T cudos-node cudos-noded '
 const NODE_MULTI_CMD = 'exec cudos-node sh -c '
 const NODE_MULTI_CMD_TTY = 'exec -T cudos-node sh -c '
 
-
-
 const runCommand = function(cmd) {
   const childResult = spawnSync(cmd, {
     stdio: 'inherit',
@@ -33,12 +31,12 @@ const executeRun = function(arg) {
 }
 
 const executeNode = function(arg, enableTty = true) {
-  let nodeCmd = enableTty ? NODE_CMD_TTY : NODE_CMD
+  const nodeCmd = enableTty ? NODE_CMD_TTY : NODE_CMD
   runCommand(dockerComposeCmd + nodeCmd + arg)
 }
 
 const executeNodeMultiCmd = function(arg, enableTty = true) {
-  let nodeMultiCmd = enableTty ? NODE_MULTI_CMD_TTY : NODE_MULTI_CMD
+  const nodeMultiCmd = enableTty ? NODE_MULTI_CMD_TTY : NODE_MULTI_CMD
   runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
 }
 

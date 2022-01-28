@@ -2,7 +2,7 @@
 source ./packages/blast-tests/integration-tests/vars.sh
 init_folder="$INIT_FOLDER-unittest"
 
-echo -n 'cudos unittest...'
+echo -n 'blast unittest...'
 cp -R template $init_folder &> /dev/null && cd $init_folder
 
 result=`blast unittest -q`

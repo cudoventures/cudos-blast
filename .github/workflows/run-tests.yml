@@ -6,8 +6,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+        name: Clone repository and checkout branch
       - uses: actions/setup-node@v2
+        name: Setup node.js
         with:
           node-version: 16
       - run: npm install && npm install -g
+        name: Install dependancies
       - run: npm run test
+        name: Run tests
