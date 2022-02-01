@@ -5,7 +5,8 @@ const { bech32 } = require('bech32')
 const createHash = require('create-hash')
 const { getAccountByName } = require('./config-utils')
 const { DirectSecp256k1Wallet } = require('cudosjs')
-
+const { executeNodeMultiCmd } = require('./run-docker-commands')
+const { saveAccounts } = require('./fs-utils')
 function createFromMnemonic(mnemonic, hdPath) {
   const privateKey = seedToPrivateKey(mnemonic, hdPath)
   return {
@@ -62,11 +63,31 @@ async function getSigner(name, network) {
   return await DirectSecp256k1Wallet.fromKey(acc.privateKey, network)
 }
 
+async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
+  const accounts = {}
+
+  for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
+    const wallet = createRandom()
+    const address = getAddressFromPrivateKey(wallet.privateKey)
+    accounts[`account${10 + i}`] = { address: address, mnemonic: wallet.mnemonic }
+    executeNodeMultiCmd(`echo ${wallet.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
+      'faucet', `account${10 + i}`, '1000000000000000000'))
+  }
+
+  saveAccounts(accounts)
+}
+
+function transferTokensByNameCommand(fromName, toName, amount) {
+  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
+    '--chain-id cudos-network --yes'
+}
+
 module.exports = {
   Create: createKeyPair,
   getAddressFromPrivateKey: getAddressFromPrivateKey,
   seedToPrivateKey: seedToPrivateKey,
   createRandom: createRandom,
   getSigner: getSigner,
-  getAccountAddress: getAccountAddress
+  getAccountAddress: getAccountAddress,
+  handleAdditionalAccountCreation: handleAdditionalAccountCreation
 }

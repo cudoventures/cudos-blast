@@ -2,6 +2,7 @@ const fsExtra = require('fs-extra')
 const process = require('process')
 const path = require('path')
 const BlastError = require('./blast-error')
+const defaultAccounts = require('../blast-config/default-accounts.json')
 
 let config = {}
 
@@ -16,12 +17,9 @@ function getConfig() {
 }
 
 function getAccountByName(name) {
-  const { config } = getConfig()
-
-  if (!config.accounts[name]) {
-    throw new BlastError('Missing Account in the config file.')
+  if (typeof defaultAccounts[name] !== 'undefined') {
+    return defaultAccounts[name]
   }
-  return config.accounts[name]
 }
 
 function getEndpoint() {
@@ -62,10 +60,20 @@ async function getDefaultAccount() {
   return config.defaultAccount
 }
 
+function getAdditionalAccounts() {
+  const { config } = getConfig()
+
+  if (config.additionalCustomAccounts) {
+    return config.additionalCustomAccounts
+  }
+  return false
+}
+
 module.exports = {
   getAccountByName: getAccountByName,
   getEndpoint: getEndpoint,
   getGasPrice: getGasPrice,
   getNetwork: getNetwork,
-  getDefaultAccount: getDefaultAccount
+  getDefaultAccount: getDefaultAccount,
+  getAdditionalAccounts: getAdditionalAccounts
 }

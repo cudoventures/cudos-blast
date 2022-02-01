@@ -4,6 +4,8 @@ const {
   checkNodeOnline,
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
+const { getAdditionalAccounts } = require('../../blast-utilities/config-utils')
+const { handleAdditionalAccountCreation } = require('../../blast-utilities/keypair')
 
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
@@ -12,6 +14,11 @@ const startNodeCmd = async function(argv) {
     return
   }
   executeCompose('up --build')
+
+  const additionalAccounts = getAdditionalAccounts()
+  if (additionalAccounts) {
+    handleAdditionalAccountCreation(additionalAccounts)
+  }
 }
 
 const stopNodeCmd = async function() {
