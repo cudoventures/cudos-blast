@@ -9,7 +9,7 @@ async function main() {
   await yargs(hideBin(process.argv))
     .scriptName('blast')
     .version()
-    .usage('$0 <cmd> [args]')
+    .usage('Usage: $0 <command> [arguments] [command options]')
     .command(commands.initInfo)
     .command(commands.compileInfo)
     .command(commands.testInfo)
@@ -38,6 +38,7 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch(error => {
+    // Expected erros are thrown as BlastError
     if (error instanceof BlastError) {
       console.error(`${error}`)
     } else {
