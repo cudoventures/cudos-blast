@@ -1,6 +1,6 @@
 const { executeCompose, executeAttach } = require('../../blast-utilities/run-docker-commands')
 const {
-  getStatusNode,
+  getNodeStatus,
   checkNodeOnline,
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
@@ -14,7 +14,7 @@ const startNodeCmd = async function(argv) {
   executeCompose('up --build -d')
 
   while (true) {
-    const nodeStatus = await getStatusNode()
+    const nodeStatus = await getNodeStatus()
     if (nodeStatus.isConnected) {
       break
     }
@@ -37,16 +37,13 @@ const stopNodeCmd = async function() {
   executeCompose('down')
 }
 
-const statusNodeCmd = async function() {
-  const nodeStatus = await getStatusNode()
+const nodeStatusCmd = async function() {
+  const nodeStatus = await getNodeStatus()
   console.log(nodeStatus.info)
-  if (typeof nodeStatus.message !== 'undefined') {
-    console.log(nodeStatus.message)
-  }
 }
 
 module.exports = {
   startNodeCmd: startNodeCmd,
   stopNodeCmd: stopNodeCmd,
-  statusNodeCmd: statusNodeCmd
+  nodeStatusCmd: nodeStatusCmd
 }
