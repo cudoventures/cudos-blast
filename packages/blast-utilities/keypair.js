@@ -67,10 +67,12 @@ async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
   const accounts = {}
 
   for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
-    const wallet = createRandom()
-    const address = getAddressFromPrivateKey(wallet.privateKey)
-    accounts[`account${10 + i}`] = { address: address, mnemonic: wallet.mnemonic }
-    executeNodeMultiCmd(`echo ${wallet.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
+    const account = createRandom()
+    const address = getAddressFromPrivateKey(account.privateKey)
+
+    accounts[`account${10 + i}`] = { address: address, mnemonic: account.mnemonic }
+
+    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
       'faucet', `account${10 + i}`, '1000000000000000000'))
   }
 

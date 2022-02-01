@@ -7,6 +7,7 @@ const defaultAccounts = require('../blast-config/default-accounts.json')
 let config = {}
 
 const configPath = path.join(process.cwd(), 'blast.config.js')
+const customAccountsPath = path.join(process.cwd(), 'cusotm-accounts.json')
 
 function getConfig() {
   if (!fsExtra.pathExistsSync(configPath)) {
@@ -16,10 +17,22 @@ function getConfig() {
   return config
 }
 
+function getCustomAccountByName(name) {
+  if (!fsExtra.pathExistsSync(customAccountsPath)) {
+    throw new BlastError(`Custom accounts file was not found! Make sure that cusotm-accounts.json was generated at ${configPath}`)
+  }
+  const customAccounts = require(customAccountsPath)
+  return customAccounts[name]
+}
+
 function getAccountByName(name) {
   if (typeof defaultAccounts[name] !== 'undefined') {
     return defaultAccounts[name]
   }
+  if (typeof getCustomAccountByName(name) !== 'undefined') {
+    return getCustomAccountByName(name)
+  }
+  // TODO: handle user account
 }
 
 function getEndpoint() {
