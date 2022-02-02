@@ -22,4 +22,7 @@ function compileCmd(argv) {
   executeRun(compileCmd)
 }
 
-module.exports = { compileCmd: compileCmd }
+module.exports = {
+  compileCmd: compileCmd,
+  optimizerVer: optimizerVer
+}

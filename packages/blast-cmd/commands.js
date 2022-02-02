@@ -1,5 +1,8 @@
 const { initCmd } = require('./init/init.js')
-const { compileCmd } = require('./compile/compile.js')
+const {
+  compileCmd,
+  optimizerVer
+} = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
 const { runCmd } = require('./run/run.js')
@@ -27,7 +30,7 @@ const compileInfo = {
     yargs.option('optimizer', {
       alias: 'o',
       type: 'string',
-      default: '0.12.3',
+      default: optimizerVer,
       description: 'Version of the cargo optimizer'
     })
   },
