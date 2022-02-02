@@ -2,12 +2,11 @@ const fsExtra = require('fs-extra')
 const process = require('process')
 const path = require('path')
 const BlastError = require('./blast-error')
-const defaultAccounts = require('../blast-config/default-accounts.json')
 
 let config = {}
 
 const configPath = path.join(process.cwd(), 'blast.config.js')
-const customAccountsPath = path.join(process.cwd(), 'cusotm-accounts.json')
+const accountsPath = path.join(process.cwd(), 'accounts.json')
 
 function getConfig() {
   if (!fsExtra.pathExistsSync(configPath)) {
@@ -17,22 +16,15 @@ function getConfig() {
   return config
 }
 
-function getCustomAccountByName(name) {
-  if (!fsExtra.pathExistsSync(customAccountsPath)) {
-    throw new BlastError(`Custom accounts file was not found! Make sure that cusotm-accounts.json was generated at ${configPath}`)
-  }
-  const customAccounts = require(customAccountsPath)
-  return customAccounts[name]
-}
-
 function getAccountByName(name) {
-  if (typeof defaultAccounts[name] !== 'undefined') {
-    return defaultAccounts[name]
+  if (!fsExtra.pathExistsSync(accountsPath)) {
+    throw new BlastError(`Accounts file was not found! Make sure that accounts.js exists at ${accountsPath}`)
   }
-  if (typeof getCustomAccountByName(name) !== 'undefined') {
-    return getCustomAccountByName(name)
+  const accounts = JSON.parse(require(accountsPath))
+  if (typeof accounts[name] !== 'undefined') {
+    return accounts[name]
   }
-  // TODO: handle user account
+  // TODO: handle user custom account
 }
 
 function getEndpoint() {

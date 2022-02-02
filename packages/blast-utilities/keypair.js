@@ -7,6 +7,8 @@ const { getAccountByName, getAdditionalAccountsBalances } = require('./config-ut
 const { DirectSecp256k1Wallet } = require('cudosjs')
 const { executeNodeMultiCmd } = require('./run-docker-commands')
 const { saveAccounts } = require('./fs-utils')
+const defaultAccounts = require('../blast-config/default-accounts.json')
+
 function createFromMnemonic(mnemonic, hdPath) {
   const privateKey = seedToPrivateKey(mnemonic, hdPath)
   return {
@@ -75,8 +77,14 @@ async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
     executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
       'faucet', `account${10 + i}`, `${customBalance}`))
   }
+  const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
+  saveAccounts(accountsToSave)
+}
 
-  saveAccounts(accounts)
+function combineAccountObjects(defaultAccounts, newAccounts) {
+  const prepareDefaultAccounts = JSON.stringify(defaultAccounts).slice(0, -1) + ','
+  const prepareNewAccounts = JSON.stringify(newAccounts).substring(1)
+  return prepareDefaultAccounts.concat(prepareNewAccounts)
 }
 
 function transferTokensByNameCommand(fromName, toName, amount) {
