@@ -4,6 +4,7 @@ module.exports.config = {
   network: 'cudos',
   defaultAccount: 'account1',
   additionalCustomAccounts: 0, // default is 10
+  customAccountBalances: '1000000000000000000',
   gasPrice: '250acudos',
   endpoint: 'http://localhost:26657'
 }

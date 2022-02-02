@@ -82,11 +82,21 @@ function getAdditionalAccounts() {
   return false
 }
 
+function getAdditionalAccountsBalances() {
+  const { config } = getConfig()
+
+  if (!config.customAccountBalances) {
+    throw new BlastError('Missing [customAccountBalances] in the config file.')
+  }
+  return config.customAccountBalances
+}
+
 module.exports = {
   getAccountByName: getAccountByName,
   getEndpoint: getEndpoint,
   getGasPrice: getGasPrice,
   getNetwork: getNetwork,
   getDefaultAccount: getDefaultAccount,
-  getAdditionalAccounts: getAdditionalAccounts
+  getAdditionalAccounts: getAdditionalAccounts,
+  getAdditionalAccountsBalances: getAdditionalAccountsBalances
 }

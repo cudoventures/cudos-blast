@@ -3,7 +3,7 @@ const bip32 = require('bip32')
 const secp256k1 = require('secp256k1')
 const { bech32 } = require('bech32')
 const createHash = require('create-hash')
-const { getAccountByName } = require('./config-utils')
+const { getAccountByName, getAdditionalAccountsBalances } = require('./config-utils')
 const { DirectSecp256k1Wallet } = require('cudosjs')
 const { executeNodeMultiCmd } = require('./run-docker-commands')
 const { saveAccounts } = require('./fs-utils')
@@ -65,7 +65,7 @@ async function getSigner(name, network) {
 
 async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
   const accounts = {}
-
+  const customBalance = getAdditionalAccountsBalances()
   for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
     const account = createRandom()
     const address = getAddressFromPrivateKey(account.privateKey)
@@ -73,7 +73,7 @@ async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
     accounts[`account${10 + i}`] = { address: address, mnemonic: account.mnemonic }
 
     executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
-      'faucet', `account${10 + i}`, '1000000000000000000'))
+      'faucet', `account${10 + i}`, `${customBalance}`))
   }
 
   saveAccounts(accounts)
