@@ -3,11 +3,15 @@ const bip32 = require('bip32')
 const secp256k1 = require('secp256k1')
 const { bech32 } = require('bech32')
 const createHash = require('create-hash')
-const { getAccountByName, getAdditionalAccountsBalances } = require('./config-utils')
+const {
+  getAccountByName,
+  getAdditionalAccountsBalances
+} = require('./config-utils')
 const { DirectSecp256k1Wallet } = require('cudosjs')
 const { executeNodeMultiCmd } = require('./run-docker-commands')
 const { saveAccounts } = require('./fs-utils')
 const defaultAccounts = require('../blast-config/default-accounts.json')
+const { transferTokensByNameCommand } = require('./blast-helper')
 
 function createFromMnemonic(mnemonic, hdPath) {
   const privateKey = seedToPrivateKey(mnemonic, hdPath)
@@ -85,11 +89,6 @@ function combineAccountObjects(defaultAccounts, newAccounts) {
   const prepareDefaultAccounts = JSON.stringify(defaultAccounts).slice(0, -1) + ','
   const prepareNewAccounts = JSON.stringify(newAccounts).substring(1)
   return prepareDefaultAccounts.concat(prepareNewAccounts)
-}
-
-function transferTokensByNameCommand(fromName, toName, amount) {
-  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
-    '--chain-id cudos-network --yes'
 }
 
 module.exports = {

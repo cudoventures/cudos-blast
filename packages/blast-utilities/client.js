@@ -6,7 +6,7 @@ const {
   getDefaultAccount
 } = require('./config-utils.js')
 
-const { getSigner } = require('./keypair.js')
+const { getSigner } = require('./account-utils')
 
 let client
 

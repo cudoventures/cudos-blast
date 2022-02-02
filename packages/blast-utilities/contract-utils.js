@@ -6,7 +6,7 @@ const path = require('path')
 const fs = require('fs')
 
 const { getGasPrice } = require('./config-utils.js')
-const { getAccountAddress } = require('./keypair.js')
+const { getAccountAddress } = require('./account-utils')
 const { getClient } = require('./client.js')
 const BlastError = require('./blast-error')
 

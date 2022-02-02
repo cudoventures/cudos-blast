@@ -1,12 +1,15 @@
-const { executeCompose, executeAttach } = require('../../blast-utilities/run-docker-commands')
+const {
+  executeCompose,
+  executeAttach
+} = require('../../blast-utilities/run-docker-commands')
 const {
   getNodeStatus,
   checkNodeOnline,
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
 const { getAdditionalAccounts } = require('../../blast-utilities/config-utils')
-const { handleAdditionalAccountCreation } = require('../../blast-utilities/keypair')
-const { delay } = require('../../blast-utilities/delay')
+const { handleAdditionalAccountCreation } = require('../../blast-utilities/account-utils')
+const { delay } = require('../../blast-utilities/blast-helper')
 
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
@@ -20,6 +23,7 @@ const startNodeCmd = async function(argv) {
     }
     await delay(2)
   }
+  // In order to wait the first block to be mined we have to wait additional ±4 seconds.
   await delay(4)
 
   const additionalAccounts = getAdditionalAccounts()

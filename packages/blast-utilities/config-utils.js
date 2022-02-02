@@ -68,8 +68,8 @@ async function getDefaultAccount() {
 function getAdditionalAccounts() {
   const { config } = getConfig()
 
-  if (config.additionalCustomAccounts) {
-    return config.additionalCustomAccounts
+  if (config.additionalAccounts) {
+    return config.additionalAccounts
   }
   return false
 }
