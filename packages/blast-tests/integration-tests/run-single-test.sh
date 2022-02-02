@@ -30,7 +30,7 @@ if [[ $1 == 'node-start-status.test.sh' ]]; then
     exit $exit_status
 fi
 
-if [[ ! `docker ps` =~ $CONTAINER_NAME && ($1 =~ 'keys' || $1 =~ 'node-stop') ]]; then
+if [[ ! `docker ps` =~ $CONTAINER_NAME && ($1 =~ 'keys' || $1 =~ 'node-stop' || $1 =~ 'run') ]]; then
     echo 'Node is not started. Your node will be started and stopped after the test is executed.'
     start_node
     node_started=true

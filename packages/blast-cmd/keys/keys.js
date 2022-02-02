@@ -12,7 +12,7 @@ const keysListCmd = async function() {
 const keysAddCmd = async function(argv) {
   await checkNodeOnline()
   executeNodeMultiCmd(`cudos-noded keys add ${argv.name} && ` + transferTokensByNameCommand(
-    'faucet', argv.name, '1000000000000000000'))
+    'faucet', argv.name, '1000000000000000000'), argv.tty)
 }
 
 const keysRmCmd = async function(argv) {
@@ -21,7 +21,7 @@ const keysRmCmd = async function(argv) {
     executeNode(`keys delete ${argv.name} --yes`)
     return
   }
-  executeNode(`keys delete ${argv.name}`)
+  executeNode(`keys delete ${argv.name}`, false)
 }
 
 const keysFundCmd = async function(argv) {
