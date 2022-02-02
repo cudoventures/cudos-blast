@@ -89,6 +89,12 @@ const keysInfo = {
           type: 'string',
           describe: 'Account name to be added'
         })
+        yargs.option('tty', {
+          alias: 't',
+          hidden: true,
+          type: 'boolean',
+          default: false
+        })
       }, keys.keysAddCmd)
       .command('rm <name>', 'Remove an account from the local node key storage', () => {
         yargs.positional('name', {

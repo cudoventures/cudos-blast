@@ -1,8 +1,9 @@
 #!/bin/bash
 source ./packages/blast-tests/integration-tests/vars.sh
+init_folder="$INIT_FOLDER-unittest"
 
 echo -n 'blast unittest...'
-cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
+cp -R template $init_folder &> /dev/null && cd $init_folder
 
 result=`blast unittest -q`
 if [[ ! $result =~ $UNITTEST_RESULT ]]; then
@@ -12,5 +13,5 @@ else
     echo -e $PASSED
 fi
 
-rm -r ../$INIT_FOLDER
+rm -r ../$init_folder &> /dev/null || true
 exit $exit_status
