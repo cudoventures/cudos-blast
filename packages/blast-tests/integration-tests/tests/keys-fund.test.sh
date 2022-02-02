@@ -10,7 +10,7 @@ cd ..
 test_address=`$COMPOSE cudos-noded keys show $TEST_KEY -a`
 balance=`$COMPOSE cudos-noded q bank balances $test_address`
 if [[ ! $balance =~ $BALANCE_AFTER_FUND ]]; then
-    echo -e "blast keys fund $FAILED\n$EXPECTED\n$BALANCE_AFTER_FUND\n$ACTUAL\n$balance" 1>&2
+    echo -e "$FAILED\n$EXPECTED\n$BALANCE_AFTER_FUND\n$ACTUAL\n$balance" 1>&2
     exit_status=1
 else
     echo -e $PASSED
