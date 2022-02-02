@@ -29,3 +29,5 @@ contracts
 integration_tests
 package.json
 scripts'
+export TEMPLATE_SCRIPTS_FILES='deploy.js
+interact.js'
