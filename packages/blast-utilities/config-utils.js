@@ -20,7 +20,7 @@ function getAccountByName(name) {
   if (!fsExtra.pathExistsSync(accountsPath)) {
     throw new BlastError(`Accounts file was not found! Make sure that accounts.js exists at ${accountsPath}`)
   }
-  const accounts = JSON.parse(require(accountsPath))
+  const accounts = JSON.parse(JSON.stringify(require(accountsPath)))
   if (typeof accounts[name] !== 'undefined') {
     return accounts[name]
   }

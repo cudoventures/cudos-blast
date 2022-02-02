@@ -24,6 +24,7 @@ checksums.txt
 checksums_intermediate.txt'
 export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
+accounts.json
 blast.config.js
 contracts
 integration_tests
