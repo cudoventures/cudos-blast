@@ -69,13 +69,11 @@ const runInfo = {
     yargs.option('network', {
       alias: 'n',
       type: 'string',
-      default: 'http://localhost:26657',
       description: 'Set a custom network to connect'
     })
     yargs.option('account', {
       alias: 'a',
       type: 'string',
-      default: 'account1',
       description: 'Set a custom signer account (account name is expected)'
     })
   },
