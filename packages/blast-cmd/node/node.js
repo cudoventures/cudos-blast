@@ -10,11 +10,13 @@ const {
 const { getAdditionalAccounts } = require('../../blast-utilities/config-utils')
 const { handleAdditionalAccountCreation } = require('../../blast-utilities/account-utils')
 const { delay } = require('../../blast-utilities/blast-helper')
+const BlastError = require('../../blast-utilities/blast-error')
 
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
   executeCompose('up --build -d')
+  let timeCounter = 0
 
   while (true) {
     const nodeStatus = await getNodeStatus()
@@ -22,6 +24,11 @@ const startNodeCmd = async function(argv) {
       break
     }
     await delay(2)
+
+    timeCounter += 2
+    if (timeCounter >= 60) {
+      throw new BlastError('Failed to instantiate a node. Error: Timeout')
+    }
   }
   // In order to wait the first block to be mined we have to wait additional ±4 seconds.
   await delay(4)
