@@ -68,7 +68,7 @@ async function getDefaultAccount() {
 function getAdditionalAccounts() {
   const { config } = getConfig()
 
-  if (!config.additionalAccounts && config.additionalAccounts !== 0) {
+  if (!config.additionalAccounts !== 'undefined') {
     throw new BlastError('Missing [additionalAccounts] in the config file.')
   }
   return config.additionalAccounts
