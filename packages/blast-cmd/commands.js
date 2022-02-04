@@ -1,5 +1,8 @@
 const { initCmd } = require('./init/init.js')
-const { compileCmd } = require('./compile/compile.js')
+const {
+  compileCmd,
+  optimizerVer
+} = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
 const { runCmd } = require('./run/run.js')
@@ -22,13 +25,13 @@ const initInfo = {
 
 const compileInfo = {
   command: 'compile',
-  describe: 'Compiles in alphabetical order the smart contracts in the workspace',
+  describe: 'Compile the smart contracts in the workspace in alphabetical order',
   builder: (yargs) => {
     yargs.option('optimizer', {
       alias: 'o',
       type: 'string',
-      default: false,
-      description: 'The version of the cargo optimizer'
+      default: optimizerVer,
+      description: 'Version of the cargo optimizer'
     })
   },
   handler: compileCmd
@@ -36,20 +39,20 @@ const compileInfo = {
 
 const testInfo = {
   command: 'test',
-  describe: 'Run integration tests',
+  describe: 'Run the integration tests',
   builder: (yargs) => {},
   handler: testCmd
 }
 
 const unitTestInfo = {
   command: 'unittest',
-  describe: 'Runs the unit tests of the smart contracts',
+  describe: 'Run smart contracts\' unit tests',
   builder: (yargs) => {
     yargs.option('quiet', {
       alias: 'q',
       type: 'boolean',
       default: false,
-      description: 'Do not print cargo log messages.'
+      description: 'Hide cargo log messages'
     })
   },
   handler: unitTestCmd
@@ -57,23 +60,21 @@ const unitTestInfo = {
 
 const runInfo = {
   command: 'run <scriptFilePath>',
-  describe: 'Run a script',
+  describe: 'Run a single script',
   builder: (yargs) => {
     yargs.positional('scriptFilePath', {
       type: 'string',
-      describe: 'The path to the script to run'
+      describe: 'Relative file path of the script'
     })
     yargs.option('network', {
       alias: 'n',
       type: 'string',
-      default: false,
-      description: 'Option to set a custom network.'
+      description: 'Set a custom network to connect'
     })
     yargs.option('account', {
       alias: 'a',
       type: 'string',
-      default: false,
-      description: 'Option to set a custom account for signer. Account name is expected.'
+      description: 'Set a custom signer account (account name is expected)'
     })
   },
   handler: runCmd
@@ -81,10 +82,10 @@ const runInfo = {
 
 const keysInfo = {
   command: 'keys',
-  describe: 'Manage accounts/keys',
+  describe: 'Manage node\'s accounts (keys)',
   builder: (yargs) => {
-    yargs.command('ls', 'List all accounts in the node key storage', () => {}, keys.keysListCmd)
-      .command('add <name>', 'Add account to the node key storage', () => {
+    yargs.command('ls', 'List all accounts in the local node key storage', () => {}, keys.keysListCmd)
+      .command('add <name>', 'Add an account to the local node key storage', () => {
         yargs.positional('name', {
           type: 'string',
           describe: 'Account name to be added'
@@ -96,7 +97,7 @@ const keysInfo = {
           default: false
         })
       }, keys.keysAddCmd)
-      .command('rm <name>', 'Remove account from the node key storage', () => {
+      .command('rm <name>', 'Remove an account from the local node key storage', () => {
         yargs.positional('name', {
           type: 'string',
           describe: 'Account name to be deleted'
@@ -105,10 +106,10 @@ const keysInfo = {
           alias: 'f',
           type: 'boolean',
           default: false,
-          description: 'Delete without prompt.'
+          description: 'Delete without confirmation'
         })
       }, keys.keysRmCmd)
-      .command('fund <name>', 'Fund account with tokens', () => {
+      .command('fund <name>', 'Transfer tokens from the default local node faucet to selected account', () => {
         yargs.positional('name', {
           type: 'string',
           describe: 'Account name to be funded'
@@ -117,7 +118,7 @@ const keysInfo = {
           alias: 't',
           type: 'string',
           required: true,
-          describe: 'Amount of tokens in acudos. Example: --tokens 100000'
+          describe: 'The amount of tokens in acudos. Example: --tokens 100000'
         })
       }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
@@ -126,18 +127,18 @@ const keysInfo = {
 
 const nodeInfo = {
   command: 'node',
-  describe: 'Manage cudos local node',
+  describe: 'Manage a local CUDOS node',
   builder: (yargs) => {
-    yargs.command('start', 'starting node', () => {
+    yargs.command('start', 'Start a fresh local node', () => {
       yargs.option('daemon', {
         alias: 'd',
         type: 'boolean',
         default: false,
-        description: 'Run Node in the background'
+        description: 'Run the node in background'
       })
     }, node.startNodeCmd)
-      .command('stop', 'stopping node', () => {}, node.stopNodeCmd)
-      .command('status', 'check node status', () => {}, node.nodeStatusCmd)
+      .command('stop', 'Stop the running local node', () => {}, node.stopNodeCmd)
+      .command('status', 'Check if a local node is running', () => {}, node.nodeStatusCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
   }
 }
