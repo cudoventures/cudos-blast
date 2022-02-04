@@ -68,10 +68,10 @@ async function getDefaultAccount() {
 function getAdditionalAccounts() {
   const { config } = getConfig()
 
-  if (config.additionalAccounts) {
-    return config.additionalAccounts
+  if (!config.additionalAccounts && config.additionalAccounts !== 0) {
+    throw new BlastError('Missing [additionalAccounts] in the config file.')
   }
-  return false
+  return config.additionalAccounts
 }
 
 function getAdditionalAccountsBalances() {

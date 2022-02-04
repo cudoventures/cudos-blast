@@ -16,25 +16,24 @@ const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
   executeCompose('up --build -d')
+
   let timeCounter = 0
+  let nodeStatus = await getNodeStatus()
 
-  while (true) {
-    const nodeStatus = await getNodeStatus()
-    if (nodeStatus.isConnected) {
-      break
-    }
+  while (!nodeStatus.isConnected) {
     await delay(2)
-
+    nodeStatus = await getNodeStatus()
     timeCounter += 2
     if (timeCounter >= 60) {
       throw new BlastError('Failed to instantiate a node. Error: Timeout')
     }
   }
-  // In order to wait the first block to be mined we have to wait additional ±4 seconds.
+  // We need the first block to be mined in order to add a new key.
+  // In order to wait the first block to be mined we have to wait additional ±4 seconds after the nodeStatus is true.
   await delay(4)
 
   const additionalAccounts = getAdditionalAccounts()
-  if (additionalAccounts) {
+  if (additionalAccounts > 0) {
     handleAdditionalAccountCreation(additionalAccounts)
   }
 
