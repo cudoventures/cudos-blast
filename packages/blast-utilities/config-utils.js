@@ -6,7 +6,6 @@ const BlastError = require('./blast-error')
 let config = {}
 
 const configPath = path.join(process.cwd(), 'blast.config.js')
-const accountsPath = path.join(process.cwd(), 'accounts.json')
 
 function getConfig() {
   if (!fsExtra.pathExistsSync(configPath)) {
@@ -17,14 +16,21 @@ function getConfig() {
 }
 
 function getAccountByName(name) {
-  if (!fsExtra.pathExistsSync(accountsPath)) {
-    throw new BlastError(`Accounts file was not found! Make sure that accounts.js exists at ${accountsPath}`)
+  const { config } = getConfig()
+
+  if (!config.accounts) {
+    throw new BlastError('Missing [accounts] in the config file.')
   }
-  const accounts = JSON.parse(JSON.stringify(require(accountsPath)))
-  if (typeof accounts[name] !== 'undefined') {
-    return accounts[name]
+
+  if (typeof config.accounts[name] !== 'undefined') {
+    return config.accounts[name]
   }
-  // TODO: handle user custom account
+
+  if (typeof config.privateAccounts[name] !== 'undefined') {
+    return config.privateAccounts[name]
+  }
+
+  throw new BlastError(`Account with name ${name} was not found. Make sure that you have configured "accounts.json" or "private-accounts.json"`)
 }
 
 function getEndpoint() {
