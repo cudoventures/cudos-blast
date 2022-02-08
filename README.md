@@ -177,7 +177,7 @@ blast run scripts/deploy.js -n cudos -a account2
 ---
 ## Managing local node accounts
 
-You can manage accounts in a local Cudos node with `blast keys` command.
+By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Another way to manage custom accounts is through `blast keys` command.
 
 ### Listing all accounts
 
