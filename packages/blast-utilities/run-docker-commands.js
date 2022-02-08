@@ -10,6 +10,7 @@ const DOCKER_RUN_CMD = 'docker run --rm '
 const NODE_CMD = 'exec cudos-node cudos-noded '
 const NODE_CMD_TTY = 'exec -T cudos-node cudos-noded '
 const NODE_MULTI_CMD = 'exec cudos-node sh -c '
+const DOCKER_ATTACH = 'docker attach blast-config_cudos-node_1'
 const NODE_MULTI_CMD_TTY = 'exec -T cudos-node sh -c '
 
 const runCommand = function(cmd) {
@@ -24,6 +25,10 @@ const runCommand = function(cmd) {
 
 const executeCompose = function(arg) {
   runCommand(dockerComposeCmd + arg)
+}
+
+const executeAttach = function(arg) {
+  runCommand(DOCKER_ATTACH)
 }
 
 const executeRun = function(arg) {
@@ -44,5 +49,6 @@ module.exports = {
   executeCompose: executeCompose,
   executeRun: executeRun,
   executeNode: executeNode,
-  executeNodeMultiCmd: executeNodeMultiCmd
+  executeNodeMultiCmd: executeNodeMultiCmd,
+  executeAttach: executeAttach
 }

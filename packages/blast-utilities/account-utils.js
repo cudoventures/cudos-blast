@@ -3,8 +3,15 @@ const bip32 = require('bip32')
 const secp256k1 = require('secp256k1')
 const { bech32 } = require('bech32')
 const createHash = require('create-hash')
-const { getAccountByName } = require('./config-utils')
+const {
+  getAccountByName,
+  getAdditionalAccountsBalances
+} = require('./config-utils')
 const { DirectSecp256k1Wallet } = require('cudosjs')
+const { executeNodeMultiCmd } = require('./run-docker-commands')
+const { saveAccounts } = require('./fs-utils')
+const defaultAccounts = require('../blast-config/default-accounts.json')
+const { transferTokensByNameCommand } = require('./blast-helper')
 
 function createFromMnemonic(mnemonic, hdPath) {
   const privateKey = seedToPrivateKey(mnemonic, hdPath)
@@ -62,11 +69,34 @@ async function getSigner(name, network) {
   return await DirectSecp256k1Wallet.fromKey(acc.privateKey, network)
 }
 
+async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
+  const accounts = {}
+  const customBalance = getAdditionalAccountsBalances()
+  for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
+    const account = createRandom()
+    const address = getAddressFromPrivateKey(account.privateKey)
+
+    accounts[`account${10 + i}`] = { address: address, mnemonic: account.mnemonic }
+
+    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
+      'faucet', `account${10 + i}`, `${customBalance}`))
+  }
+  const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
+  saveAccounts(accountsToSave)
+}
+
+function combineAccountObjects(defaultAccounts, newAccounts) {
+  const prepareDefaultAccounts = JSON.stringify(defaultAccounts).slice(0, -1) + ','
+  const prepareNewAccounts = JSON.stringify(newAccounts).substring(1)
+  return prepareDefaultAccounts.concat(prepareNewAccounts)
+}
+
 module.exports = {
   Create: createKeyPair,
   getAddressFromPrivateKey: getAddressFromPrivateKey,
   seedToPrivateKey: seedToPrivateKey,
   createRandom: createRandom,
   getSigner: getSigner,
-  getAccountAddress: getAccountAddress
+  getAccountAddress: getAccountAddress,
+  handleAdditionalAccountCreation: handleAdditionalAccountCreation
 }

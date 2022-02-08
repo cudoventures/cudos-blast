@@ -6,6 +6,7 @@ const BlastError = require('./blast-error')
 let config = {}
 
 const configPath = path.join(process.cwd(), 'blast.config.js')
+const accountsPath = path.join(process.cwd(), 'accounts.json')
 
 function getConfig() {
   if (!fsExtra.pathExistsSync(configPath)) {
@@ -16,12 +17,14 @@ function getConfig() {
 }
 
 function getAccountByName(name) {
-  const { config } = getConfig()
-
-  if (!config.accounts[name]) {
-    throw new BlastError('Missing Account in the config file.')
+  if (!fsExtra.pathExistsSync(accountsPath)) {
+    throw new BlastError(`Accounts file was not found! Make sure that accounts.js exists at ${accountsPath}`)
   }
-  return config.accounts[name]
+  const accounts = JSON.parse(JSON.stringify(require(accountsPath)))
+  if (typeof accounts[name] !== 'undefined') {
+    return accounts[name]
+  }
+  // TODO: handle user custom account
 }
 
 function getEndpoint() {
@@ -62,10 +65,26 @@ async function getDefaultAccount() {
   return config.defaultAccount
 }
 
+function getAdditionalAccounts() {
+  const { config } = getConfig()
+  return config.additionalAccounts
+}
+
+function getAdditionalAccountsBalances() {
+  const { config } = getConfig()
+
+  if (!config.customAccountBalances) {
+    throw new BlastError('Missing [customAccountBalances] in the config file.')
+  }
+  return config.customAccountBalances
+}
+
 module.exports = {
   getAccountByName: getAccountByName,
   getEndpoint: getEndpoint,
   getGasPrice: getGasPrice,
   getNetwork: getNetwork,
-  getDefaultAccount: getDefaultAccount
+  getDefaultAccount: getDefaultAccount,
+  getAdditionalAccounts: getAdditionalAccounts,
+  getAdditionalAccountsBalances: getAdditionalAccountsBalances
 }
