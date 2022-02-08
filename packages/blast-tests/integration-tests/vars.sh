@@ -29,6 +29,8 @@ blast.config.js
 contracts
 integration_tests
 package.json
+private-accounts.json
 scripts'
+
 export TEMPLATE_SCRIPTS_FILES='deploy.js
 interact.js'
