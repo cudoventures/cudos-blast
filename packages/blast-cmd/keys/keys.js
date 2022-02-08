@@ -3,6 +3,7 @@ const {
   executeNodeMultiCmd
 } = require('../../blast-utilities/run-docker-commands')
 const { checkNodeOnline } = require('../../blast-utilities/get-node-status')
+const { transferTokensByNameCommand } = require('../../blast-utilities/blast-helper')
 
 const keysListCmd = async function() {
   await checkNodeOnline()
@@ -27,11 +28,6 @@ const keysRmCmd = async function(argv) {
 const keysFundCmd = async function(argv) {
   await checkNodeOnline()
   executeNodeMultiCmd(transferTokensByNameCommand('faucet', argv.name, argv.tokens))
-}
-
-function transferTokensByNameCommand(fromName, toName, amount) {
-  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
-    '--chain-id cudos-network --yes'
 }
 
 module.exports = {
