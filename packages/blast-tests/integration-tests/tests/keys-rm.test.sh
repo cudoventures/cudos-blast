@@ -7,9 +7,9 @@ cd template
 blast keys rm $TEST_KEY -f &> /dev/null
 cd ..
 
-if [[ `$COMPOSE cudos-noded keys list` =~ $TEST_KEY ]]; then
+if [[ `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $TEST_KEY ]]; then
     echo -e "$FAILED\nKey was not removed successfuly!" 1>&2
-    $COMPOSE cudos-noded keys delete $TEST_KEY -y &> /dev/null
+    $COMPOSE cudos-noded keys delete $TEST_KEY -y --keyring-backend test &> /dev/null
     exit_status=1
 else
     echo -e $PASSED
