@@ -6,12 +6,12 @@ echo $CUDOS_HOME
 WORKING_PATH=$(pwd) && cd $CUDOS_HOME && rm -Rf ./* && cd $WORKING_PATH
 
 # chain parameters
- MONIKER="cudos-root-node"
+MONIKER="cudos-root-node"
 CHAIN_ID="cudos-network"
 TIMEOUT_COMMIT="5s" #5s originally
 KEYPASSWD='123123123' #at least 8 characters
 
-MIN_SELF_DELEGATION="1" # minimum tokens sto stake multiplyer by 1 000 000 for validator01
+MIN_SELF_DELEGATION="2000000000000000000000000" # minimum tokens sto stake multiplyer by 1 000 000 for validator01
 
 # slashing parameters
 JAIL_DURATION="600s" #600s originally
@@ -117,73 +117,73 @@ cat "${CUDOS_HOME}/config/genesis.json" | jq  --arg BANK_NAME "$BANK_NAME" '.app
 cat "${CUDOS_HOME}/config/genesis.json" | jq --arg DENOM_METADATA_DESC "$DENOM_METADATA_DESC" --arg DENOM1 "$DENOM1" --arg EXP1 "$EXP1" --arg ALIAS1 "$ALIAS1" --arg DENOM2 "$DENOM2" --arg EXP2 "$EXP2" --arg ALIAS2 "$ALIAS2" --arg DENOM3 "$DENOM3" --arg EXP3 "$EXP3" --arg ALIAS3 "$ALIAS3" --arg DENOM4 "$DENOM4" --arg EXP4 "$EXP4" --arg ALIAS4 "$ALIAS4" --arg DENOM5 "$DENOM5" --arg EXP5 "$EXP5" --arg ALIAS5 "$ALIAS5" --arg DENOM6 "$DENOM6" --arg EXP6 "$EXP6" --arg ALIAS6 "$ALIAS6" --arg DENOM7 "$DENOM7" --arg EXP7 "$EXP7" --arg BASE "$BASE" --arg DISPLAY "$DISPLAY" '.app_state.bank.denom_metadata[0].description=$DENOM_METADATA_DESC | .app_state.bank.denom_metadata[0].denom_units[0].denom=$DENOM1 | .app_state.bank.denom_metadata[0].denom_units[0].exponent=$EXP1 | .app_state.bank.denom_metadata[0].denom_units[0].aliases[0]=$ALIAS1 | .app_state.bank.denom_metadata[0].denom_units[1].denom=$DENOM2 | .app_state.bank.denom_metadata[0].denom_units[1].exponent=$EXP2 | .app_state.bank.denom_metadata[0].denom_units[1].aliases[0]=$ALIAS2 | .app_state.bank.denom_metadata[0].denom_units[2].denom=$DENOM3 | .app_state.bank.denom_metadata[0].denom_units[2].exponent=$EXP3 | .app_state.bank.denom_metadata[0].denom_units[2].aliases[0]=$ALIAS3 | .app_state.bank.denom_metadata[0].denom_units[3].denom=$DENOM4 | .app_state.bank.denom_metadata[0].denom_units[3].exponent=$EXP4 | .app_state.bank.denom_metadata[0].denom_units[3].aliases[0]=$ALIAS4 | .app_state.bank.denom_metadata[0].denom_units[4].denom=$DENOM5 | .app_state.bank.denom_metadata[0].denom_units[4].exponent=$EXP5 | .app_state.bank.denom_metadata[0].denom_units[4].aliases[0]=$ALIAS5 | .app_state.bank.denom_metadata[0].denom_units[5].denom=$DENOM6 | .app_state.bank.denom_metadata[0].denom_units[5].exponent=$EXP6 | .app_state.bank.denom_metadata[0].denom_units[5].aliases[0]=$ALIAS6 | .app_state.bank.denom_metadata[0].denom_units[6].denom=$DENOM7 | .app_state.bank.denom_metadata[0].denom_units[6].exponent=$EXP7 | .app_state.bank.denom_metadata[0].base=$BASE | .app_state.bank.denom_metadata[0].display=$DISPLAY'  > "${CUDOS_HOME}/config/tmp_genesis.json" && mv "${CUDOS_HOME}/config/tmp_genesis.json" "${CUDOS_HOME}/config/genesis.json"
 
 # add a new key entry from which to make validator
-cudos-noded keys add root-validator-01 
-ROOT_VALIDATOR_01_ADDRESS=$(  cudos-noded keys show root-validator-01 -a  )
+cudos-noded keys add root-validator-01 --keyring-backend test
+ROOT_VALIDATOR_01_ADDRESS=$(cudos-noded keys show root-validator-01 -a --keyring-backend test)
 
-cudos-noded keys add validator-02 
-VALIDATOR_02_ADDRESS=$(  cudos-noded keys show validator-02 -a  )
-  cudos-noded keys add validator-03
-VALIDATOR_03_ADDRESS=$(  cudos-noded keys show validator-03 -a  )
+cudos-noded keys add validator-02 --keyring-backend test
+VALIDATOR_02_ADDRESS=$(cudos-noded keys show validator-02 -a --keyring-backend test)
+  cudos-noded keys add validator-03 --keyring-backend test
+VALIDATOR_03_ADDRESS=$(cudos-noded keys show validator-03 -a --keyring-backend test)
 
-  cudos-noded keys add private-sale-offer
-PRIVATE_SALE_OFFER_ADDRESS=$(  cudos-noded keys show private-sale-offer -a  )
+  cudos-noded keys add private-sale-offer --keyring-backend test
+PRIVATE_SALE_OFFER_ADDRESS=$(cudos-noded keys show private-sale-offer -a --keyring-backend test)
 
 # create validators
 cudos-noded add-genesis-account $ROOT_VALIDATOR_01_ADDRESS "100000000000000000000100000${BOND_DENOM},1cudosAdmin"
 cudos-noded add-genesis-account $VALIDATOR_02_ADDRESS "100000000000000100000${BOND_DENOM},1cudosAdmin"
 cudos-noded add-genesis-account $VALIDATOR_03_ADDRESS "100000000000000100000${BOND_DENOM},1cudosAdmin"
-cudos-noded gentx root-validator-01 "1000000000000000000000${BOND_DENOM}" "0x9fdE6D55dDa637806DbF016a03B6970613630333" "cudos1g6wvv0fk2q5m2xh0yk2app0ewp6f6aum7v2j7y" --chain-id $CHAIN_ID
+cudos-noded gentx root-validator-01 "${MIN_SELF_DELEGATION}${BOND_DENOM}" "0x9fdE6D55dDa637806DbF016a03B6970613630333" "cudos1g6wvv0fk2q5m2xh0yk2app0ewp6f6aum7v2j7y" --chain-id $CHAIN_ID --keyring-backend test
 
 # test validator creation on genesis
-cudos-noded keys add genesis-validator
-GENESIS_VALIDATOR_ADDRESS=$(cudos-noded keys show genesis-validator -a)
+cudos-noded keys add genesis-validator --keyring-backend test
+GENESIS_VALIDATOR_ADDRESS=$(cudos-noded keys show genesis-validator -a --keyring-backend test)
 cudos-noded add-genesis-account $GENESIS_VALIDATOR_ADDRESS "9152921504606846975000000${BOND_DENOM}"
 
 # add faucet account
-cudos-noded keys add faucet
-FAUCET_ADDRESS=$(  cudos-noded keys show faucet -a  )
+cudos-noded keys add faucet --keyring-backend test
+FAUCET_ADDRESS=$(cudos-noded keys show faucet -a --keyring-backend test)
 cudos-noded add-genesis-account $FAUCET_ADDRESS "1000000000000000000000000${BOND_DENOM}"
 
 # add default accounts
 echo "Adding Default Accounts"
-echo "ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit" | cudos-noded keys add account1 --recover
-ACCOUNT1_ADDRESS=$(  cudos-noded keys show account1 -a  )
+echo "ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit" | cudos-noded keys add account1 --keyring-backend test --recover
+ACCOUNT1_ADDRESS=$(cudos-noded keys show account1 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT1_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "course hurdle stand heart rescue trap upset cousin dish embody business equip" | cudos-noded keys add account2 --recover
-ACCOUNT2_ADDRESS=$(  cudos-noded keys show account2 -a  )
+echo "course hurdle stand heart rescue trap upset cousin dish embody business equip" | cudos-noded keys add account2 --keyring-backend test --recover
+ACCOUNT2_ADDRESS=$(cudos-noded keys show account2 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT2_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "warrior smoke melt opinion broccoli filter hole skate place cart ask alien" | cudos-noded keys add account3 --recover
-ACCOUNT3_ADDRESS=$(  cudos-noded keys show account3 -a  )
+echo "warrior smoke melt opinion broccoli filter hole skate place cart ask alien" | cudos-noded keys add account3 --keyring-backend test  --recover
+ACCOUNT3_ADDRESS=$(cudos-noded keys show account3 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT3_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "debate result toward brick dutch unusual caught plunge honey ramp want update" | cudos-noded keys add account4 --recover
-ACCOUNT4_ADDRESS=$(  cudos-noded keys show account4 -a  )
+echo "debate result toward brick dutch unusual caught plunge honey ramp want update" | cudos-noded keys add account4 --keyring-backend test  --recover
+ACCOUNT4_ADDRESS=$(cudos-noded keys show account4 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT4_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "tape soul absorb cabin luxury practice rally clerk love kiss throw avoid" | cudos-noded keys add account5 --recover
-ACCOUNT5_ADDRESS=$(  cudos-noded keys show account5 -a  )
+echo "tape soul absorb cabin luxury practice rally clerk love kiss throw avoid" | cudos-noded keys add account5 --keyring-backend test  --recover
+ACCOUNT5_ADDRESS=$(cudos-noded keys show account5 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT5_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "write senior detail business try dirt sort rural donate way acid flame" | cudos-noded keys add account6 --recover
-ACCOUNT6_ADDRESS=$(  cudos-noded keys show account6 -a  )
+echo "write senior detail business try dirt sort rural donate way acid flame" | cudos-noded keys add account6 --keyring-backend test  --recover
+ACCOUNT6_ADDRESS=$(cudos-noded keys show account6 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT6_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "debris beef trip coral victory boy picture lab best royal wrestle path" | cudos-noded keys add account7 --recover
-ACCOUNT7_ADDRESS=$(  cudos-noded keys show account7 -a  )
+echo "debris beef trip coral victory boy picture lab best royal wrestle path" | cudos-noded keys add account7 --keyring-backend test  --recover
+ACCOUNT7_ADDRESS=$(cudos-noded keys show account7 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT7_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "damp bunker feed quit maze execute raccoon office error squirrel believe measure" | cudos-noded keys add account8 --recover
-ACCOUNT8_ADDRESS=$(  cudos-noded keys show account8 -a  )
+echo "damp bunker feed quit maze execute raccoon office error squirrel believe measure" | cudos-noded keys add account8 --keyring-backend test  --recover
+ACCOUNT8_ADDRESS=$(cudos-noded keys show account8 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT8_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "sea prison zero sugar episode meadow neutral silly chronic creek danger flat" | cudos-noded keys add account9 --recover
-ACCOUNT9_ADDRESS=$(  cudos-noded keys show account9 -a  )
+echo "sea prison zero sugar episode meadow neutral silly chronic creek danger flat" | cudos-noded keys add account9 --keyring-backend test  --recover
+ACCOUNT9_ADDRESS=$(cudos-noded keys show account9 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT9_ADDRESS "1000000000000000000${BOND_DENOM}"
 
-echo "save wear nature point april cage hybrid peasant penalty silver sadness friend" | cudos-noded keys add account10 --recover
-ACCOUNT10_ADDRESS=$(  cudos-noded keys show account10 -a  )
+echo "save wear nature point april cage hybrid peasant penalty silver sadness friend" | cudos-noded keys add account10 --keyring-backend test  --recover
+ACCOUNT10_ADDRESS=$(cudos-noded keys show account10 -a --keyring-backend test)
 cudos-noded add-genesis-account $ACCOUNT10_ADDRESS "1000000000000000000${BOND_DENOM}"
 
 
@@ -192,6 +192,10 @@ cudos-noded add-genesis-account $ACCOUNT10_ADDRESS "1000000000000000000${BOND_DE
 #  --commission-max-rate '0.20' \
 #  --commission-max-change-rate '0.02' \
 #  --pubkey 'cudosvalconspub1zcjduepqmh9qn9n77z3ngc0n4lvyunuaj34pdrtcka8ywh6avjdg9x9lmvzskg0s47'
+cat "${CUDOS_HOME}/config/genesis.json" | jq --arg ROOT_VALIDATOR_01_ADDRESS "$ROOT_VALIDATOR_01_ADDRESS" '.app_state.gravity.static_val_cosmos_addrs += [$ROOT_VALIDATOR_01_ADDRESS]' > "${CUDOS_HOME}/config/tmp_genesis.json" && mv "${CUDOS_HOME}/config/tmp_genesis.json" "${CUDOS_HOME}/config/genesis.json"
+cat "${CUDOS_HOME}/config/genesis.json" | jq --arg VALIDATOR_02_ADDRESS "$VALIDATOR_02_ADDRESS" '.app_state.gravity.static_val_cosmos_addrs += [$VALIDATOR_02_ADDRESS]' > "${CUDOS_HOME}/config/tmp_genesis.json" && mv "${CUDOS_HOME}/config/tmp_genesis.json" "${CUDOS_HOME}/config/genesis.json"
+cat "${CUDOS_HOME}/config/genesis.json" | jq --arg VALIDATOR_03_ADDRESS "$VALIDATOR_03_ADDRESS" '.app_state.gravity.static_val_cosmos_addrs += [$VALIDATOR_03_ADDRESS]' > "${CUDOS_HOME}/config/tmp_genesis.json" && mv "${CUDOS_HOME}/config/tmp_genesis.json" "${CUDOS_HOME}/config/genesis.json"
+
 cat "${CUDOS_HOME}/config/genesis.json" | jq '.app_state.gravity.erc20_to_denoms[0] |= .+ {"erc20": "0x28ea52f3ee46CaC5a72f72e8B3A387C0291d586d", "denom": "acudos"}' > "${CUDOS_HOME}/config/tmp_genesis.json" && mv "${CUDOS_HOME}/config/tmp_genesis.json" "${CUDOS_HOME}/config/genesis.json"
 
 cudos-noded collect-gentxs
