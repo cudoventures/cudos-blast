@@ -28,7 +28,14 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 
 ## Installation
 
-Make sure you have [NodeJS](https://nodejs.org/en/download/package-manager/) installed. Using latest version is recommended. [Docker](https://docs.docker.com/engine/install) is also required.
+Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) installed.  [Docker](https://docs.docker.com/engine/install) is also required.
+
+Prerequisite     | Minimum version | Recommended version |
+| -----------    | ----------------| --------------------|
+| Node.js        | 12.5.0          | 16.10.0             |
+| npm            | 6.9.0           | 7.24.0              |
+| Docker engine  | 19.03.13        | 20.10.12            |
+| Docker compose | 1.27.4          | 1.29.2              |  
 
 > For Windows users we recommend using Windows Subsystem for Linux ([WSL](https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distros)).
 > To avoid permission issues with `WSL`, you may have to [change](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory) `npm` default directory. 
@@ -177,7 +184,7 @@ blast run scripts/deploy.js -n cudos -a account2
 ---
 ## Managing local node accounts
 
-By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Another way to manage custom accounts is through `blast keys` command.
+By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.
 
 ### Listing all accounts
 
