@@ -30,8 +30,8 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 
 Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) installed.  [Docker](https://docs.docker.com/engine/install) is also required.
 
-Prerequisite     | Minimum version | Recommended version |
-| -----------    | ----------------| --------------------|
+| Prerequisite   | Minimum version | Recommended version |
+| -------------- | --------------- | ------------------- |
 | Node.js        | 12.5.0          | 16.10.0             |
 | npm            | 6.9.0           | 7.24.0              |
 | Docker engine  | 19.03.13        | 20.10.12            |
@@ -59,9 +59,11 @@ Run `--help` on any `blast` command to show all available subcommands, parameter
 
 ```bash
 blast --help
+blast node --help
+blast node start --help
 ```
 
-Run `--version` on any `blast` command to show `cudos-blast` version number.
+You can display `cudos-blast` version number using `--version`.
 
 ```bash
 blast --version
@@ -77,7 +79,7 @@ To scaffold a sample project navigate to empty directory and run
 blast init
 ```
 
-You can also specify the directory of the project using optional parameter `--dir` or `-d`
+You can also specify the full directory of the project using optional parameter `--dir` or `-d`
 
 ```bash
 blast init --dir /Your/Location/Here
@@ -123,7 +125,7 @@ blast test
 ```
 
 Integration tests have to be in the `{project_root}/integration_tests/` folder.  
-> Integration tests functionality is not working correctly. Only for demo purpose!
+> Integration tests functionality is still under development. 
 
 ---
 ## Interacting with a Cudos node
@@ -165,7 +167,7 @@ You can check the status of a non-local Cudos node by setting its URL in `blast.
 ---
 ## Deploying smart contracts, interacting with them and running custom script files
 
-You can use supplied `{project_root}/scripts/deploy.js` to deploy smart contracts one by one. You can interact with them by using supplied `interact.js` as a template. You are free to use custom `.js` scripts.
+You can run the supplied `{project_root}/scripts/deploy.js` to deploy a sample smart contract. When it is deployed, its address will be printed. Then you can edit `{project_root}/scripts/interact.js` with the new address and run the script to interact with the deployed smart contract. You are free to use these files as templates or create your own custom `.js` scripts.
 
 ```bash
 blast run scripts/deploy.js
@@ -173,7 +175,7 @@ blast run scripts/interact.js
 blast run scripts/myCustomScript.js
 ```
 
-You can specify your own script file path. A custom network can be set with `--network` or `(-n)`. Also, signer account can be specified with `--account` or `(-a)`. Default values can be changed in `blast.config.js` under `network` or `defaultAccount`. 
+You can specify your own script file path. A custom network can be set with `--network` or `(-n)`. Also, the signer can be specified by its account name with `--account` or `(-a)`. Default values can be changed in `blast.config.js` under `network` or `defaultAccount`. 
 
 ```bash
 blast run newFolder/anotherScripts/myCustomScript.js

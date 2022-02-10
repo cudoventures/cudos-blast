@@ -1,4 +1,5 @@
 async function main () {
+  // use your deployed smart conotract's address
   const alphaContract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
   const r = await alphaContract.execute({
     increment: {}

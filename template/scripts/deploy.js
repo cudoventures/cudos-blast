@@ -3,7 +3,7 @@ async function main () {
     count: 13
   })
   const contractAddress = await contract.deploy()
-  console.log(`${contractAddress}`)
+  console.log(`Contract is deployed at: ${contractAddress}`)
 }
 
 main()

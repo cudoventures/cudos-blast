@@ -19,6 +19,7 @@ const initInfo = {
       default: '.',
       description: 'Project directory'
     })
+      .version(false)
   },
   handler: initCmd
 }
@@ -33,6 +34,7 @@ const compileInfo = {
       default: optimizerVer,
       description: 'Version of the cargo optimizer'
     })
+      .version(false)
   },
   handler: compileCmd
 }
@@ -40,7 +42,9 @@ const compileInfo = {
 const testInfo = {
   command: 'test',
   describe: 'Run the integration tests',
-  builder: (yargs) => {},
+  builder: (yargs) => {
+    yargs.version(false)
+  },
   handler: testCmd
 }
 
@@ -54,6 +58,7 @@ const unitTestInfo = {
       default: false,
       description: 'Hide cargo log messages'
     })
+      .version(false)
   },
   handler: unitTestCmd
 }
@@ -76,6 +81,7 @@ const runInfo = {
       type: 'string',
       description: 'Set a custom signer account (account name is expected)'
     })
+    yargs.version(false)
   },
   handler: runCmd
 }
@@ -122,6 +128,7 @@ const keysInfo = {
         })
       }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
+      .version(false)
   }
 }
 
@@ -140,6 +147,7 @@ const nodeInfo = {
       .command('stop', 'Stop the running local node', () => {}, node.stopNodeCmd)
       .command('status', 'Check if a local node is running', () => {}, node.nodeStatusCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
+      .version(false)
   }
 }
 
