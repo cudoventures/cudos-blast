@@ -66,16 +66,6 @@ const runInfo = {
       type: 'string',
       describe: 'Relative file path of the script'
     })
-    yargs.option('network', {
-      alias: 'n',
-      type: 'string',
-      description: 'Set a custom network to connect'
-    })
-    yargs.option('account', {
-      alias: 'a',
-      type: 'string',
-      description: 'Set a custom signer account (account name is expected)'
-    })
   },
   handler: runCmd
 }
