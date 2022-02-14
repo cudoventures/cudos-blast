@@ -1,8 +1,9 @@
 async function main () {
-  const contract = await getContractFactory('alpha', {
-    count: 13
-  })
-  const contractAddress = await contract.deploy()
+  const [alice, bob] = await getSigners()
+  const contract = await getContractFactory('alpha')
+  
+  const MSG_INIT = { count: 13 }
+  const contractAddress = await contract.deploy(MSG_INIT, bob)
   console.log(`${contractAddress}`)
 }
 
