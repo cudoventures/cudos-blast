@@ -27,11 +27,11 @@ function getAccountByName(name) {
   // TODO: handle user custom account
 }
 
-function getEndpoint() {
+function getNetworkUrl() {
   const { config } = getConfig()
 
-  if (!config.endpoint) {
-    throw new BlastError('Missing [endpoint] in the config file.')
+  if (!config.networkUrl) {
+    throw new BlastError('Missing networkUrl in the config file.')
   }
   return config.endpoint
 }
@@ -45,14 +45,14 @@ function getGasPrice() {
   return config.gasPrice
 }
 
-async function getNetwork() {
+async function getAddressPrefix() {
   const { config } = await getConfig()
 
-  if (!config.network) {
+  if (!config.addressPrefix) {
     throw new BlastError('Missing network in the config file.')
   }
 
-  return config.network
+  return config.addressPrefix
 }
 
 async function getDefaultAccount() {
@@ -81,9 +81,9 @@ function getAdditionalAccountsBalances() {
 
 module.exports = {
   getAccountByName: getAccountByName,
-  getEndpoint: getEndpoint,
+  getNetworkUrl: getNetworkUrl,
   getGasPrice: getGasPrice,
-  getNetwork: getNetwork,
+  getAddressPrefix: getAddressPrefix,
   getDefaultAccount: getDefaultAccount,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances
