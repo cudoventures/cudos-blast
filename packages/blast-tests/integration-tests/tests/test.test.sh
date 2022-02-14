@@ -6,7 +6,8 @@ cp -R template $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER
 docker run --rm -v "`pwd`":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3 &> /dev/null
 npm install &> /dev/null
 
-result=`blast test`
+blast test &> jest.logs.json
+result=`cat jest.logs.json`
 if [[ ! $result =~ $TEST_RESULT ]]; then
     echo -e "$FAILED\n$EXPECTED\n$TEST_RESULT\n$ACTUAL\n$result" 1>&2
     exit_status=1

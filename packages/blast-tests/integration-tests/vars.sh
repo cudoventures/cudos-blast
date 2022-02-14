@@ -16,7 +16,7 @@ export TEST_KEY='testtest'
 export KEY_REMOVED_MSG='Key deleted forever'
 export BALANCE_AFTER_FUND='amount: "1"'
 export UNITTEST_RESULT='test result: ok. 3 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out'
-export TEST_RESULT="1 passing"
+export TEST_RESULT='3 passed, 3 total'
 export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
@@ -27,6 +27,7 @@ accounts.json
 blast.config.js
 contracts
 integration_tests
+jsconfig.json
 package.json
 scripts'
 export TEMPLATE_SCRIPTS_FILES='deploy.js

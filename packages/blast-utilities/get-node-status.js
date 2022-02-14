@@ -1,5 +1,5 @@
 const axios = require('axios').default
-const { getEndpoint } = require('./config-utils')
+const { getNetworkUrl } = require('./config-utils')
 const BlastError = require('./blast-error')
 
 async function checkNodeOnline() {
@@ -17,7 +17,7 @@ async function checkNodeOffline() {
 }
 
 async function getNodeStatus() {
-  const url = getEndpoint()
+  const url = getNetworkUrl()
   return await getNodeStatusByUrl(url)
 }
 

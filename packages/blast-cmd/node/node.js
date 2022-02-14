@@ -34,7 +34,7 @@ const startNodeCmd = async function(argv) {
 
   const additionalAccounts = getAdditionalAccounts()
   if (additionalAccounts > 0) {
-    handleAdditionalAccountCreation(additionalAccounts)
+    await handleAdditionalAccountCreation(additionalAccounts)
   }
 
   if (!argv.daemon) {
