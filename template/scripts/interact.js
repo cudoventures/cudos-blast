@@ -1,9 +1,6 @@
 async function main() {
   const [alice, bob] = await getSigners()
-  const contract = await getContractFactory('alpha')
-  
-  const MSG_INIT = { count: 13 }
-  await contract.deploy(MSG_INIT, bob)
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
 
   const QUERY_GET_COUNT = { get_count: {} }
   let count = await contract.query(QUERY_GET_COUNT)
