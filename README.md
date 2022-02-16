@@ -55,12 +55,13 @@ npm install -g
 ---
 ## Help and version
 
-Run `--help` on any `blast` command to show all available subcommands, parameters and additional information.
+Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
 
 ```bash
 blast --help
+blast help
 blast node --help
-blast node start --help
+blast node start help
 ```
 
 You can display `cudos-blast` version number using `--version`.
@@ -140,7 +141,7 @@ To start a fresh local Cudos node run
 blast node start
 ```
 
-or you can leave the current terminal window free by running the local node in background. To do this use `--daemon` or `(-d)`.
+or you can leave the current terminal window free by running the local node in background. To do this use `--daemon` or `-d`.
 
 ```bash
 blast node start -d
@@ -167,20 +168,62 @@ You can check the status of a non-local Cudos node by setting its URL in `blast.
 ---
 ## Deploying smart contracts, interacting with them and running custom script files
 
-You can run the supplied `{project_root}/scripts/deploy.js` to deploy a sample smart contract. When it is deployed, its address will be printed. Then you can edit `{project_root}/scripts/interact.js` with the new address and run the script to interact with the deployed smart contract. You are free to use these files as templates or create your own custom `.js` scripts.
+You can use the supplied `{project_root}/scripts/deploy.js` to deploy a sample smart contract.
+
+```bash
+async function main () {
+  // functions such as 'getSigners' and 'getContractFactory' are available in global context
+  const [alice, bob] = await getSigners()
+
+  // get contract object of 'alpha' contract in 'contracts/alpha'
+  const contract = await getContractFactory('alpha')
+
+  // define instantiate message for the contract
+  const MSG_INIT = { count: 13 }
+
+  // deploying the contract with bob as a signer
+  const contractAddress = await contract.deploy(MSG_INIT, bob)
+
+  // printing contract address so it can be copied and used in other scripts such as interact.js
+  console.log(`${contractAddress}`)
+}
+// ...
+```
+
+Run the contract with:
 
 ```bash
 blast run scripts/deploy.js
+```
+
+When the contract is deployed, its address will be printed. Then you can edit `{project_root}/scripts/interact.js` with the new address
+
+```bash
+async function main() {
+  const [alice, bob] = await getSigners()
+
+  // replace the address with the new one from your deployed smart contract
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+// ...
+```
+
+and run the script to interact with the deployed smart contract.
+
+```bash
 blast run scripts/interact.js
+```
+
+You are free to use these files as templates or create your own custom `.js` scripts.
+
+```bash
 blast run scripts/myCustomScript.js
 ```
 
-You can specify your own script file path. A custom network can be set with `--network` or `(-n)`. Also, the signer can be specified by its account name with `--account` or `(-a)`. Default values can be changed in `blast.config.js` under `network` or `defaultAccount`. 
+You can specify your own script file path. A custom network can be set with `--network` or `-n`. Default values can be changed in `blast.config.js` under `network`.
 
 ```bash
 blast run newFolder/anotherScripts/myCustomScript.js
-blast run scripts/deploy.js -a account2
-blast run scripts/deploy.js -n cudos -a account2
+blast run scripts/deploy.js -n cudos
 ```
 
 ---
