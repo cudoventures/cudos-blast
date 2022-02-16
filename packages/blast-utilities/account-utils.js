@@ -12,7 +12,6 @@ const {
   getAddressPrefix
 } = require('./config-utils')
 
-
 async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
   const accounts = {}
   const customBalance = getAdditionalAccountsBalances()

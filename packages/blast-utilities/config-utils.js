@@ -8,7 +8,7 @@ function getConfig() {
   if (!fsExtra.pathExistsSync(CONFIG_PATH)) {
     throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${CONFIG_PATH}`)
   }
-  config = require(CONFIG_PATH)
+  const config = require(CONFIG_PATH)
   return config
 }
 
