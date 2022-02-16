@@ -2,7 +2,7 @@
 
 export TESTS_FOLDER='./packages/blast-tests/integration-tests/tests'
 export INIT_FOLDER='./test-blast-init'
-export CONTAINER_NAME='blast-config_cudos-node'
+export CONTAINER_NAME='cudos_blast_node'
 export COMPOSE='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml exec -T cudos-node'
 red='\033[0;31m'
 green='\033[0;32m'
