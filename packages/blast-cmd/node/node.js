@@ -1,6 +1,6 @@
 const {
   executeCompose,
-  executeAttach
+  executeComposeAsync
 } = require('../../blast-utilities/run-docker-commands')
 const {
   getNodeStatus,
@@ -15,8 +15,15 @@ const BlastError = require('../../blast-utilities/blast-error')
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
-  executeCompose('up --build -d')
+  if (!argv.daemon) {
+    executeComposeAsync('up --build -d')
+  }
+  executeComposeAsync('up --build')
 
+  await supplyAcc()
+}
+
+const supplyAcc = async function() {
   let timeCounter = 0
   let nodeStatus = await getNodeStatus()
 
@@ -35,10 +42,6 @@ const startNodeCmd = async function(argv) {
   const additionalAccounts = getAdditionalAccounts()
   if (additionalAccounts > 0) {
     handleAdditionalAccountCreation(additionalAccounts)
-  }
-
-  if (!argv.daemon) {
-    executeAttach()
   }
 }
 

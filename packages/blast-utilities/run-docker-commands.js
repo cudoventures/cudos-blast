@@ -1,4 +1,7 @@
-const { spawnSync } = require('child_process')
+const {
+  spawnSync,
+  spawn
+} = require('child_process')
 const BlastError = require('./blast-error')
 const {
   getDockerComposeInitFile,
@@ -21,6 +24,20 @@ const runCommand = function(cmd) {
   if (childResult.status !== 0) {
     throw new BlastError(`An error occured while executing a command in docker container/local node: ${cmd}`)
   }
+}
+
+const runCommandAsync = function(cmd) {
+  const childResult = spawn(cmd, {
+    stdio: 'inherit',
+    shell: true
+  })
+  // test for status
+  console.log(childResult)
+}
+
+// maybe merge
+const executeComposeAsync = function(arg) {
+  runCommandAsync(dockerComposeCmd + arg)
 }
 
 const executeCompose = function(arg) {
@@ -47,6 +64,7 @@ const executeNodeMultiCmd = function(arg, enableTty = true) {
 
 module.exports = {
   executeCompose: executeCompose,
+  executeComposeAsync: executeComposeAsync,
   executeRun: executeRun,
   executeNode: executeNode,
   executeNodeMultiCmd: executeNodeMultiCmd,
