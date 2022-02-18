@@ -1,37 +1,41 @@
 # Cudos Blast
 
-Cudos Blast is a Node.js CLI (command line interface) tool for working with the Cudos blockchain. You can scaffold, compile, test (both unit & integration) your smart contracts.
+Cudos Blast is a Node.js CLI (command line interface) tool for working with the Cudos blockchain. You can scaffold, compile and test your **Rust** smart contracts. Both unit and integration testing is supported.
 Utilizing `blast.config.js` it provides a possibility for deploying and interacting with them on a specified network (local, test or public).
 By using this tool you can also spin up a local [`Cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
 
 ## Table of Contents
 
-* [Installation](#installation)  
-* [Help and version](#help-and-version)  
-* [Initializing a project](#initializing-a-project)  
-* [Compiling smart contracts](#compiling-smart-contracts)  
-* [Running unit tests](#running-unit-tests)  
+* [Installation](#installation) 
+* [Help and version](#help-and-version) 
+* [Initializing a project](#initializing-a-project) 
+* [Compiling smart contracts](#compiling-smart-contracts) 
+* [Running unit tests](#running-unit-tests) 
 * [Running integration tests](#running-integration-tests) 
 * [Interacting with a Cudos node](#interacting-with-a-Cudos-node) 
-  * [Starting a local node](#starting-a-local-node)  
-  * [Stopping a running local node](#stopping-a-running-local-node)  
-  * [Checking node status](#checking-node-status)  
-* [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts,-interacting-with-them-and-running-custom-script-files)  
-* [Managing local node accounts](#managing-local-node-accounts)  
-  * [Listing all accounts](#listing-all-accounts)  
-  * [Adding new account](#adding-new-account)  
-  * [Removing existing account](#removing-existing-account)  
-  * [Funding existing account](#funding-existing-account)  
-* [Development](#development)  
-  * [Running tests](#running-tests)  
-  * [Sample integration test](#sample-integration-test)  
+  * [Starting a local node](#starting-a-local-node) 
+  * [Stopping a running local node](#stopping-a-running-local-node) 
+  * [Checking node status](#checking-node-status) 
+* [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts,-interacting-with-them-and-running-custom-script-files) 
+  * [Available functions in global context](#available-functions-in-global-context)
+* [Network](#network)
+  * [Testnet](#testnet)
+  * [Mainnet](#mainnet)
+* [Managing local node accounts](#managing-local-node-accounts) 
+  * [Listing all accounts](#listing-all-accounts) 
+  * [Adding new account](#adding-new-account) 
+  * [Removing existing account](#removing-existing-account) 
+  * [Funding existing account](#funding-existing-account) 
+* [Development](#development) 
+  * [Running tests](#running-tests) 
+  * [Sample integration test](#sample-integration-test) 
 
 ## Installation
 
 Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) installed.  [Docker](https://docs.docker.com/engine/install) is also required.
 
 | Prerequisite   | Minimum version | Recommended version |
-| -------------- | --------------- | ------------------- |
+| ---            | ---             | ---                 |
 | Node.js        | 12.5.0          | 16.10.0             |
 | npm            | 6.9.0           | 7.24.0              |
 | Docker engine  | 19.03.13        | 20.10.12            |
@@ -104,7 +108,7 @@ The contracts have to be in `{project_root}/contracts/` folder. They are compile
 ---
 ## Running unit tests
 
-To run smart contracts' unit tests:
+The unit tests are written in Rust and are organized by the Rust convention for writing tests. You can check them in the respective contract in `{project_root}/contracts/{contract_name}/`. To run smart contracts' unit tests:
 
 ```bash
 blast unittest
@@ -119,14 +123,11 @@ blast unittest -q
 ---
 ## Running integration tests
 
-To run integration tests:
+The integration tests have to be JavaScript files located in `{project_root}/integration_tests/` folder. Run them with
 
 ```bash
 blast test
 ```
-
-Integration tests have to be in the `{project_root}/integration_tests/` folder.  
-> Integration tests functionality is still under development. 
 
 ---
 ## Interacting with a Cudos node
@@ -147,6 +148,8 @@ or you can leave the current terminal window free by running the local node in b
 blast node start -d
 ```
 
+To see how to manage local node accounts go [here](#managing-local-node-accounts).
+
 ### Stopping a running local node
 
 To stop a running node run
@@ -163,7 +166,7 @@ To check whether a Cudos node is online or offline run
 blast node status
 ```
 
-You can check the status of a non-local Cudos node by setting its URL in `blast.config.js` under `endpoint:`.
+You are able to check the status of a [non-local Cudos node](#network) by setting its URL in `blast.config.js` under `networkUrl:`.
 
 ---
 ## Deploying smart contracts, interacting with them and running custom script files
@@ -213,18 +216,40 @@ and run the script to interact with the deployed smart contract.
 blast run scripts/interact.js
 ```
 
-You are free to use these files as templates or create your own custom `.js` scripts.
+You are free to use these files as templates or create your own custom `.js` scripts. You can specify your own script file path. 
 
 ```bash
 blast run scripts/myCustomScript.js
-```
-
-You can specify your own script file path. A custom network can be set with `--network` or `-n`. Default values can be changed in `blast.config.js` under `network`.
-
-```bash
 blast run newFolder/anotherScripts/myCustomScript.js
-blast run scripts/deploy.js -n cudos
 ```
+
+### Available functions in global context
+
+| Function                                              | Descripton                                                                                                       | Code example                                                                                  |
+| ---                                                   | ---                                                                                                              | ---                                                                                           |
+| getSigners()                                          | set supplied accounts? as signers in order as in `{project_root}/accounts.json`                                  | const [alice, bob] = await getSigners()                                                       |
+| getContractFactory(contractName)                      | get a contract object from contract named `contractName` and sign it witn the first account                      | const contract = await getContractFactory('alpha')                                            |
+| getContractFromAddress(contractAddress, owner = null) | get a contract object by its address. Contract owner can be omitted if present in `{project_root}/accounts.json` | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
+
+You can run your scripts on a different node by setting its URL in `blast.config.js` under `networkUrl`. You can connect to the default local node as well as a [public one](#network) or you can use your own Cudos node.  
+You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
+
+---
+## Network
+
+Here are public Cudos nodes you can use to connect to Cudos network:
+
+### Testnet
+
+| Chain ID               | URL                                            |
+| ---                    | ---                                            |
+| cudos-testnet-public-2 | https://sentry1.gcp-uscentral1.cudos.org:26657 |
+
+### Mainnet
+
+| Chain ID | URL |
+| ---      | --- |
+|          |     |
 
 ---
 ## Managing local node accounts
