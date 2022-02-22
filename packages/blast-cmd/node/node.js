@@ -24,9 +24,7 @@ const startNodeCmd = async function(argv) {
 
   const additionalAccounts = getAdditionalAccounts()
   if (additionalAccounts > 0) {
-    console.log('BOO -->', 'b cr acc', '<-- YAA')
     await createAdditionalAccounts(additionalAccounts)
-    console.log('BOO -->', 'a cr acc', '<-- YAA')
   }
 }
 

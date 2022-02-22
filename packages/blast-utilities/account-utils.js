@@ -78,8 +78,8 @@ async function createAdditionalAccounts(numberOfAdditionalAccounts) {
 
     accounts[`account${10 + i}`] = { address: address, mnemonic: account.mnemonic }
 
-    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
-      'faucet', `account${10 + i}`, `${customBalance}`))
+    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover ` +
+      '--keyring-backend test && ' + transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`))
   }
   const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
   saveAccounts(accountsToSave)
