@@ -8,7 +8,7 @@ const {
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
 const { getAdditionalAccounts } = require('../../blast-utilities/config-utils')
-const { handleAdditionalAccountCreation } = require('../../blast-utilities/account-utils')
+const { createAdditionalAccounts } = require('../../blast-utilities/account-utils')
 const { delay } = require('../../blast-utilities/blast-helper')
 const BlastError = require('../../blast-utilities/blast-error')
 
@@ -20,10 +20,27 @@ const startNodeCmd = async function(argv) {
   }
   executeComposeAsync('up --build')
 
-  await insertAdditionalAccounts()
+  await waitForRunningNode()
+
+  const additionalAccounts = getAdditionalAccounts()
+  if (additionalAccounts > 0) {
+    console.log('BOO -->', 'b cr acc', '<-- YAA')
+    await createAdditionalAccounts(additionalAccounts)
+    console.log('BOO -->', 'a cr acc', '<-- YAA')
+  }
 }
 
-const insertAdditionalAccounts = async function() {
+const stopNodeCmd = async function() {
+  await checkNodeOnline()
+  executeCompose('down')
+}
+
+const nodeStatusCmd = async function() {
+  const nodeStatus = await getNodeStatus()
+  console.log(nodeStatus.info)
+}
+
+async function waitForRunningNode() {
   let timeCounter = 0
   let nodeStatus = await getNodeStatus()
 
@@ -38,21 +55,6 @@ const insertAdditionalAccounts = async function() {
   // We need the first block to be mined in order to add a new key.
   // In order to wait the first block to be mined we have to wait additional ±4 seconds after the nodeStatus is true.
   await delay(4)
-
-  const additionalAccounts = getAdditionalAccounts()
-  if (additionalAccounts > 0) {
-    handleAdditionalAccountCreation(additionalAccounts)
-  }
-}
-
-const stopNodeCmd = async function() {
-  await checkNodeOnline()
-  executeCompose('down')
-}
-
-const nodeStatusCmd = async function() {
-  const nodeStatus = await getNodeStatus()
-  console.log(nodeStatus.info)
 }
 
 module.exports = {

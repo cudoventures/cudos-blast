@@ -69,7 +69,7 @@ async function getSigner(name, network) {
   return await DirectSecp256k1Wallet.fromKey(acc.privateKey, network)
 }
 
-async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
+async function createAdditionalAccounts(numberOfAdditionalAccounts) {
   const accounts = {}
   const customBalance = getAdditionalAccountsBalances()
   for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
@@ -98,5 +98,5 @@ module.exports = {
   createRandom: createRandom,
   getSigner: getSigner,
   getAccountAddress: getAccountAddress,
-  handleAdditionalAccountCreation: handleAdditionalAccountCreation
+  createAdditionalAccounts: createAdditionalAccounts
 }

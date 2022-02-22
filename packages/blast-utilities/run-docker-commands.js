@@ -27,22 +27,18 @@ const runCommand = function(cmd) {
 }
 
 const runCommandAsync = function(cmd) {
-  const childResult = spawn(cmd, {
+  spawn(cmd, {
     stdio: 'inherit',
     shell: true
   })
-  if (childResult.status !== 0) {
-    throw new BlastError(`An error occured while executing a command in docker container/local node: ${cmd}`)
-  }
-}
-
-// maybe merge
-const executeComposeAsync = function(arg) {
-  runCommandAsync(dockerComposeCmd + arg)
 }
 
 const executeCompose = function(arg) {
   runCommand(dockerComposeCmd + arg)
+}
+
+const executeComposeAsync = function(arg) {
+  runCommandAsync(dockerComposeCmd + arg)
 }
 
 const executeAttach = function(arg) {
