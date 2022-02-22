@@ -15,15 +15,15 @@ const BlastError = require('../../blast-utilities/blast-error')
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
-  if (!argv.daemon) {
+  if (argv.daemon) {
     executeComposeAsync('up --build -d')
   }
   executeComposeAsync('up --build')
 
-  await supplyAcc()
+  await insertAdditionalAccounts()
 }
 
-const supplyAcc = async function() {
+const insertAdditionalAccounts = async function() {
   let timeCounter = 0
   let nodeStatus = await getNodeStatus()
 

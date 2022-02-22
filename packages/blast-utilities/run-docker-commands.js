@@ -31,8 +31,9 @@ const runCommandAsync = function(cmd) {
     stdio: 'inherit',
     shell: true
   })
-  // test for status
-  console.log(childResult)
+  if (childResult.status !== 0) {
+    throw new BlastError(`An error occured while executing a command in docker container/local node: ${cmd}`)
+  }
 }
 
 // maybe merge
