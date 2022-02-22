@@ -1,6 +1,6 @@
 # Cudos Blast
 
-Cudos Blast is a Node.js CLI (command line interface) tool for working with the Cudos blockchain. You can scaffold, compile and test your **Rust** smart contracts. Both unit and integration testing is supported.
+Cudos Blast is a Node.js CLI (command line interface) tool for working with the Cudos blockchain. You can scaffold, compile and test your **Rust** smart contracts. JavaScript and Rust testing is supported.
 Utilizing `blast.config.js` it provides a possibility for deploying and interacting with them on a specified network (local, test or public).
 By using this tool you can also spin up a local [`Cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
 
@@ -10,8 +10,8 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 * [Help and version](#help-and-version) 
 * [Initializing a project](#initializing-a-project) 
 * [Compiling smart contracts](#compiling-smart-contracts) 
-* [Running unit tests](#running-unit-tests) 
-* [Running integration tests](#running-integration-tests) 
+* [Running Rust tests](#running-rust-tests) 
+* [Testing contracts with JavaScript](#testing-contracts-with-javascript) 
 * [Interacting with a Cudos node](#interacting-with-a-Cudos-node) 
   * [Starting a local node](#starting-a-local-node) 
   * [Stopping a running local node](#stopping-a-running-local-node) 
@@ -103,12 +103,12 @@ To compile all smart contracts run
 blast compile
 ```
 
-The contracts have to be in `{project_root}/contracts/` folder. They are compiled in alphabetical order. The smart contracts are compiled as a Rust workspace. If you want to add more folders to compile, all you have to do is edit the base `{project_root}/Cargo.toml` file and add your folder under `members`. The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artifacts in `{project_root}/artifacts/` folder are optimized for deployment.
+The contracts have to be in `{project_root}/contracts/` folder. Cudos Blast comes with sample contracts you can use. All contracts are compiled in alphabetical order and as a Rust workspace. If you want to add more folders to compile, all you have to do is edit the base `{project_root}/Cargo.toml` file and add your folder under `members`. The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artifacts in `{project_root}/artifacts/` folder are optimized for deployment.
 
 ---
-## Running unit tests
+## Running Rust tests
 
-The unit tests are written in Rust and are organized by the Rust convention for writing tests. You can check them in the respective contract in `{project_root}/contracts/{contract_name}/`. To run smart contracts' unit tests:
+Rust tests are organized by the Rust convention for writing tests. You can check them in their corresponding contracts in `{project_root}/contracts/{contract_name}/`. To run smart contracts' unit tests:
 
 ```bash
 blast unittest
@@ -121,9 +121,45 @@ blast unittest -q
 ```
 
 ---
-## Running integration tests
+## Testing contracts with JavaScript
 
-The integration tests have to be JavaScript files located in `{project_root}/integration_tests/` folder. Run them with
+You can test your smart contracts using `.js` files in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You must have a [local node running](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests.
+
+```bash
+describe('alpha contract', () => {
+  const MSG_INIT = { count: 13 }
+  const MSG_INCREMENT = { increment: {} }
+  const MSG_RESET = { reset: { count: 1 } }
+  const QUERY_GET_COUNT = { get_count: {} }
+
+  let alice, bob, contract
+
+  // deploying alpha contract before each test case
+  beforeAll(async () => {
+    // function 'getSigners' is available in global context
+    [alice, bob] = await getSigners()
+    contract = await getContractFactory('alpha')
+    await contract.deploy(MSG_INIT, bob)
+  })
+
+  // positive test case
+  test('increment count', async () => {
+    await contract.execute(MSG_INCREMENT, alice)
+    return expect(contract.query(QUERY_GET_COUNT))
+      .resolves.toEqual({ count: 14 })
+  })
+
+  // ...
+
+  // negative test case
+  test('reset count from user throws unauthorized', () => {
+    return expect(contract.execute(MSG_RESET, alice))
+      .rejects.toThrow('Unauthorized')
+  })
+})
+```
+
+Run all test files with
 
 ```bash
 blast test
@@ -319,7 +355,7 @@ npm test init.test.sh
 ```
 
 ---
-### Sample integration test
+### Sample test
 
 The following sample test contains a detailed explanation of the commands and syntax. It is recommended to execute `npm test` first to get a general idea of the behavior. New tests should be placed in `{repo_root}/packages/blast-tests/integration-tests/tests/` folder. Lets take a look at `init.test.sh`. It covers `blast init` command which should initialize a project inside the current directory. The tests follow the classic Arrange-Act-Assert pattern.
 
