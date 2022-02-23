@@ -263,7 +263,7 @@ blast run newFolder/anotherScripts/myCustomScript.js
 
 | Function                                              | Descripton                                                                                                       | Code example                                                                                  |
 | ---                                                   | ---                                                                                                              | ---                                                                                           |
-| getSigners()                                          | set supplied accounts? as signers in order as in `{project_root}/accounts.json`                                  | const [alice, bob] = await getSigners()                                                       |
+| getSigners()                                          | set assigned objects as signers in order as in `{project_root}/accounts.json`                                    | const [alice, bob] = await getSigners()                                                       |
 | getContractFactory(contractName)                      | get a contract object from contract named `contractName` and sign it witn the first account                      | const contract = await getContractFactory('alpha')                                            |
 | getContractFromAddress(contractAddress, owner = null) | get a contract object by its address. Contract owner can be omitted if present in `{project_root}/accounts.json` | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
 
