@@ -123,7 +123,7 @@ blast unittest -q
 ---
 ## Testing contracts with JavaScript
 
-You can test your smart contracts using `.js` files in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You must have a [local node running](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests.
+Cudos Blast uses [Jest](https://jestjs.io) framework for testing. Test files must be in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You must have a [local node running](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests.
 
 ```bash
 describe('alpha contract', () => {
@@ -134,7 +134,7 @@ describe('alpha contract', () => {
 
   let alice, bob, contract
 
-  // deploying alpha contract before each test case
+  // deploying alpha contract once before test cases
   beforeAll(async () => {
     // function 'getSigners' is available in global context
     [alice, bob] = await getSigners()
