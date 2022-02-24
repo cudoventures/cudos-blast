@@ -20,12 +20,6 @@ const startNodeCmd = async function(argv) {
   } else {
     executeComposeAsync('up --build')
   }
-
-  // if (argv.daemon === 3847384) {
-  //   executeComposeAsync('up --build')
-  // }
-
-  // executeCompose('up --build -d')
   await waitForRunningNode()
   console.log('Cudos Blast local node is ready')
 
@@ -34,8 +28,6 @@ const startNodeCmd = async function(argv) {
     console.log('Creating additional accounts ...')
     await createAdditionalAccounts(additionalAccounts)
   }
-
-  // executeCompose('logs --follow')
 }
 
 const stopNodeCmd = async function() {
