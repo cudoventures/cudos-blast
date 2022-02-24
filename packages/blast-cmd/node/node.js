@@ -16,16 +16,26 @@ const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
   if (argv.daemon) {
-    executeComposeAsync('up --build -d')
+    executeCompose('up --build -d')
+  } else {
+    executeComposeAsync('up --build')
   }
-  executeComposeAsync('up --build')
 
+  // if (argv.daemon === 3847384) {
+  //   executeComposeAsync('up --build')
+  // }
+
+  // executeCompose('up --build -d')
   await waitForRunningNode()
+  console.log('Cudos Blast local node is ready')
 
   const additionalAccounts = getAdditionalAccounts()
   if (additionalAccounts > 0) {
+    console.log('Creating additional accounts ...')
     await createAdditionalAccounts(additionalAccounts)
   }
+
+  // executeCompose('logs --follow')
 }
 
 const stopNodeCmd = async function() {
@@ -50,7 +60,7 @@ async function waitForRunningNode() {
       throw new BlastError('Failed to instantiate a node. Error: Timeout')
     }
   }
-  // We need the first block to be mined in order to add a new key.
+  // We need the first block to be mined so we can interact with the node.
   // In order to wait the first block to be mined we have to wait additional ±4 seconds after the nodeStatus is true.
   await delay(4)
 }
