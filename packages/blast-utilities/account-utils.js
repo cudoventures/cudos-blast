@@ -18,9 +18,10 @@ async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
   const addressPrefix = getAddressPrefix()
   for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
     const mnemonic = bip39.generateMnemonic(256)
+    const address = await getAddressFromMnemonic(mnemonic, addressPrefix)
     accounts[`account${10 + i}`] = {
       mnemonic: mnemonic,
-      address: await getAddressFromMnemonic(mnemonic, addressPrefix)
+      address: address
     }
 
     executeNodeMultiCmd(`echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(

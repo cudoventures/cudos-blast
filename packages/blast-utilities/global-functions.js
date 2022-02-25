@@ -1,5 +1,4 @@
 const path = require('path')
-const BlastError = require('./blast-error')
 const { CudosContract } = require('./contract-utils')
 const { getProjectRootPath } = require('./package-info')
 const {
@@ -28,18 +27,10 @@ global.getContractFactory = async function(contractName) {
   return new CudosContract(contractName, await getSigner(accounts[0]))
 }
 
-global.getContractFromAddress = async function(contractAddress, owner = null) {
+global.getContractFromAddress = async function(contractAddress) {
   const contractInfo = await getContractInfo(contractAddress)
-  const creatorAccount = accounts.find(acc => acc.address === contractInfo.creator)
-
-  if (owner && owner.address !== contractInfo.creator) {
-    throw new BlastError('Invalid owner!')
-  } else if (!owner && !creatorAccount) {
-    throw new BlastError('Unknown owner! Please specify contract owner!')
-  } else if (!owner) {
-    owner = await getSigner(creatorAccount)
-  }
-  return new CudosContract(contractInfo.label, owner, contractAddress)
+  const defaultSigner = await getSigner(accounts[0])
+  return new CudosContract(contractInfo.label, defaultSigner, contractAddress)
 }
 
 function getAccounts() {

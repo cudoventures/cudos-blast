@@ -34,11 +34,9 @@ module.exports.CudosContract = class CudosContract {
     
     this.#owner = owner
     const uploadReceipt = await this.#uploadContract()
-    console.log(uploadReceipt)
-    const ic = await this.#initContract(uploadReceipt.codeId, initMsg, label)
-    console.log(ic)
-    this.#contractAddress = ic.contractAddress
-    return ic.contractAddress
+    const initReceipt = await this.#initContract(uploadReceipt.codeId, initMsg, label)
+    this.#contractAddress = initReceipt.contractAddress
+    return initReceipt.contractAddress
   }
 
   async execute(msg, sender = this.#owner) {
@@ -58,7 +56,6 @@ module.exports.CudosContract = class CudosContract {
     // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
     const uploadFee = calculateFee(1_500_000, this.#gasPrice)
-    console.log(wasm)
     return await this.#owner.upload(
       this.#owner.address,
       wasm,
