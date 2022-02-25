@@ -33,10 +33,10 @@ module.exports.CudosContract = class CudosContract {
     }
     
     this.#owner = owner
-    const uploadReceipt = await this.#uploadContract()
-    const initReceipt = await this.#initContract(uploadReceipt.codeId, initMsg, label)
-    this.#contractAddress = initReceipt.contractAddress
-    return initReceipt.contractAddress
+    const uploadTx = await this.#uploadContract()
+    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
+    this.#contractAddress = initTx.contractAddress
+    return { uploadTx: uploadTx, initTx: initTx }
   }
 
   async execute(msg, sender = this.#owner) {

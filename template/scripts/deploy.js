@@ -3,7 +3,8 @@ async function main () {
   const contract = await getContractFactory('alpha')
   
   const MSG_INIT = { count: 13 }
-  const contractAddress = await contract.deploy(MSG_INIT, bob)
+  const deploy = await contract.deploy(MSG_INIT, bob)
+  const contractAddress = deploy.initTx.contractAddress
   console.log(`${contractAddress}`)
 }
 
