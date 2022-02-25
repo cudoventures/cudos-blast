@@ -12,7 +12,7 @@ const {
   getAddressPrefix
 } = require('./config-utils')
 
-async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
+async function createAdditionalAccounts(numberOfAdditionalAccounts) {
   const accounts = {}
   const customBalance = getAdditionalAccountsBalances()
   const addressPrefix = getAddressPrefix()
@@ -54,5 +54,5 @@ function saveAccounts(accounts) {
 }
 
 module.exports = {
-  handleAdditionalAccountCreation: handleAdditionalAccountCreation
+  createAdditionalAccounts: createAdditionalAccounts
 }

@@ -1,8 +1,5 @@
 const { initCmd } = require('./init/init.js')
-const {
-  compileCmd,
-  optimizerVer
-} = require('./compile/compile.js')
+const { compileCmd } = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
 const { unitTestCmd } = require('./unittest/unittest.js')
 const { runCmd } = require('./run/run.js')
@@ -26,14 +23,7 @@ const initInfo = {
 const compileInfo = {
   command: 'compile',
   describe: 'Compile the smart contracts in the workspace in alphabetical order',
-  builder: (yargs) => {
-    yargs.option('optimizer', {
-      alias: 'o',
-      type: 'string',
-      default: optimizerVer,
-      description: 'Version of the cargo optimizer'
-    })
-  },
+  builder: (yargs) => {},
   handler: compileCmd
 }
 

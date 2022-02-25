@@ -54,10 +54,20 @@ function getAdditionalAccountsBalances() {
   return config.customAccountBalances
 }
 
+function getRustOptimizerVersion() {
+  const { config } = getConfig()
+
+  if (!config.rustOptimizerVersion) {
+    throw new BlastError('Missing rustOptimizerVersion in the config file.')
+  }
+  return config.rustOptimizerVersion
+}
+
 module.exports = {
   getNetworkUrl: getNetworkUrl,
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
-  getAdditionalAccountsBalances: getAdditionalAccountsBalances
+  getAdditionalAccountsBalances: getAdditionalAccountsBalances,
+  getRustOptimizerVersion: getRustOptimizerVersion
 }
