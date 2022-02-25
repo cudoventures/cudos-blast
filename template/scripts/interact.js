@@ -1,6 +1,6 @@
 async function main() {
   const [alice, bob] = await getSigners()
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 
   const QUERY_GET_COUNT = { get_count: {} }
   let count = await contract.query(QUERY_GET_COUNT)

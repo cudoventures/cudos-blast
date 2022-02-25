@@ -27,10 +27,10 @@ global.getContractFactory = async function(contractName) {
   return new CudosContract(contractName, await getSigner(accounts[0]))
 }
 
-global.getContractFromAddress = async function(contractAddress) {
+global.getContractFromAddress = async function(contractAddress, signer = null) {
   const contractInfo = await getContractInfo(contractAddress)
-  const defaultSigner = await getSigner(accounts[0])
-  return new CudosContract(contractInfo.label, defaultSigner, contractAddress)
+  signer = signer ?? await getSigner(accounts[0])
+  return new CudosContract(contractInfo.label, signer, contractAddress)
 }
 
 function getAccounts() {
