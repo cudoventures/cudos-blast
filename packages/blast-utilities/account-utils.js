@@ -69,7 +69,7 @@ async function getSigner(name, network) {
   return await DirectSecp256k1Wallet.fromKey(acc.privateKey, network)
 }
 
-async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
+async function createAdditionalAccounts(numberOfAdditionalAccounts) {
   const accounts = {}
   const customBalance = getAdditionalAccountsBalances()
   for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
@@ -78,8 +78,8 @@ async function handleAdditionalAccountCreation(numberOfAdditionalAccounts) {
 
     accounts[`account${10 + i}`] = { address: address, mnemonic: account.mnemonic }
 
-    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
-      'faucet', `account${10 + i}`, `${customBalance}`))
+    executeNodeMultiCmd(`echo ${account.mnemonic} | cudos-noded keys add account${10 + i} --recover ` +
+      '--keyring-backend test && ' + transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`))
   }
   const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
   saveAccounts(accountsToSave)
@@ -98,5 +98,5 @@ module.exports = {
   createRandom: createRandom,
   getSigner: getSigner,
   getAccountAddress: getAccountAddress,
-  handleAdditionalAccountCreation: handleAdditionalAccountCreation
+  createAdditionalAccounts: createAdditionalAccounts
 }
