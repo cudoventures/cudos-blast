@@ -44,10 +44,10 @@ Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) in
 > For Windows users we recommend using Windows Subsystem for Linux ([WSL](https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distros)).
 > To avoid permission issues with `WSL`, you may have to [change](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory) `npm` default directory. 
 
-Clone the repository and navigate to its directory. Then install dependencies:
+Install Cudos Blast package:
 
 ```bash
-npm install
+npm install cudos-blast
 ```
 
 Install Cudos Blast globally:
