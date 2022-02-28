@@ -12,7 +12,7 @@ async function main() {
     .command(commands.initInfo)
     .command(commands.compileInfo)
     .command(commands.testInfo)
-    .command(commands.unitTestInfo)
+    .command(commands.rustTestInfo)
     .command(commands.nodeInfo)
     .command(commands.runInfo)
     .command(commands.keysInfo)

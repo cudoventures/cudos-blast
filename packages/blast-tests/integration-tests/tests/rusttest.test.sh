@@ -1,14 +1,14 @@
 #!/bin/bash
 source ./packages/blast-tests/integration-tests/vars.sh
-init_folder="$INIT_FOLDER-unittest"
+init_folder="$INIT_FOLDER-rusttest"
 
-echo -n 'blast unittest...'
+echo -n 'blast rusttest...'
 cp -R template $init_folder &> /dev/null && cd $init_folder
 
-blast unittest -q &> cargo.logs.json
+blast rusttest -q &> cargo.logs.json
 result=`cat cargo.logs.json`
-if [[ ! $result =~ $UNITTEST_RESULT ]]; then
-    echo -e "$FAILED\n$EXPECTED\n$UNITTEST_RESULT\n$ACTUAL\n$result" 1>&2
+if [[ ! $result =~ $RUSTTEST_RESULT ]]; then
+    echo -e "$FAILED\n$EXPECTED\n$RUSTTEST_RESULT\n$ACTUAL\n$result" 1>&2
     exit_status=1
 else
     echo -e $PASSED

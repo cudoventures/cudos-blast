@@ -108,16 +108,16 @@ The contracts have to be in `{project_root}/contracts/` folder. Cudos Blast come
 ---
 ## Running Rust tests
 
-Rust tests are organized by the Rust convention for writing tests. You can check them in their corresponding contracts in `{project_root}/contracts/{contract_name}/`. To run smart contracts' unit tests:
+Rust tests are organized by the Rust convention for writing tests. You can check them in their corresponding contracts in `{project_root}/contracts/{contract_name}/`. To run smart contracts' Rust tests:
 
 ```bash
-blast unittest
+blast rusttest
 ```
 
-To run unit tests without printing cargo log messages use `--quiet` or `-q`
+To run the Rust tests without printing cargo log messages use `--quiet` or `-q`
 
 ```bash
-blast unittest -q
+blast rusttest -q
 ```
 
 ---
