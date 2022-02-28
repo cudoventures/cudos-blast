@@ -1,37 +1,28 @@
-const Mocha = require('mocha')
 const path = require('path')
 const fs = require('fs')
-
+const { spawnSync } = require('child_process')
 const BlastError = require('../../blast-utilities/blast-error')
+const {
+  getPackageRootPath,
+  getProjectRootPath
+} = require('../../blast-utilities/package-info')
 
-const mocha = new Mocha()
 const INTEGRATION_TESTS_FOLDER_NAME = 'integration_tests'
-const testDir = path.join(process.cwd(), INTEGRATION_TESTS_FOLDER_NAME)
+const GLOBAL_FUNCTIONS = path.join(getPackageRootPath(), 'packages/blast-utilities/global-functions.js')
+const JEST_BINARY = path.join(getPackageRootPath(), 'node_modules/.bin/jest')
 
-function runTest() {
-  fs.readdirSync(testDir).filter(function(file) {
-    console.log('run test: ', file)
-    return file.substring(file.length - 3, file.length) === '.js'
-  }).forEach(function(file) {
-    mocha.addFile(
-      path.join(testDir, file)
-    )
-  })
-
-  // Run the tests.
-  // TODO: this command should be fixed as it does not seems to work.
-  mocha.run(function(failures) {
-    process.exitCode = failures ? 1 : 0
-  })
-}
-
-async function testCmd(argv) {
-  if (!fs.existsSync(testDir)) {
+function testCmd(argv) {
+  const TEST_DIR = path.join(getProjectRootPath(), INTEGRATION_TESTS_FOLDER_NAME)
+  if (!fs.existsSync(TEST_DIR)) {
     throw new BlastError('No integration tests folder found! Make sure to place your integration tests in /' +
       INTEGRATION_TESTS_FOLDER_NAME)
   }
   console.log('Running integration tests...')
-  runTest()
+
+  spawnSync(`${JEST_BINARY} ${TEST_DIR} --setupFilesAfterEnv=${GLOBAL_FUNCTIONS} --testTimeout=15000 --silent`, {
+    stdio: 'inherit',
+    shell: true
+  })
 }
 
 module.exports = { testCmd: testCmd }

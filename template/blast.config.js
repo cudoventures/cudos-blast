@@ -1,10 +1,9 @@
 /* eslint-disable quote-props */
 module.exports.config = {
-  name: 'template',
-  network: 'cudos',
-  defaultAccount: 'account1',
+  addressPrefix: 'cudos',
   additionalAccounts: 0,
   customAccountBalances: '1000000000000000000',
   gasPrice: '250acudos',
-  endpoint: 'http://localhost:26657'
+  networkUrl: 'http://localhost:26657',
+  rustOptimizerVersion: '0.12.3'
 }
