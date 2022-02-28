@@ -53,7 +53,7 @@ npm install cudos-blast
 Install Cudos Blast globally:
 
 ```bash
-npm install -g
+npm install -g cudos-blast
 ```
 
 ---
