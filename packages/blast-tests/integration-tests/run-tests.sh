@@ -1,5 +1,10 @@
 #!/bin/bash
 source ./packages/blast-tests/integration-tests/vars.sh
+if [[ ! $? == 0 ]]; then
+    echo -e "Invalid source!" 1>&2
+    exit $?
+fi
+
 compose='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml'
 start_node() {
     $compose up --build -d &> /dev/null
@@ -23,8 +28,8 @@ fi
 
 echo '- Executing node-start-status.test.sh...'
 $TESTS_FOLDER/node-start-status.test.sh
-if [[ $? == 1 ]]; then
-    exit_status=1
+if [[ ! $? == 0 ]]; then
+    exit_status=$?
     start_node
 fi
 
@@ -34,16 +39,16 @@ for test in $TESTS_FOLDER/*.test.sh; do
         file_name=${split[5]}
         echo "- Executing $file_name..."
         $test
-        if [[ $? == 1 ]]; then
-            exit_status=1
+        if [[ ! $? == 0 ]]; then
+            exit_status=$?
         fi
     fi
 done
 
 echo '- Executing node-stop-status.test.sh...'
 $TESTS_FOLDER/node-stop-status.test.sh
-if [[ $? == 1 ]]; then
-    exit_status=1
+if [[ ! $? == 0 ]]; then
+    exit_status=$?
 fi
 if [[ ! $node_stopped == true && `docker ps` =~ $CONTAINER_NAME ]]; then
     $compose down &> /dev/null && sleep 5

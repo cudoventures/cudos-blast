@@ -2,12 +2,12 @@
 source ./packages/blast-tests/integration-tests/vars.sh
 
 echo -n 'blast keys fund...'
-$COMPOSE cudos-noded keys add $TEST_KEY &> /dev/null
+$COMPOSE cudos-noded keys add $TEST_KEY --keyring-backend test &> /dev/null
 cd template
 blast keys fund $TEST_KEY -t 1 &> /dev/null
 cd ..
 
-test_address=`$COMPOSE cudos-noded keys show $TEST_KEY -a`
+test_address=`$COMPOSE cudos-noded keys show $TEST_KEY --keyring-backend test -a`
 balance=`$COMPOSE cudos-noded q bank balances $test_address`
 if [[ ! $balance =~ $BALANCE_AFTER_FUND ]]; then
     echo -e "$FAILED\n$EXPECTED\n$BALANCE_AFTER_FUND\n$ACTUAL\n$balance" 1>&2
@@ -16,5 +16,5 @@ else
     echo -e $PASSED
 fi
 
-$COMPOSE cudos-noded keys delete $TEST_KEY -y &> /dev/null
+$COMPOSE cudos-noded keys delete $TEST_KEY --keyring-backend test -y &> /dev/null
 exit $exit_status

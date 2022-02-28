@@ -4,97 +4,77 @@ const {
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
-
-const { getGasPrice } = require('./config-utils.js')
-const { getAccountAddress } = require('./account-utils')
-const { getClient } = require('./client.js')
+const { getGasPrice } = require('./config-utils')
 const BlastError = require('./blast-error')
+const { getProjectRootPath } = require('./package-info')
 
-const Contract = class {
-  constructor(contractname, initMsg, label) {
-    this.contractname = contractname
-    this.initMsg = initMsg
-    this.label = label || contractname
-    this.client = {}
-  }
+module.exports.CudosContract = class CudosContract {
+  #contractName
+  #signer
+  #contractAddress
+  #wasmPath
+  #gasPrice
+  
+  constructor(contractName, signer, deployedContractAddress = null) {
+    this.#contractName = contractName
+    this.#signer = signer
+    this.#contractAddress = deployedContractAddress
+    this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractName}.wasm`)
+    this.#gasPrice = GasPrice.fromString(getGasPrice())
 
-  async init() {
-    this.client = getClient()
-
-    if (!this.deployed) {
-      this.wasmPath = path.join(process.cwd(), `artifacts/${this.contractname}.wasm`)
-      if (!fs.existsSync(this.wasmPath)) {
-        throw new BlastError(`Contract with name ${this.contractname} was not found, did you compile it?`)
-      }
+    if (!this.#isDeployed() && !fs.existsSync(this.#wasmPath)) {
+      throw new BlastError(`Contract with name ${contractName} was not found, did you compile it?`)
     }
-
-    this.gasPrice = GasPrice.fromString(await getGasPrice())
-    this.defaultAccount = await getAccountAddress(this.client.name)
-
-    return this
   }
 
-  async deploy() {
-    const uploadReceipt = await this.uploadContract()
-    console.log(uploadReceipt)
-    const ic = await this.initContract(uploadReceipt.codeId)
-    console.log(ic)
-    this.contractAddress = ic.contractAddress
-    return ic.contractAddress
+  async deploy(initMsg, owner = this.#signer, label = this.#contractName) {
+    if (this.#isDeployed()) {
+      throw new BlastError(`Contract is already deployed!`)
+    }
+    
+    this.#signer = owner
+    const uploadTx = await this.#uploadContract()
+    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
+    this.#contractAddress = initTx.contractAddress
+    return { uploadTx: uploadTx, initTx: initTx }
   }
 
-  async uploadContract() {
+  async execute(msg, signer = this.#signer) {
+    const fee = calculateFee(1_500_000, this.#gasPrice)
+    return await signer.execute(signer.address, this.#contractAddress, msg, fee)
+  }
+
+  async query(queryMsg, signer = this.#signer) {
+    return await signer.queryContractSmart(this.#contractAddress, queryMsg)
+  }
+
+  getAddress() {
+    return this.#contractAddress
+  }
+
+  async #uploadContract() {
     // TODO: pass gasLimit as a param or read it from config
-    const uploadFee = calculateFee(1_500_000, this.gasPrice)
-    const wasm = fs.readFileSync(this.wasmPath)
-
-    return await this.client.upload(
-      this.defaultAccount,
+    const wasm = fs.readFileSync(this.#wasmPath)
+    const uploadFee = calculateFee(1_500_000, this.#gasPrice)
+    return await this.#signer.upload(
+      this.#signer.address,
       wasm,
       uploadFee
     )
   }
 
-  async initContract(codeId) {
-    const instantiateFee = calculateFee(500_000, this.gasPrice)
-    return await this.client.instantiate(
-      this.defaultAccount,
+  async #initContract(codeId, initMsg, label) {
+    const instantiateFee = calculateFee(500_000, this.#gasPrice)
+    return await this.#signer.instantiate(
+      this.#signer.address,
       codeId,
-      this.initMsg,
-      this.label,
+      initMsg,
+      label,
       instantiateFee
     )
   }
 
-  addAddress(contractAddress) {
-    this.deployed = true
-    this.contractAddress = contractAddress
+  #isDeployed() {
+    return this.#contractAddress !== null
   }
-
-  async execute(msg) {
-    const fee = calculateFee(1_500_000, this.gasPrice)
-    return await this.client.execute(this.defaultAccount, this.contractAddress, msg, fee)
-  }
-
-  async querySmart(queryMsg) {
-    return await this.client.queryContractSmart(this.contractAddress, queryMsg)
-  }
-}
-
-async function getContractFactory(contractname, initMsg) {
-  const contract = new Contract(contractname, initMsg)
-  await contract.init()
-  return contract
-}
-
-async function getContractFromAddress(contractAddress) {
-  const contract = new Contract()
-  contract.addAddress(contractAddress)
-  await contract.init()
-  return contract
-}
-
-module.exports = {
-  getContractFactory: getContractFactory,
-  getContractFromAddress: getContractFromAddress
 }

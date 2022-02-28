@@ -3,43 +3,22 @@ const process = require('process')
 const path = require('path')
 const BlastError = require('./blast-error')
 
-let config = {}
-
-const configPath = path.join(process.cwd(), 'blast.config.js')
-
 function getConfig() {
-  if (!fsExtra.pathExistsSync(configPath)) {
-    throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${configPath}`)
+  const CONFIG_PATH = path.join(process.cwd(), 'blast.config.js')
+  if (!fsExtra.pathExistsSync(CONFIG_PATH)) {
+    throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${CONFIG_PATH}`)
   }
-  config = require(configPath)
+  const config = require(CONFIG_PATH)
   return config
 }
 
-function getAccountByName(name) {
+function getNetworkUrl() {
   const { config } = getConfig()
 
-  if (!config.accounts) {
-    throw new BlastError('Missing [accounts] in the config file.')
+  if (!config.networkUrl) {
+    throw new BlastError('Missing networkUrl in the config file.')
   }
-
-  if (typeof config.accounts[name] !== 'undefined') {
-    return config.accounts[name]
-  }
-
-  if (typeof config.privateAccounts[name] !== 'undefined') {
-    return config.privateAccounts[name]
-  }
-
-  throw new BlastError(`Account with name ${name} was not found. Make sure that you have configured "accounts.json" or "private-accounts.json"`)
-}
-
-function getEndpoint() {
-  const { config } = getConfig()
-
-  if (!config.endpoint) {
-    throw new BlastError('Missing [endpoint] in the config file.')
-  }
-  return config.endpoint
+  return config.networkUrl
 }
 
 function getGasPrice() {
@@ -51,24 +30,14 @@ function getGasPrice() {
   return config.gasPrice
 }
 
-async function getNetwork() {
-  const { config } = await getConfig()
+function getAddressPrefix() {
+  const { config } = getConfig()
 
-  if (!config.network) {
+  if (!config.addressPrefix) {
     throw new BlastError('Missing network in the config file.')
   }
 
-  return config.network
-}
-
-async function getDefaultAccount() {
-  const { config } = await getConfig()
-
-  if (!config.defaultAccount) {
-    throw new BlastError('Missing defaultAccount in the config file.')
-  }
-
-  return config.defaultAccount
+  return config.addressPrefix
 }
 
 function getAdditionalAccounts() {
@@ -85,12 +54,20 @@ function getAdditionalAccountsBalances() {
   return config.customAccountBalances
 }
 
+function getRustOptimizerVersion() {
+  const { config } = getConfig()
+
+  if (!config.rustOptimizerVersion) {
+    throw new BlastError('Missing rustOptimizerVersion in the config file.')
+  }
+  return config.rustOptimizerVersion
+}
+
 module.exports = {
-  getAccountByName: getAccountByName,
-  getEndpoint: getEndpoint,
+  getNetworkUrl: getNetworkUrl,
   getGasPrice: getGasPrice,
-  getNetwork: getNetwork,
-  getDefaultAccount: getDefaultAccount,
+  getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
-  getAdditionalAccountsBalances: getAdditionalAccountsBalances
+  getAdditionalAccountsBalances: getAdditionalAccountsBalances,
+  getRustOptimizerVersion: getRustOptimizerVersion
 }

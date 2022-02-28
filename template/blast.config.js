@@ -7,8 +7,10 @@ module.exports.config = {
   defaultAccount: 'account1',
   accounts: accounts,
   privateAccounts: privateAccounts,
+  addressPrefix: 'cudos',
   additionalAccounts: 0,
   customAccountBalances: '1000000000000000000',
   gasPrice: '250acudos',
-  endpoint: 'http://localhost:26657'
+  networkUrl: 'http://localhost:26657',
+  rustOptimizerVersion: '0.12.3'
 }

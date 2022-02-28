@@ -6,8 +6,8 @@ async function delay(n) {
 }
 
 function transferTokensByNameCommand(fromName, toName, amount) {
-  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} -a) ${amount}acudos ` +
-    '--chain-id cudos-network --yes'
+  return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} --keyring-backend test -a) ${amount}acudos ` +
+    '--keyring-backend test --chain-id cudos-network --yes'
 }
 
 module.exports = {

@@ -1,14 +1,11 @@
 const fs = require('fs')
 const { executeRun } = require('../../blast-utilities/run-docker-commands')
 const { getProjectRootPath } = require('../../blast-utilities/package-info')
+const { getRustOptimizerVersion } = require('../../blast-utilities/config-utils')
 const BlastError = require('../../blast-utilities/blast-error')
 
-let optimizerVer = '0.12.3'
-
 function compileCmd(argv) {
-  if (argv.optimizer) {
-    optimizerVer = argv.optimizer
-  }
+  const optimizerVer = getRustOptimizerVersion()
   const projectRootPath = getProjectRootPath()
   const compileCmd = `-v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target` +
     ' --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry' +
@@ -22,4 +19,6 @@ function compileCmd(argv) {
   executeRun(compileCmd)
 }
 
-module.exports = { compileCmd: compileCmd }
+module.exports = {
+  compileCmd: compileCmd
+}
