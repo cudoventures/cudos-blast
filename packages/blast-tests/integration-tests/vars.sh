@@ -29,6 +29,8 @@ contracts
 integration_tests
 jsconfig.json
 package.json
+private-accounts.json
 scripts'
+
 export TEMPLATE_SCRIPTS_FILES='deploy.js
 interact.js'
