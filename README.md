@@ -1,276 +1,412 @@
-# CUDOS CLI (command line interface)
+# Cudos Blast
 
-CUDOS CLI is a Node.js framework for working with the CUDOS blockchain. Using it you can scaffold, compile, test (both unit & integration) your smart contracts.
-Utilizing [`cudos.js`](https://github.com/CudoVentures/cudos.js) it offers the possibility to deploy and interact with them on a specified network ( local, test or public).
-By using this tool you can also spin up a local [`cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
+Cudos Blast is a Node.js CLI (command line interface) tool for working with the Cudos blockchain. You can scaffold, compile and test your **Rust** smart contracts. JavaScript and Rust testing is supported.
+Utilizing `blast.config.js` it provides a possibility for deploying and interacting with them on a specified network (local, test or public).
+By using this tool you can also spin up a local [`Cudos node`](https://github.com/CudoVentures/cudos-node) and interact with it.
 
-## Overview
+## Table of Contents
 
-_Click on a command for more information and examples._
+* [Installation](#installation) 
+* [Help and version](#help-and-version) 
+* [Initializing a project](#initializing-a-project) 
+* [Compiling smart contracts](#compiling-smart-contracts) 
+* [Running Rust tests](#running-rust-tests) 
+* [Testing contracts with JavaScript](#testing-contracts-with-javascript) 
+* [Interacting with a Cudos node](#interacting-with-a-cudos-node) 
+  * [Starting a local node](#starting-a-local-node) 
+  * [Stopping a running local node](#stopping-a-running-local-node) 
+  * [Checking node status](#checking-node-status) 
+* [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts-interacting-with-them-and-running-custom-script-files) 
+  * [Available functions in global context](#available-functions-in-global-context)
+* [Network](#network)
+  * [Testnet](#testnet)
+  * [Mainnet](#mainnet)
+* [Managing accounts](#managing-accounts) 
+  * [Listing local node accounts](#listing-local-node-accounts) 
+  * [Adding a new local node account](#adding-a-new-local-node-account) 
+  * [Removing an existing local node account](#removing-an-existing-local-node-account) 
+  * [Funding an existing local node account](#funding-an-existing-local-node-account) 
+* [Development](#development) 
+  * [Running tests](#running-tests) 
+  * [Sample test](#sample-test) 
 
+## Installation
 
-| Command                                               | Description                                                                                                                            |
-| ----------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| [`cudos init`](#cudos-init)                           | Initializes a sample project                                                   |
-| [`cudos compile`](#cudos-compile)                             | Compiles all the smart contracts in the project in alphabetical order                                                                           |
-| [`cudos unittest`](#cudos-unittest)             | Runs the unit tests for the smart contracts   |
-| [`cudos test`](#cudos-test)                        | Runs the integration tests for the smart contracts                                                                                                    |
-| [`cudos node`](#cudos-node)                  | Base command for interacting with a local node. Subcommands: 'start', 'stop', 'status', 'keys'.                                                                                               |
-| [`cudos run`](#cudos-run)                        |  Runs a custom javascript file - for deployment and interaction                                                                                                 |
-| [`cudos keys`](#cudos-keys)                 | Base comand for maneging keystore/accounts. Subcommands: 'add', 'rm', 'fund', 'ls'.                                                                              |
+Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) installed.  [Docker](https://docs.docker.com/engine/install) is also required.
 
-### Installation
+| Prerequisite   | Minimum version | Recommended version |
+| ---            | ---             | ---                 |
+| Node.js        | 12.5.0          | 16.10.0             |
+| npm            | 6.9.0           | 7.24.0              |
+| Docker engine  | 19.03.13        | 20.10.12            |
+| Docker compose | 1.27.4          | 1.29.2              |  
 
-> Make sure you have a current version of `npm` and `NodeJS` installed.
+> For Windows users we recommend using Windows Subsystem for Linux ([WSL](https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distros)).
+> To avoid permission issues with `WSL`, you may have to [change](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory) `npm` default directory. 
 
-#### Mac and Linux
-
-1. Install `npm` and `node`.
-2. Clone the repo & and cd to the cloned directory
-3. Install `cudos-cli` globally by running both: 
+Install Cudos Blast package:
 
 ```bash
-npm install
+npm install cudos-blast
 ```
+
+Install Cudos Blast globally:
+
 ```bash
-npm install -g
+npm install -g cudos-blast
 ```
 
-#### Windows
+---
+## Help and version
 
-> For Windows users, we recommend using Windows Subsystem for Linux (`WSL`).
-
-1. Install `WSL` [[click here]](https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distros)
-2. Install `npm` [[click here]](https://www.npmjs.com/get-npm)
-3. Install ` Node.js` [ [ click here ]](https://nodejs.org/en/download/package-manager/)
-4. Change `npm` default directory [ [ click here ] ](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory)
-   - This is to avoid any permission issues with `WSL`
-5. Open `WSL`, clone the repo and cd to its directory
-6. Run both:
+Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
 
 ```bash
-npm install
+blast --help
+blast help
+blast node --help
+blast node start help
 ```
+
+You can display `cudos-blast` version number using `--version`.
+
 ```bash
-npm install -g
+blast --version
 ```
 
 ---
 
-### Build Docker image
+## Initializing a project
 
- -  necessary step before we make production ready public cudos repo
-```docker build -t cudos/node -f cudos-node.Dockerfile .```
-
-### Network selection
-
-todo
-
----
-
-## Full commands info
-
-### `cudos init`
-
-> Scaffolds a sample project that is ready to work with the CUDOS blockchain. Contains smart contracts and scripts to deploy and interact with them. Optionally you specify the directory of the project. If not specified - gets created in the current working directory.
-
-- arguments: `none`
-- options: `-dir (--d)` `string` `Specify a path to install` `not required`
-
-**Example:**
+To scaffold a sample project navigate to empty directory and run
 
 ```bash
-cudos init
+blast init
 ```
 
+You can also specify the full directory of the project using optional parameter `--dir` or `-d`
+
 ```bash
-cudos init --d /Your/Location/Here
+blast init --dir /Your/Location/Here
 ```
 
+The project is now ready to work with the Cudos blockchain. It contains sample smart contracts and scripts to deploy or interact.  
+> Make sure to initialize a new project in a directory other than the local repository folder, or else `cudos-blast` will break and the repository have to be cloned again.  
+> Also, all `blast` commands are designed to be executed from the project root directory.
+
 ---
+## Compiling smart contracts
 
-### `cudos compile`
-
-> Compiles all the smart contracts in alphabetical order. 
-> Please note that you have to call `cudo compile` from the root of your project and the contracts have to be in a folder named '/contracts' again in the root of the project or else the tool will not find them.
-> The contracts are compiled as Rust workspace - this means that if you want to add more folders for compile (ie dependent packages in a separate /packages folder ) all you have to do is go in the base Cargo.toml file ( located at project root) and add your folder under ```[members]```
-> The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artefacts (projectRoot/artefacts folder) are optimized for deployment.
-
-- arguments: `none`
-- options: `none`
-
-**Example:**
+To compile all smart contracts run
 
 ```bash
-cudos compile
+blast compile
+```
+
+The contracts have to be in `{project_root}/contracts/` folder. Cudos Blast comes with sample contracts you can use. All contracts are compiled in alphabetical order and as a Rust workspace. If you want to add more folders to compile, all you have to do is edit the base `{project_root}/Cargo.toml` file and add your folder under `members`. The compilation is done using [rust-optimizer](https://github.com/CosmWasm/rust-optimizer) and the artifacts in `{project_root}/artifacts/` folder are optimized for deployment.
+
+---
+## Running Rust tests
+
+Rust tests are organized by the Rust convention for writing tests. You can check them in their corresponding contracts in `{project_root}/contracts/{contract_name}/`. To run smart contracts' unit tests:
+
+```bash
+blast unittest
+```
+
+To run unit tests without printing cargo log messages use `--quiet` or `-q`
+
+```bash
+blast unittest -q
 ```
 
 ---
+## Testing contracts with JavaScript
 
-### `cudos unittest`
-
-> Runs the unit tests of the smart contracts. 
-> In order for the command to find the tests - please call it from the root of your project or wherever you main Cargo.toml file is located.
-
-- arguments: `none`
-- options: `none`
-
-**Example:**
+Cudos Blast uses [Jest](https://jestjs.io) framework for testing. Test files must be in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You must have a [local node running](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests.
 
 ```bash
-cudos unittest
+describe('alpha contract', () => {
+  const MSG_INIT = { count: 13 }
+  const MSG_INCREMENT = { increment: {} }
+  const MSG_RESET = { reset: { count: 1 } }
+  const QUERY_GET_COUNT = { get_count: {} }
+
+  let alice, bob, contract
+
+  // deploying alpha contract once before test cases
+  beforeAll(async () => {
+    // function 'getSigners' is available in global context
+    [alice, bob] = await getSigners()
+    contract = await getContractFactory('alpha')
+    await contract.deploy(MSG_INIT, bob)
+  })
+
+  // positive test case
+  test('increment count', async () => {
+    await contract.execute(MSG_INCREMENT, alice)
+    return expect(contract.query(QUERY_GET_COUNT))
+      .resolves.toEqual({ count: 14 })
+  })
+
+  // ...
+
+  // negative test case
+  test('reset count from user throws unauthorized', () => {
+    return expect(contract.execute(MSG_RESET, alice))
+      .rejects.toThrow('Unauthorized')
+  })
+})
+```
+
+Run all test files with
+
+```bash
+blast test
 ```
 
 ---
+## Interacting with a Cudos node
 
-### `cudos test`
+You can interact with a local [`Cudos node`](https://github.com/CudoVentures/cudos-node) with `blast node` command.
 
-`Currently its not working correctly, only for demo purpose !`
-> Runs the integration tests of the smart contracts - by default located in the `integration_test` folder
-> In order for the command to find the tests - please call it from the root of your project.
+### Starting a local node
 
-- arguments: `none`
-- options: `none`
-
-**Example:**
+To start a fresh local Cudos node run
 
 ```bash
-cudos test
+blast node start
 ```
+
+or you can leave the current terminal window free by running the local node in background. To do this use `--daemon` or `-d`.
+
+```bash
+blast node start -d
+```
+
+To see how to manage local node accounts go [here](#managing-accounts).
+
+### Stopping a running local node
+
+To stop a running node run
+
+```bash
+blast node stop
+```
+
+### Checking node status
+
+To check whether a Cudos node is online or offline run
+
+```bash
+blast node status
+```
+
+You are able to check the status of a [non-local Cudos node](#network) by setting its URL in `blast.config.js` under `networkUrl:`.
 
 ---
+## Deploying smart contracts, interacting with them and running custom script files
 
-
-### `cudos node`
-
-> Base command for interaction with a local node ([`cudos node`](https://github.com/CudoVentures/cudos-node) )
-> Run ```cudo node --help``` for info
-
-### `cudos node start`
-> Starts a local CUDOS node
-
-- arguments: `none`
-- options: `--daemon` `--d` `runs the node as a daemon and leaves the current console window free and usable` `not required`
-
-**Example:**
+You can use the supplied `{project_root}/scripts/deploy.js` to deploy a sample smart contract.
 
 ```bash
-cudos node start
-cudos node start --d
+async function main () {
+  // functions such as 'getSigners' and 'getContractFactory' are available in global context
+  const [alice, bob] = await getSigners()
+
+  // get contract object of 'alpha' contract in 'contracts/alpha'
+  const contract = await getContractFactory('alpha')
+
+  // define instantiate message for the contract
+  const MSG_INIT = { count: 13 }
+
+  // deploying the contract with bob as a signer
+  const contractAddress = await contract.deploy(MSG_INIT, bob)
+
+  // printing contract address so it can be copied and used in other scripts such as interact.js
+  console.log(`${contractAddress}`)
+}
+// ...
 ```
 
-### `cudos node stop`
-> Stops a local CUDOS node
-
-**Example:**
+Run the contract with:
 
 ```bash
-cudos node stop
+blast run scripts/deploy.js
 ```
 
-### `cudos node status`
-> Gives a status of a local CUDOS node - online/offline
-
-**Example:**
+When the contract is deployed, its address will be printed. Then you can edit `{project_root}/scripts/interact.js` with the new address
 
 ```bash
-cudos node stop
+async function main() {
+  const [alice, bob] = await getSigners()
+
+  // replace the address with the new one from your deployed smart contract
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
+// ...
 ```
 
-### `cudos node keys`
-> List keys of a local CUDOS node
-
-**Example:**
+and run the script to interact with the deployed smart contract.
 
 ```bash
-cudos node keys
+blast run scripts/interact.js
 ```
+
+You are free to use these files as templates or create your own custom `.js` scripts. You can specify your own script file path. 
+
+```bash
+blast run scripts/myCustomScript.js
+blast run newFolder/anotherScripts/myCustomScript.js
+```
+
+### Available functions in global context
+
+| Function                                               | Descripton                                                                                                                                           | Sample usage                                                                                  |
+| ---                                                    | ---                                                                                                                                                  | ---                                                                                           |
+| getSigners()                                           | set assigned objects as signers in order as in `{project_root}/accounts.json`                                                                        | const [alice, bob] = await getSigners()                                                       |
+| getContractFactory(contractName)                       | get a contract object from contract named `contractName` and sign it witn the first account in `{project_root}/accounts.json`                        | const contract = await getContractFactory('alpha')                                            |
+| getContractFromAddress(contractAddress, signer = null) | get a contract object by address. Default contract signer can be set. If omitted, signer becomes first account in `{project_root}/accounts.json`     | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
+
+You can run your scripts on a different node by setting its URL in `blast.config.js` under `networkUrl`. You can connect to the default local node as well as a [public one](#network) or you can use your own Cudos node.  
+You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
 
 ---
+## Network
 
-### `cudos run`
-> Runs a custom javascript file. 
-> Currently in the /scripts directory there are two files: deploy.js and interact.js
-> In the future it should be possibly to supply relevant info by the command line (smart contract name, user adress, etc) as option
-> 
+Here are public Cudos nodes you can use to connect to Cudos network:
 
-- arguments: `scriptFilePath` `string` `The script file to execute`
-- options: `none`
+### Testnet
+
+| Chain ID               | URL                                            |
+| ---                    | ---                                            |
+| cudos-testnet-public-2 | https://sentry1.gcp-uscentral1.cudos.org:26657 |
+
+### Mainnet
+
+| Chain ID | URL |
+| ---      | --- |
+|          |     |
+
+---
+## Managing accounts
+
+By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
+You can put your private accounts in `{project_root}/private-accounts.json` and add the file to `.gitignore` to prevent exposing them.
+
+### Listing local node accounts
+
+To list all accounts in the local node key storage run
+
+```bash
+blast keys ls
+```
+
+### Adding a new local node account
+
+To add a new account named `myAccount1` to the local node key storage run
   
+```bash
+blast keys add myAccount1
+```
 
-  ###### How to deploy different smart contracts?
-  > For each of your smart contracts create a separate deploy file ( for example deploy_alpha.js and deploy_beta.js) and run it one by one. Do not forget to edit the contract name in the .js file ( line 4 in the supplied deploy.js file)
+After adding the new account, it is automatically funded with `acudos` tokens from the default local node faucet.
 
-**Example:**
+### Removing an existing local node account
+
+To remove an account from the node key storage run
 
 ```bash
-cudos run scripts/deploy.js
-cudos run scripts/interact.js
-cudos run scripts/yourScriptFile.js
+blast keys rm myAccount1
+```
+
+You can skip the delete confirmation with `--force` or `-f`
+
+```bash
+blast keys rm myAccount1 -f
 ```
 
 ---
+### Funding an existing local node account
 
-### `cudos keys`
-> Manages keystore/accounts
-
-### Subcommands:
-
-#### `cudos keys add accountName`
-> Add account to the keystore
-- arguments: `accountName` `string`
-- options: `none`
-  
-  
-**Example:**
+You can fund an account with additional tokens. To specify tokens amount use `--tokens` or `-t`.
 
 ```bash
-cudos keys add accountName
+blast keys fund myAccount1 --tokens 1000000
 ```
 
-#### `cudos keys rm accountName`
-> Removes account from keystore
-- arguments: `accountName` `string`
-- options: `--yes, -y` `No confirmation when deleting a user`
+The tokens are funded from the default local node faucet in `acudos`.
 
-**Example:**
+---
+##  Development
+
+
+
+### Running tests
+
+You can run tests that ensure `blast` commands are working correctly.
 
 ```bash
-cudos keys rm accountName
+npm test
 ```
 
-#### `cudos keys ls`
-> List all accounts in the keystore
-- arguments: `None`
-- options: `None`
-  
-  
-**Example:**
+You can also specify the test file name to run a single test. Test files are located in `{repo_root}/packages/blast-tests/integration-tests/tests/`
 
 ```bash
-cudos keys ls
-```
-
-#### `cudos keys fund accountName`
-> Fund account with tokens
-- arguments: `accountName` `string` 
-- options: 
-  - `--address, -a` `string` `The address of the account` `not required if accountName is supplied - only if we want to fund account which is not in the keystore`
-  - `--tokens, -t` `string` `The amount of tokens to give` `required`
-  
-  
-**Example:**
-
-```bash
-cudos keys fund accountName --token=10000000ucudos
-cudos keys fund --address=yourCosmosAddress --token=10000000ucudos
-
+npm test init.test.sh
 ```
 
 ---
-## Options
+### Sample test
 
-| Option                     | Description                                                                                                                            |
-| -------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `--help`                   |  Show help  [boolean]                                                                                                                  |
-| `--version`                |  Show version number  [boolean]                                                                                                        |                                                                    |
+The following sample test contains a detailed explanation of the commands and syntax. It is recommended to execute `npm test` first to get a general idea of the behavior. New tests should be placed in `{repo_root}/packages/blast-tests/integration-tests/tests/` folder. Lets take a look at `init.test.sh`. It covers `blast init` command which should initialize a project inside the current directory. The tests follow the classic Arrange-Act-Assert pattern.
+
+```bash
+# our files start with "#!/bin/bash", which tells your terminal it should use bash to execute the file
+#!/bin/bash
+
+# "source" lets you use the contents of a file
+source ./packages/blast-tests/integration-tests/vars.sh
+
+# 'echo' prints out the string
+# -n flag tells your terminal to stay on the same line after printing out the message
+echo -n 'blast init...'
+
+# ARRANGE
+# "mkdir" creates a folder at the path specified in INIT_FOLDER variable
+# "cd" navigates to the specified directory
+# "&&" lets you execute the command that follows it only if the first command is successful
+mkdir $INIT_FOLDER && cd $INIT_FOLDER
+
+# ACT
+# "&>" hides the output of the command
+blast init &> /dev/null
+
+# ASSERT
+# "ls -R" lists directory content
+# `` executes the command placed inside and provides its output
+# we compare the output with the expected folder structure defined in TEMPLATE_FILES
+if [[ ! `ls` == $TEMPLATE_FILES || ! `ls scripts` == $TEMPLATE_SCRIPTS_FILES ]]; then
+
+    # if the output doesn't match we print a fail message
+    # FAILED variable defines a red colored message
+    # -e flag escapes special characters, we need it in order to have colored messages
+    # 1>&2 redirects the output to stderr
+    echo -e "$FAILED\nGenerated folder is invalid!" 1>&2
+
+    # we are defining a variable with status 1
+    # in bash status code 1 means the script was not successful
+    exit_status=1
+else
+    # otherwise we print pass message
+    echo -e $PASSED
+fi
+
+# we are cleaning up the files generated by the test
+# "rm -r" removes the specified directory
+rm -r ../$INIT_FOLDER &> /dev/null
+
+# EXIT the script
+# if the test fails and exit_status is assigned, the program will exit with status 1
+# otherwise the exit_status will be undefined and the program will exit without a status, which means it was successful
+exit $exit_status
+```
