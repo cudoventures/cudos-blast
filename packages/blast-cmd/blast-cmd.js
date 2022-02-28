@@ -8,7 +8,6 @@ const BlastError = require('../blast-utilities/blast-error')
 async function main() {
   await yargs(hideBin(process.argv))
     .scriptName('blast')
-    .version()
     .usage('Usage: $0 <command> [arguments] [command options]')
     .command(commands.initInfo)
     .command(commands.compileInfo)
