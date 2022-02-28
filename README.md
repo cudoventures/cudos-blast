@@ -12,23 +12,23 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 * [Compiling smart contracts](#compiling-smart-contracts) 
 * [Running Rust tests](#running-rust-tests) 
 * [Testing contracts with JavaScript](#testing-contracts-with-javascript) 
-* [Interacting with a Cudos node](#interacting-with-a-Cudos-node) 
+* [Interacting with a Cudos node](#interacting-with-a-cudos-node) 
   * [Starting a local node](#starting-a-local-node) 
   * [Stopping a running local node](#stopping-a-running-local-node) 
   * [Checking node status](#checking-node-status) 
-* [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts,-interacting-with-them-and-running-custom-script-files) 
+* [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts-interacting-with-them-and-running-custom-script-files) 
   * [Available functions in global context](#available-functions-in-global-context)
 * [Network](#network)
   * [Testnet](#testnet)
   * [Mainnet](#mainnet)
-* [Managing local node accounts](#managing-local-node-accounts) 
-  * [Listing all accounts](#listing-all-accounts) 
-  * [Adding new account](#adding-new-account) 
-  * [Removing existing account](#removing-existing-account) 
-  * [Funding existing account](#funding-existing-account) 
+* [Managing accounts](#managing-accounts) 
+  * [Listing local node accounts](#listing-local-node-accounts) 
+  * [Adding a new local node account](#adding-a-new-local-node-account) 
+  * [Removing an existing local node account](#removing-an-existing-local-node-account) 
+  * [Funding an existing local node account](#funding-an-existing-local-node-account) 
 * [Development](#development) 
   * [Running tests](#running-tests) 
-  * [Sample integration test](#sample-integration-test) 
+  * [Sample test](#sample-test) 
 
 ## Installation
 
@@ -184,7 +184,7 @@ or you can leave the current terminal window free by running the local node in b
 blast node start -d
 ```
 
-To see how to manage local node accounts go [here](#managing-local-node-accounts).
+To see how to manage local node accounts go [here](#managing-accounts).
 
 ### Stopping a running local node
 
@@ -242,7 +242,7 @@ async function main() {
   const [alice, bob] = await getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 // ...
 ```
 
@@ -261,11 +261,11 @@ blast run newFolder/anotherScripts/myCustomScript.js
 
 ### Available functions in global context
 
-| Function                                              | Descripton                                                                                                       | Code example                                                                                  |
-| ---                                                   | ---                                                                                                              | ---                                                                                           |
-| getSigners()                                          | set assigned objects as signers in order as in `{project_root}/accounts.json`                                    | const [alice, bob] = await getSigners()                                                       |
-| getContractFactory(contractName)                      | get a contract object from contract named `contractName` and sign it witn the first account                      | const contract = await getContractFactory('alpha')                                            |
-| getContractFromAddress(contractAddress, owner = null) | get a contract object by its address. Contract owner can be omitted if present in `{project_root}/accounts.json` | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
+| Function                                               | Descripton                                                                                                                                           | Sample usage                                                                                  |
+| ---                                                    | ---                                                                                                                                                  | ---                                                                                           |
+| getSigners()                                           | set assigned objects as signers in order as in `{project_root}/accounts.json`                                                                        | const [alice, bob] = await getSigners()                                                       |
+| getContractFactory(contractName)                       | get a contract object from contract named `contractName` and sign it witn the first account in `{project_root}/accounts.json`                        | const contract = await getContractFactory('alpha')                                            |
+| getContractFromAddress(contractAddress, signer = null) | get a contract object by address. Default contract signer can be set. If omitted, signer becomes first account in `{project_root}/accounts.json`     | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
 
 You can run your scripts on a different node by setting its URL in `blast.config.js` under `networkUrl`. You can connect to the default local node as well as a [public one](#network) or you can use your own Cudos node.  
 You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
@@ -288,11 +288,12 @@ Here are public Cudos nodes you can use to connect to Cudos network:
 |          |     |
 
 ---
-## Managing local node accounts
+## Managing accounts
 
-By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.
+By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
+You can put your private accounts in `{project_root}/private-accounts.json` and add the file to `.gitignore` to prevent exposing them.
 
-### Listing all accounts
+### Listing local node accounts
 
 To list all accounts in the local node key storage run
 
@@ -300,7 +301,7 @@ To list all accounts in the local node key storage run
 blast keys ls
 ```
 
-### Adding new account
+### Adding a new local node account
 
 To add a new account named `myAccount1` to the local node key storage run
   
@@ -310,7 +311,7 @@ blast keys add myAccount1
 
 After adding the new account, it is automatically funded with `acudos` tokens from the default local node faucet.
 
-### Removing existing account
+### Removing an existing local node account
 
 To remove an account from the node key storage run
 
@@ -325,7 +326,7 @@ blast keys rm myAccount1 -f
 ```
 
 ---
-### Funding existing account
+### Funding an existing local node account
 
 You can fund an account with additional tokens. To specify tokens amount use `--tokens` or `-t`.
 
