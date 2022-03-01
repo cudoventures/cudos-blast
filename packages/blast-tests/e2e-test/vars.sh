@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export TESTS_FOLDER='./packages/blast-tests/integration-tests/tests'
+export TESTS_FOLDER='./packages/blast-tests/e2e-test/tests'
 export INIT_FOLDER='./test-blast-init'
 export CONTAINER_NAME='cudos_blast_node'
 export COMPOSE='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml exec -T cudos-node'

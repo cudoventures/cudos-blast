@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/blast-tests/integration-tests/vars.sh
+source ./packages/blast-tests/e2e-test/vars.sh
 init_folder="$INIT_FOLDER-rusttest"
 
 echo -n 'blast rusttest...'
