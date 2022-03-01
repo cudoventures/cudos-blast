@@ -3,7 +3,7 @@ source ./packages/blast-tests/integration-tests/vars.sh
 
 echo -n 'blast node start...'
 cd template
-blast node start -d &> /dev/null
+blast node start &> /dev/null
 cd ..
 sleep 45
 timer=30
