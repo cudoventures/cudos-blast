@@ -1,6 +1,6 @@
 # The following sample test contains a detailed explanation of the commands and syntax. It is recommended to execute 
 # `npm test` first to get a general idea of the behavior. 
-# New tests should be placed in `{repo_root}/packages/blast-tests/e2e-test/tests/` folder. 
+# New tests should be placed in `{repo_root}/packages/blast-tests/e2e-tests/tests/` folder. 
 # `init.test.sh` covers `blast init` command which should initialize a project inside the current directory. The tests 
 # follow the classic Arrange-Act-Assert pattern.
 
@@ -12,7 +12,7 @@
 #!/bin/bash
 
 # "source" lets you use the contents of a file
-source ./packages/blast-tests/e2e-test/vars.sh
+source ./packages/blast-tests/e2e-tests/vars.sh
 
 # 'echo' prints out the string
 # -n flag tells your terminal to stay on the same line after printing out the message

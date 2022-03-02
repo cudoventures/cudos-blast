@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/blast-tests/e2e-test/vars.sh
+source ./packages/blast-tests/e2e-tests/vars.sh
 
 echo -n 'blast keys rm...'
 $COMPOSE keys add $TEST_KEY &> /dev/null

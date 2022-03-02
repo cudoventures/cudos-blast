@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/blast-tests/e2e-test/vars.sh
+source ./packages/blast-tests/e2e-tests/vars.sh
 compose='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml'
 start_node() {
     $compose up --build -d &> /dev/null

@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/blast-tests/e2e-test/vars.sh
+source ./packages/blast-tests/e2e-tests/vars.sh
 if [[ ! $? == 0 ]]; then
     echo -e "Invalid source!" 1>&2
     exit $?
@@ -16,7 +16,7 @@ start_node() {
 }
 
 if [[ $1 ]]; then
-    ./packages/blast-tests/e2e-test/run-single-test.sh $1
+    ./packages/blast-tests/e2e-tests/run-single-test.sh $1
     exit $?
 fi
 

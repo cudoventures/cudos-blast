@@ -4,7 +4,7 @@
     "description": "",
     "main": "./packages/blast-cmd/blast-cmd.js",
     "scripts": {
-        "test": "./packages/blast-tests/e2e-test/run-tests.sh"
+        "test": "./packages/blast-tests/e2e-tests/run-tests.sh"
     },
     "bin": {
         "blast": "./packages/blast-cmd/blast-cmd.js"
