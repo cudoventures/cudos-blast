@@ -1,5 +1,5 @@
 on: pull_request
-name: Run tests
+name: Check code quality
 
 jobs:
   run-tests:
@@ -13,5 +13,7 @@ jobs:
           node-version: 16
       - run: npm install && npm install -g
         name: Install dependencies
+      - run: npm run lint
+        name: Run lint check
       - run: npm run test
         name: Run tests

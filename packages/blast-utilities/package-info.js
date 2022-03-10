@@ -22,9 +22,7 @@ function getProjectRootPath() {
 }
 
 function findClosestPackageJson(file) {
-  return findup.sync('package.json', {
-    cwd: path.dirname(file)
-  })
+  return findup.sync('package.json', { cwd: path.dirname(file) })
 }
 
 module.exports = {

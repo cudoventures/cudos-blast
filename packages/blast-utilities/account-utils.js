@@ -24,8 +24,8 @@ async function createAdditionalAccounts(numberOfAdditionalAccounts) {
       address: address
     }
 
-    executeNodeMultiCmd(`echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
-      'faucet', `account${10 + i}`, `${customBalance}`))
+    executeNodeMultiCmd(`echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover && ` +
+      transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`))
   }
   const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
   saveAccounts(accountsToSave)
@@ -53,6 +53,4 @@ function saveAccounts(accounts) {
   }
 }
 
-module.exports = {
-  createAdditionalAccounts: createAdditionalAccounts
-}
+module.exports = { createAdditionalAccounts: createAdditionalAccounts }

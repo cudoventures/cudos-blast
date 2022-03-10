@@ -21,6 +21,10 @@
         }],
         "object-curly-newline": ["error", { "minProperties": 2 }],
         "object-shorthand": ["warn", "never"],
-        "max-len": ["warn", { "code": 120 }]
+        "max-len": ["error", {
+            "code": 120,
+            "tabWidth": 2,
+            "ignoreUrls": true
+        }]
     }
 }

@@ -4,7 +4,8 @@
     "description": "",
     "main": "./packages/blast-cmd/blast-cmd.js",
     "scripts": {
-        "test": "./packages/blast-tests/integration-tests/run-tests.sh"
+        "test": "./packages/blast-tests/integration-tests/run-tests.sh",
+        "lint": "eslint --ext .js,.jsx ."
     },
     "bin": {
         "blast": "./packages/blast-cmd/blast-cmd.js"
