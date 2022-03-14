@@ -24,7 +24,7 @@ async function createAdditionalAccounts(numberOfAdditionalAccounts) {
       address: address
     }
 
-    executeNodeMultiCmd(`echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover && ` + transferTokensByNameCommand(
+    executeNodeMultiCmd(`echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover --keyring-backend test && ` + transferTokensByNameCommand(
       'faucet', `account${10 + i}`, `${customBalance}`))
   }
   const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
