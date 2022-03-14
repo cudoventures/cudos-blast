@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/blast-tests/integration-tests/vars.sh
+source ./packages/blast-tests/e2e-tests/vars.sh
 
 echo -n 'blast keys ls...'
 $COMPOSE cudos-noded keys add $TEST_KEY --keyring-backend test &> /dev/null

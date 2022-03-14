@@ -4,14 +4,14 @@
     "description": "",
     "main": "./packages/blast-cmd/blast-cmd.js",
     "scripts": {
-        "test": "./packages/blast-tests/integration-tests/run-tests.sh"
+        "test": "./packages/blast-tests/e2e-tests/run-tests.sh"
     },
     "bin": {
         "blast": "./packages/blast-cmd/blast-cmd.js"
     },
     "dependencies": {
-        "cudosjs": "0.0.18",
-        "axios": "^0.25.0",
+        "cudosjs": "^0.0.19",
+        "axios": "^0.26.0",
         "bip39": "^3.0.4",
         "find-up": "^5.0.0",
         "fs-extra": "^10.0.0",
