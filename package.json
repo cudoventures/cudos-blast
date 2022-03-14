@@ -11,9 +11,9 @@
         "blast": "./packages/blast-cmd/blast-cmd.js"
     },
     "dependencies": {
-        "axios": "^0.25.0",
+        "axios": "^0.26.0",
         "bip39": "^3.0.4",
-        "cudosjs": "0.0.18",
+        "cudosjs": "^0.0.19",
         "find-up": "^5.0.0",
         "fs-extra": "^10.0.0",
         "jest": "^27.5.1",
