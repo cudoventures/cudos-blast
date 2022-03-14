@@ -9,7 +9,7 @@ const {
 const { checkNodeOnline } = require('../../blast-utilities/get-node-status')
 
 const JS_TESTS_FOLDER_NAME = 'tests'
-const GLOBAL_FUNCTIONS = path.join(getPackageRootPath(), 'packages/blast-utilities/global-functions.js')
+const GLOBALS_PATH = path.join(getPackageRootPath(), 'packages/blast-utilities/globals.js')
 const JEST_BINARY = path.join(getPackageRootPath(), 'node_modules/.bin/jest')
 
 async function testCmd(argv) {
@@ -21,7 +21,7 @@ async function testCmd(argv) {
   await checkNodeOnline()
   console.log('Running JavaScript tests...')
 
-  spawnSync(`${JEST_BINARY} ${TEST_DIR} --setupFilesAfterEnv=${GLOBAL_FUNCTIONS} --testTimeout=15000 --silent`, {
+  spawnSync(`${JEST_BINARY} ${TEST_DIR} --setupFilesAfterEnv=${GLOBALS_PATH} --testTimeout=15000 --silent`, {
     stdio: 'inherit',
     shell: true
   })
