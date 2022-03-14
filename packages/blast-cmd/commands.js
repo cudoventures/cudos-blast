@@ -115,11 +115,11 @@ const nodeInfo = {
   describe: 'Manage a local CUDOS node',
   builder: (yargs) => {
     yargs.command('start', 'Start a fresh local node', () => {
-      yargs.option('daemon', {
-        alias: 'd',
+      yargs.option('log', {
+        alias: 'l',
         type: 'boolean',
         default: false,
-        description: 'Run the node in background'
+        description: 'Continuously output the node logs'
       })
     }, node.startNodeCmd)
       .command('stop', 'Stop the running local node', () => {}, node.stopNodeCmd)

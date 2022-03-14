@@ -15,7 +15,7 @@ const BlastError = require('../../blast-utilities/blast-error')
 const startNodeCmd = async function(argv) {
   await checkNodeOffline()
 
-  if (argv.daemon) {
+  if (!argv.logs) {
     executeCompose('up --build -d')
   } else {
     executeComposeAsync('up --build')

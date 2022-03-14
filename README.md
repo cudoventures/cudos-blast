@@ -175,10 +175,10 @@ To start a fresh local Cudos node run
 blast node start
 ```
 
-or you can leave the current terminal window free by running the local node in background. To do this use `--daemon` or `-d`.
+or you can show the node logging output in current terminal window. To do this use `--log` or `-l`.
 
 ```bash
-blast node start -d
+blast node start -l
 ```
 
 To see how to manage local node accounts go [here](#managing-accounts).
