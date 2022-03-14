@@ -7,7 +7,9 @@ async function runCmd(argv) {
   if (!fs.existsSync(`${path.resolve('.')}/${argv.scriptFilePath}`)) {
     throw new BlastError(`Script at location ${path.resolve('.')}/${argv.scriptFilePath} does not exist.`)
   }
-  require('../../blast-utilities/global-functions')
+  require('../../blast-utilities/globals')
+  global.selectedNetwork = argv.network
+
   const ds = new vm.Script(fs.readFileSync(argv.scriptFilePath))
   return ds.runInThisContext()
 }

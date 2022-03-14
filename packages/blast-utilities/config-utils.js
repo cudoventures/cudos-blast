@@ -12,13 +12,21 @@ function getConfig() {
   return config
 }
 
-function getNetworkUrl() {
+function getNodeUrl(network) {
   const { config } = getConfig()
 
-  if (!config.networkUrl) {
-    throw new BlastError('Missing networkUrl in the config file.')
+  // network parameter is not passed when we need the local node URL
+  if (typeof network === 'undefined') {
+    if (!config.localNodeUrl) {
+      throw new BlastError('Missing localNodeUrl in the config file.')
+    }
+    return config.localNodeUrl
   }
-  return config.networkUrl
+  // check for custom network name
+  if (!config.networks || !config.networks[network]) {
+    throw new BlastError(`Missing network: ${network} in the config file.`)
+  }
+  return config.networks[network]
 }
 
 function getGasPrice() {
@@ -64,7 +72,7 @@ function getRustOptimizerVersion() {
 }
 
 module.exports = {
-  getNetworkUrl: getNetworkUrl,
+  getNodeUrl: getNodeUrl,
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,

@@ -35,8 +35,8 @@ const stopNodeCmd = async function() {
   executeCompose('down')
 }
 
-const nodeStatusCmd = async function() {
-  const nodeStatus = await getNodeStatus()
+const nodeStatusCmd = async function(argv) {
+  const nodeStatus = await getNodeStatus(argv.network)
   console.log(nodeStatus.info)
 }
 

@@ -24,7 +24,9 @@ const initInfo = {
 const compileInfo = {
   command: 'compile',
   describe: 'Compile the smart contracts in the workspace in alphabetical order',
-  builder: (yargs) => {},
+  builder: (yargs) => {
+    yargs.version(false)
+  },
   handler: compileCmd
 }
 
@@ -60,6 +62,13 @@ const runInfo = {
       type: 'string',
       describe: 'Relative file path of the script'
     })
+      .option('network', {
+        alias: 'n',
+        type: 'string',
+        default: 'default',
+        description: 'Network to run against. Pass your network name as in config file'
+      })
+      .version(false)
   },
   handler: runCmd
 }
@@ -123,7 +132,14 @@ const nodeInfo = {
       })
     }, node.startNodeCmd)
       .command('stop', 'Stop the running local node', () => {}, node.stopNodeCmd)
-      .command('status', 'Check if a local node is running', () => {}, node.nodeStatusCmd)
+      .command('status', 'Check if a node is running', () => {
+        yargs.option('network', {
+          alias: 'n',
+          type: 'string',
+          default: 'default',
+          description: 'Network to run against. Pass your network name as in config file'
+        })
+      }, node.nodeStatusCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command
       .version(false)
   }
