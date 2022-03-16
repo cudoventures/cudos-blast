@@ -43,9 +43,6 @@ echo "- Executing $1..."
 $TESTS_FOLDER/$1
 exit_status=$?
 
-echo $node_started
-echo `docker ps`
-
 if [[ $node_started == true && `docker ps` =~ $CONTAINER_NAME ]]; then
     echo 'Stopping the node...'
     $compose down &> /dev/null && sleep 5

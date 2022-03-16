@@ -28,6 +28,9 @@ fi
 
 echo '- Executing node-start-custom-accounts.test.sh...'
 $TESTS_FOLDER/node-start-custom-accounts.test.sh
+if [[ ! $? == 0 ]]; then
+    exit_status=$?
+fi
 $compose down &> /dev/null && sleep 5
 
 echo '- Executing node-start-status.test.sh...'
