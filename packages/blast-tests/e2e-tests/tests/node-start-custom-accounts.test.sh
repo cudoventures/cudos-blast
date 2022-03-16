@@ -1,9 +1,9 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
+init_folder="$INIT_FOLDER-config-test"
 
 echo -n 'blast node start...'
-
-cd template
+cp -R template $init_folder &> /dev/null && cd $init_folder
 
 sed -i '' 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
 sed -i '' 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
@@ -35,7 +35,7 @@ if [[ $exit_status == 1 ]]; then
     done;
 fi
 
-cd template
+cd $init_folder
 if [[ ! `blast node status` =~ 'online' ]]; then
     echo -e $FAILED
     exit_status=1
@@ -63,9 +63,5 @@ else
     echo -e $PASSED
 fi
 
-cd template
-sed -i '' 's/additionalAccounts: 1/additionalAccounts: 0/' blast.config.js
-sed -i '' 's/customAccountBalances: 500/customAccountBalances: 1000000000000000000/' blast.config.js
-
-
+rm -r $init_folder &> /dev/null || true
 exit $exit_status
