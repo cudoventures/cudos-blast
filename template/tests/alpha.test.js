@@ -25,10 +25,7 @@ describe('alpha contract', () => {
   })
 
   test('reset count from user throws unauthorized', () => {
-    
     return expect(contract.execute(MSG_RESET, alice))
       .rejects.toThrow('Unauthorized')
   })
-
-  
 })
