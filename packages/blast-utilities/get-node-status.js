@@ -1,24 +1,24 @@
 const axios = require('axios').default
-const { getNodeUrl } = require('./config-utils')
+const { getNetwork } = require('./config-utils')
 const BlastError = require('./blast-error')
 
-async function checkNodeOnline() {
-  const nodeStatus = await getNodeStatus()
+async function checkNodeOnline(network) {
+  const nodeStatus = await getNodeStatus(network)
   if (!nodeStatus.isConnected) {
     throw new BlastError('The node is offline. \n' +
       'Make sure you have the correct node URL in the config file and run "blast node start" for a local node')
   }
 }
 
-async function checkNodeOffline() {
-  const nodeStatus = await getNodeStatus()
+async function checkNodeOffline(network) {
+  const nodeStatus = await getNodeStatus(network)
   if (nodeStatus.isConnected) {
     throw new BlastError('A node is already running.')
   }
 }
 
 async function getNodeStatus(network) {
-  const url = getNodeUrl(network)
+  const url = getNetwork(network)
   return await getNodeStatusByUrl(url)
 }
 
