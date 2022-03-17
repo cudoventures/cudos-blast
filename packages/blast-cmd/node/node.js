@@ -1,6 +1,7 @@
 const {
   executeCompose,
-  executeComposeAsync
+  executeComposeAsync,
+  checkDockerStatus
 } = require('../../blast-utilities/run-docker-commands')
 const {
   getNodeStatus,
@@ -13,6 +14,7 @@ const { delay } = require('../../blast-utilities/blast-helper')
 const BlastError = require('../../blast-utilities/blast-error')
 
 const startNodeCmd = async function(argv) {
+  await checkDockerStatus()
   await checkNodeOffline()
 
   if (!argv.logs) {
