@@ -120,7 +120,7 @@ blast rusttest -q
 ---
 ## Testing contracts with JavaScript
 
-Cudos Blast uses [Jest](https://jestjs.io) framework for testing. Test files must be in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You must have a [local node running](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests.
+Cudos Blast uses [Jest](https://jestjs.io) framework for testing. Test files must be in `{project_root}/tests/` folder. You can use the provided sample test as a template or make one or more tests of your own. You can run the [default local node](#starting-a-local-node) in order to deploy or interact with the smart contracts in your tests. To connect to a non-local Cudos node such as testnet or your own node, follow these [instructions](#network).
 
 ```bash
 describe('alpha contract', () => {
@@ -160,6 +160,7 @@ Run all test files with
 
 ```bash
 blast test
+blast test -n testnet
 ```
 
 ---
@@ -193,13 +194,14 @@ blast node stop
 
 ### Checking node status
 
-To check whether a Cudos node is online or offline run
+To check whether any Cudos node is online or offline run
 
 ```bash
 blast node status
+blast node status -n testnet
 ```
 
-You are able to check the status of a [non-local Cudos node](#network) by setting its URL in `blast.config.js` under `networkUrl:`.
+More information about connecting to a non-local Cudos node [here](#network).
 
 ---
 ## Deploying smart contracts, interacting with them and running custom script files
@@ -264,12 +266,16 @@ blast run newFolder/anotherScripts/myCustomScript.js
 | getContractFactory(contractName)                       | get a contract object from contract named `contractName` and sign it witn the first account in `{project_root}/accounts.json`                        | const contract = await getContractFactory('alpha')                                            |
 | getContractFromAddress(contractAddress, signer = null) | get a contract object by address. Default contract signer can be set. If omitted, signer becomes first account in `{project_root}/accounts.json`     | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
 
-You can run your scripts on a different node by setting its URL in `blast.config.js` under `networkUrl`. You can connect to the default local node as well as a [public one](#network) or you can use your own Cudos node.  
-You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
+You can run your scripts on a different node. More information [here](#network). You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
+
+```bash
+blast run scripts/myCustomScript.js -n testnet
+```
 
 ---
 ## Network
 
+You can connect to a default local node as well as a public one or you can use your own Cudos node. One way to do that is to add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the run command with `--network` or `-n` followed by `{custom_name}`. You can set `defaultNetwork: {custom_name}` in the config to connect to that node automatically. If there is no `defaultNetwork`, run command uses `localNetwork` to connect to the default local node.  
 Here are public Cudos nodes you can use to connect to Cudos network:
 
 ### Testnet
@@ -287,7 +293,7 @@ Here are public Cudos nodes you can use to connect to Cudos network:
 ---
 ## Managing accounts
 
-By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. In `customAccountBalances` you can set the amount of tokens that these additional accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
+By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. If any additional accounts are added, `customAccountBalances` field must be set for the amount of tokens that these accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
 You can put your private accounts in `{project_root}/private-accounts.json` and add the file to `.gitignore` to prevent exposing them.
 
 ### Listing local node accounts
