@@ -14,7 +14,7 @@ module.exports.CudosContract = class CudosContract {
   #contractAddress
   #wasmPath
   #gasPrice
-  
+
   constructor(contractName, signer, deployedContractAddress = null) {
     this.#contractName = contractName
     this.#signer = signer
@@ -29,14 +29,16 @@ module.exports.CudosContract = class CudosContract {
 
   async deploy(initMsg, owner = this.#signer, label = this.#contractName) {
     if (this.#isDeployed()) {
-      throw new BlastError(`Contract is already deployed!`)
+      throw new BlastError('Contract is already deployed!')
     }
-    
     this.#signer = owner
     const uploadTx = await this.#uploadContract()
     const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
     this.#contractAddress = initTx.contractAddress
-    return { uploadTx: uploadTx, initTx: initTx }
+    return {
+      uploadTx: uploadTx,
+      initTx: initTx
+    }
   }
 
   async execute(msg, signer = this.#signer) {

@@ -15,7 +15,7 @@ if [[ ! `ls -a $TESTS_FOLDER` =~ $1 ]]; then
     exit 1
 fi
 
-if [[ $1 == 'node-start-status.test.sh' ]]; then
+if [[ $1 == 'node-start-status.test.sh' || $1 == 'node-start-custom-accounts.test.sh' ]]; then
     if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
         echo 'Node is started. Your node will be stopped and started again after the test is executed...'
         $compose down &> /dev/null && sleep 5
