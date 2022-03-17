@@ -21,10 +21,14 @@ if [[ $1 ]]; then
 fi
 
 if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
-    echo 'Node is started. Your node will be stopped and started again after the tests are executed...'
-    $compose down &> /dev/null && sleep 5
-    node_stopped=true
-fi
+        echo "A running node is detected. The end-to-end tests requires a fresh instance of a Blast node. Do you want to restart it?"
+        select yn in "Yes" "No"; do
+        case $yn in
+            Yes ) echo 'stopping node...'; $compose down &> /dev/null && sleep 5; break;;
+            No ) exit $?;;
+        esac
+        done
+    fi
 
 echo '- Executing node-start-custom-accounts.test.sh...'
 $TESTS_FOLDER/node-start-custom-accounts.test.sh
@@ -57,11 +61,10 @@ $TESTS_FOLDER/node-stop-status.test.sh
 if [[ ! $? == 0 ]]; then
     exit_status=$?
 fi
-if [[ ! $node_stopped == true && `docker ps` =~ $CONTAINER_NAME ]]; then
+
+if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
+    echo 'Stopping the node...'
     $compose down &> /dev/null && sleep 5
-elif [[ $node_stopped == true && ! `docker ps` =~ $CONTAINER_NAME ]]; then
-    echo 'Getting your node back up...'
-    start_node
 fi
 
 exit $exit_status
