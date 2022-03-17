@@ -25,25 +25,9 @@ if [[ ! $exit_status == 1 ]]; then
     echo -e $PASSED
 fi
 
-echo -n 'blast node status...'
-if [[ $exit_status == 1 ]]; then
-    $compose up --build -d &> /dev/null
-    timer=45
-    sleep $timer
-    until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
-        sleep $timer
-    done;
-fi
-
 cd $init_folder
-if [[ ! `blast node status` =~ 'online' ]]; then
-    echo -e $FAILED
-    exit_status=1
-else
-    echo -e $PASSED
-fi
 
-echo -n 'added custom accounts...'
+echo -n 'adding custom accounts...'
 
 cd ..
 if [[ ! `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
@@ -55,7 +39,7 @@ fi
 
 additional_account=`$COMPOSE cudos-noded keys show $ADDITIONAL_KEY --keyring-backend test -a`
 
-echo -n 'added custom balances...'
+echo -n 'validating custom balances...'
 if [[ ! `$COMPOSE cudos-noded query bank balances $additional_account` =~ $CUSTOM_BALANCE ]]; then
     echo -e $FAILED
     exit_status=1
