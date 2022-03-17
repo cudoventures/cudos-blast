@@ -21,7 +21,7 @@ if [[ $1 ]]; then
 fi
 
 if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
-        echo "We are detecting a running node! In order to run the integration tests we need a fresh instance of Blast Node. Do you want us to restart it?"
+        echo "A running node is detected. The end-to-end tests requires a fresh instance of a Blast node. Do you want to restart it?"
         select yn in "Yes" "No"; do
         case $yn in
             Yes ) echo 'stopping node...'; $compose down &> /dev/null && sleep 5; break;;
