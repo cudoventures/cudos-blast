@@ -1,8 +1,12 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
 
+init_folder="$INIT_FOLDER-start-status"
+cp -R template $init_folder &> /dev/null
+cd $init_folder
+
 echo -n 'blast node start...'
-cd template
+
 blast node start &> /dev/null
 cd ..
 sleep 45
@@ -29,7 +33,8 @@ if [[ $exit_status == 1 ]]; then
         sleep $timer
     done;
 fi
-cd template
+cd $init_folder
+
 if [[ ! `blast node status` =~ 'online' ]]; then
     echo -e $FAILED
     exit_status=1
@@ -37,4 +42,19 @@ else
     echo -e $PASSED
 fi
 
+echo -n 'blast node status -n [network]...'
+# Setup config to allow local node connection (and therefore successful run) only for passed --network parameter
+# invalidate [localNetwork] and [defaultNetwork] values and add valid local network to [networks]
+sed -i '' $'s|localNetwork: \'http://localhost:26657\'|localNetwork: \'https://sentry1.gcp-uscentral1.cudos.org:26657\'|' blast.config.js
+sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://sentry1.gcp-uscentral1.cudos.org:26657\'|' blast.config.js
+sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+
+if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
+    echo -e $FAILED
+    exit_status=1
+else
+    echo -e $PASSED
+fi
+
+rm -r ../$init_folder &> /dev/null || true
 exit $exit_status
