@@ -1,7 +1,7 @@
 const { initCmd } = require('./init/init.js')
 const { compileCmd } = require('./compile/compile.js')
 const { testCmd } = require('./test/test.js')
-const { unitTestCmd } = require('./unittest/unittest.js')
+const { rustTestCmd } = require('./rusttest/rusttest.js')
 const { runCmd } = require('./run/run.js')
 const keys = require('./keys/keys.js')
 const node = require('./node/node.js')
@@ -30,16 +30,16 @@ const compileInfo = {
 
 const testInfo = {
   command: 'test',
-  describe: 'Run the integration tests',
+  describe: 'Run the JavaScript tests',
   builder: (yargs) => {
     yargs.version(false)
   },
   handler: testCmd
 }
 
-const unitTestInfo = {
-  command: 'unittest',
-  describe: 'Run smart contracts\' unit tests',
+const rustTestInfo = {
+  command: 'rusttest',
+  describe: 'Run smart contracts\' rust tests',
   builder: (yargs) => {
     yargs.option('quiet', {
       alias: 'q',
@@ -49,7 +49,7 @@ const unitTestInfo = {
     })
       .version(false)
   },
-  handler: unitTestCmd
+  handler: rustTestCmd
 }
 
 const runInfo = {
@@ -115,11 +115,11 @@ const nodeInfo = {
   describe: 'Manage a local CUDOS node',
   builder: (yargs) => {
     yargs.command('start', 'Start a fresh local node', () => {
-      yargs.option('daemon', {
-        alias: 'd',
+      yargs.option('log', {
+        alias: 'l',
         type: 'boolean',
         default: false,
-        description: 'Run the node in background'
+        description: 'Continuously output the node logs'
       })
     }, node.startNodeCmd)
       .command('stop', 'Stop the running local node', () => {}, node.stopNodeCmd)
@@ -133,7 +133,7 @@ module.exports = {
   initInfo: initInfo,
   compileInfo: compileInfo,
   testInfo: testInfo,
-  unitTestInfo: unitTestInfo,
+  rustTestInfo: rustTestInfo,
   runInfo: runInfo,
   keysInfo: keysInfo,
   nodeInfo: nodeInfo

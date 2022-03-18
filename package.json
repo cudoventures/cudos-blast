@@ -1,28 +1,29 @@
 {
     "name": "cudos-blast",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "",
     "main": "./packages/blast-cmd/blast-cmd.js",
     "scripts": {
-        "test": "./packages/blast-tests/integration-tests/run-tests.sh"
+        "lint": "eslint --ext .js,.jsx .",
+        "test": "./packages/blast-tests/e2e-tests/run-tests.sh"
     },
     "bin": {
         "blast": "./packages/blast-cmd/blast-cmd.js"
     },
     "dependencies": {
-        "cudosjs": "0.0.18",
-        "axios": "^0.25.0",
+        "axios": "^0.26.0",
         "bip39": "^3.0.4",
+        "cudosjs": "^0.0.19",
         "find-up": "^5.0.0",
         "fs-extra": "^10.0.0",
         "jest": "^27.5.1",
         "yargs": "^17.3.1"
     },
     "devDependencies": {
-        "eslint": "^7.32.0",
-        "eslint-config-standard": "^16.0.3",
-        "eslint-plugin-import": "^2.25.3",
+        "eslint": "^8.10.0",
+        "eslint-config-standard": "^17.0.0-1",
+        "eslint-plugin-import": "^2.25.4",
         "eslint-plugin-node": "^11.1.0",
-        "eslint-plugin-promise": "^5.1.1"
+        "eslint-plugin-promise": "^6.0.0"
     }
 }

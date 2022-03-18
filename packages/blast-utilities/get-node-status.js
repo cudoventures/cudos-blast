@@ -5,14 +5,15 @@ const BlastError = require('./blast-error')
 async function checkNodeOnline() {
   const nodeStatus = await getNodeStatus()
   if (!nodeStatus.isConnected) {
-    throw new BlastError('Local node is not running.')
+    throw new BlastError('The node is offline. \n' +
+      'Make sure you have the correct node URL in the config file and run "blast node start" for a local node')
   }
 }
 
 async function checkNodeOffline() {
   const nodeStatus = await getNodeStatus()
   if (nodeStatus.isConnected) {
-    throw new BlastError('Local node is already running.')
+    throw new BlastError('A node is already running.')
   }
 }
 
