@@ -60,7 +60,7 @@ const checkDockerStatus = async function() {
     await runCommand(CHECK_DOCKER_STATUS)
   } catch (error) {
     if (error instanceof BlastError) {
-      throw new BlastError('Cannot connect to the Docker daemon at unix:///var/run/docker.sock. Is the docker daemon running?')
+      throw new BlastError('Cannot connect to the Docker daemon. Is the docker daemon running?')
     }
   }
 }
