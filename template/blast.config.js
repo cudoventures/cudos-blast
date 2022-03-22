@@ -2,7 +2,6 @@
 module.exports.config = {
   addressPrefix: 'cudos',
   gasPrice: '250acudos',
-  localNetwork: 'http://localhost:26657',
   rustOptimizerVersion: '0.12.3',
 
   // optional parameners

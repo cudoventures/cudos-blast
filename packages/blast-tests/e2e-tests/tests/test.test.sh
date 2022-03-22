@@ -16,10 +16,9 @@ else
 fi
 
 echo -n 'blast test -n [network]...'
-# Setup config to allow local node connection (and therefore successful run) only for passed --network parameter
-# invalidate [localNetwork] and [defaultNetwork] values and add valid local network to [networks]
-sed -i '' $'s|localNetwork: \'http://localhost:26657\'|localNetwork: \'https://sentry1.gcp-uscentral1.cudos.org:26657\'|' blast.config.js
-sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://sentry1.gcp-uscentral1.cudos.org:26657\'|' blast.config.js
+# Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
+#  ignore [defaultNetwork]
+sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
 sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
 blast test -n localhost_test &> jest.logs.json

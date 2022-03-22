@@ -2,6 +2,7 @@ const fsExtra = require('fs-extra')
 const process = require('process')
 const path = require('path')
 const BlastError = require('./blast-error')
+const { localNetwork } = require('../blast-config/blast-constants')
 
 function getConfig() {
   const CONFIG_PATH = path.join(process.cwd(), 'blast.config.js')
@@ -31,10 +32,7 @@ function getNetwork(network) {
     return config.networks[config.defaultNetwork]
   }
   // if default network is missing - return the local network
-  if (!config.localNetwork) {
-    throw new BlastError('Missing [localNetwork] from the config file.')
-  }
-  return config.localNetwork
+  return localNetwork
 }
 
 function getGasPrice() {
@@ -52,7 +50,6 @@ function getAddressPrefix() {
   if (!config.addressPrefix) {
     throw new BlastError('Missing [addressPrefix] from the config file.')
   }
-
   return config.addressPrefix
 }
 
