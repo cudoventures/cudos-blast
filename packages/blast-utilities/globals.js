@@ -7,12 +7,12 @@ const {
   CosmWasmClient
 } = require('cudosjs')
 const {
-  getNetworkUrl,
+  getNetwork,
   getAddressPrefix
 } = require('./config-utils')
 
+const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 const accounts = getAccounts()
-const networkUrl = getNetworkUrl()
 const addressPrefix = getAddressPrefix()
 
 global.getSigners = async function() {
@@ -39,13 +39,13 @@ function getAccounts() {
 }
 
 async function getContractInfo(contractAddress) {
-  const client = await CosmWasmClient.connect(networkUrl)
+  const client = await CosmWasmClient.connect(nodeUrl)
   return await client.getContract(contractAddress)
 }
 
 async function getSigner(acc) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(acc.mnemonic, { prefix: addressPrefix })
-  const signer = await SigningCosmWasmClient.connectWithSigner(networkUrl, wallet)
+  const signer = await SigningCosmWasmClient.connectWithSigner(nodeUrl, wallet)
   signer.address = acc.address
   return signer
 }

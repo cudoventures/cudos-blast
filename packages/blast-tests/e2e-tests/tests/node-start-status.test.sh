@@ -1,8 +1,12 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
 
+init_folder="$INIT_FOLDER-start-status"
+cp -R template $init_folder &> /dev/null
+cd $init_folder
+
 echo -n 'blast node start...'
-cd template
+
 blast node start &> /dev/null
 cd ..
 sleep 45
@@ -29,7 +33,8 @@ if [[ $exit_status == 1 ]]; then
         sleep $timer
     done;
 fi
-cd template
+cd $init_folder
+
 if [[ ! `blast node status` =~ 'online' ]]; then
     echo -e $FAILED
     exit_status=1
@@ -37,4 +42,18 @@ else
     echo -e $PASSED
 fi
 
+echo -n 'blast node status -n [network]...'
+# Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
+#  ignore [defaultNetwork]
+sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
+sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+
+if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
+    echo -e $FAILED
+    exit_status=1
+else
+    echo -e $PASSED
+fi
+
+rm -r ../$init_folder &> /dev/null || true
 exit $exit_status
