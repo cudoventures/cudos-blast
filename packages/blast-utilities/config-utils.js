@@ -4,7 +4,7 @@ const BlastError = require('./blast-error')
 const { localNetwork } = require('../blast-config/blast-constants')
 const { getProjectRootPath } = require('./package-info')
 
-// Blast config region
+// Blast config utils
 
 function getConfig() {
   const CONFIG_PATH = path.join(getProjectRootPath(), 'blast.config.js')
@@ -77,14 +77,14 @@ function getRustOptimizerVersion() {
   return config.rustOptimizerVersion
 }
 
-// Accounts config region
+// Accounts config utils
 
 function getAccounts() {
   const configPath = path.join(getProjectRootPath(), 'accounts.json')
   return Object.values(require(configPath))
 }
 
-// Private accounts config region
+// Private accounts config utils
 
 function getPrivateAccounts() {
   const configPath = path.join(getProjectRootPath(), 'private-accounts.json')
