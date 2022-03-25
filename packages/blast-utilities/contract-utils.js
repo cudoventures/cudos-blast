@@ -9,29 +9,25 @@ const BlastError = require('./blast-error')
 const { getProjectRootPath } = require('./package-info')
 
 module.exports.CudosContract = class CudosContract {
-  #contractName
+  #contractLabel
   #signer
   #contractAddress
   #wasmPath
   #gasPrice
 
-  constructor(contractName, signer, deployedContractAddress = null) {
-    this.#contractName = contractName
+  constructor(contractLabel, signer, deployedContractAddress = null) {
+    this.#contractLabel = contractLabel
     this.#signer = signer
     this.#contractAddress = deployedContractAddress
-    this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractName}.wasm`)
+    this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractLabel}.wasm`)
     this.#gasPrice = GasPrice.fromString(getGasPrice())
 
-    if (!this.#isDeployed() && !fs.existsSync(this.#wasmPath)) {
-      throw new BlastError(`Contract with name ${contractName} was not found, did you compile it?`)
+    if (deployedContractAddress === null && !fs.existsSync(this.#wasmPath)) {
+      throw new BlastError(`Contract with name ${contractLabel} was not found, did you compile it?`)
     }
   }
 
-  async deploy(initMsg, owner = this.#signer, label = this.#contractName) {
-    if (this.#isDeployed()) {
-      throw new BlastError('Contract is already deployed!')
-    }
-    this.#signer = owner
+  async deploy(initMsg, label = this.#contractLabel) {
     const uploadTx = await this.#uploadContract()
     const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
     this.#contractAddress = initTx.contractAddress
@@ -48,6 +44,10 @@ module.exports.CudosContract = class CudosContract {
 
   async query(queryMsg, signer = this.#signer) {
     return await signer.queryContractSmart(this.#contractAddress, queryMsg)
+  }
+
+  connectSigner(signer) {
+    this.#signer = signer
   }
 
   getAddress() {
@@ -74,9 +74,5 @@ module.exports.CudosContract = class CudosContract {
       label,
       instantiateFee
     )
-  }
-
-  #isDeployed() {
-    return this.#contractAddress !== null
   }
 }

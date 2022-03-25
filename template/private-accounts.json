@@ -1,8 +1,6 @@
 {
-    "comment": "It is highly recommended to .gitignore this file",
-    "privateAccount":
-    {
-      "address": "",
-      "mnemonic": ""
-    }
+	"comment": "It is highly recommended to .gitignore this file",
+	"privateAccount": {
+		"mnemonic": ""
+	}
 }
