@@ -27,13 +27,13 @@ module.exports.CudosContract = class CudosContract {
     }
   }
 
-  async deploy(initMsg, owner = this.#signer, label = this.#contractName) {
+  async deploy(initMsg, owner = this.#signer, funds, label = this.#contractName) {
     if (this.#isDeployed()) {
       throw new BlastError('Contract is already deployed!')
     }
     this.#signer = owner
     const uploadTx = await this.#uploadContract()
-    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
+    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label, funds)
     this.#contractAddress = initTx.contractAddress
     return {
       uploadTx: uploadTx,
@@ -65,14 +65,15 @@ module.exports.CudosContract = class CudosContract {
     )
   }
 
-  async #initContract(codeId, initMsg, label) {
+  async #initContract(codeId, initMsg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
     return await this.#signer.instantiate(
       this.#signer.address,
       codeId,
       initMsg,
       label,
-      instantiateFee
+      instantiateFee,
+      { funds: funds }
     )
   }
 
