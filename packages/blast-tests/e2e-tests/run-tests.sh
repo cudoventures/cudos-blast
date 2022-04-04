@@ -1,5 +1,11 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
+
+if  [[ `docker info` =~ $DOCKER_ERROR ]]; then
+    echo -e "Cannot connect to the Docker daemon. Is the docker daemon running?" 1>&2
+    exit $?
+fi
+
 if [[ ! $? == 0 ]]; then
     echo -e "Invalid source!" 1>&2
     exit $?
