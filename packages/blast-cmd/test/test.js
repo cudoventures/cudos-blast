@@ -18,7 +18,7 @@ async function testCmd(argv) {
     throw new BlastError('No tests folder found! Make sure to place your JavaScript tests in /' +
     JS_TESTS_FOLDER_NAME)
   }
-  await checkNodeOnline(argv.network)
+  await checkNodeOnline(false, argv.network)
   console.log('Running JavaScript tests...')
 
   process.env.BLAST_NETWORK = argv.network ?? ''
