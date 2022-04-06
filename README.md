@@ -294,7 +294,7 @@ Here are public Cudos nodes you can use to connect to Cudos network:
 ## Managing accounts
 
 By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. If any additional accounts are added, `customAccountBalances` field must be set for the amount of tokens that these accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
-You can put your private accounts in `{project_root}/private-accounts.json` and add the file to `.gitignore` to prevent exposing them.
+You can put your private accounts in `{project_root}/private-accounts.json`. Initializing a new project automatically adds this file to `.gitignore`. **Make sure you keep `private-accounts.json` in `.gitignore` in order to prevent accidentally committing and exposing your private accounts.** 
 
 ### Listing local node accounts
 

@@ -1,6 +1,6 @@
 {
-	"comment": "It is highly recommended to .gitignore this file",
-	"privateAccount": {
+	"comment": "It is highly recommended to keep this file in .gitignore to prevent committing and exposing your accounts",
+	"privateAccount1": {
 		"mnemonic": ""
 	}
 }
