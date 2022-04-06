@@ -282,7 +282,7 @@ Here are public Cudos nodes you can use to connect to Cudos network:
 
 | Chain ID               | URL                                            |
 | ---                    | ---                                            |
-| cudos-testnet-public-2 | https://sentry1.gcp-uscentral1.cudos.org:26657 |
+| cudos-testnet-public-2 | https://sentry1.gcp-uscentral1.cudos.org:36657 |
 
 ### Mainnet
 
