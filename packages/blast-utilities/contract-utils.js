@@ -23,7 +23,7 @@ module.exports.CudosContract = class CudosContract {
     this.#gasPrice = GasPrice.fromString(getGasPrice())
 
     if (deployedContractAddress === null && !fs.existsSync(this.#wasmPath)) {
-      throw new BlastError(`Contract with name ${contractLabel} was not found, did you compile it?`)
+      throw new BlastError(`Contract with label ${contractLabel} was not found, did you compile it?`)
     }
   }
 

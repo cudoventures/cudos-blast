@@ -32,8 +32,11 @@ if [[ $1 == 'node-start-status.test.sh' || $1 == 'node-start-custom-accounts.tes
     exit $exit_status
 fi
 
-start_node
-
+if [[ $1 == 'keys-add.test.sh' || $1 == 'keys-fund.test.sh' || $1 == 'keys-ls.test.sh' 
+|| $1 == 'keys-rm.test.sh' || $1 == 'node-stop-status.test.sh' 
+|| $1 == 'compile-run.test.sh' || 'test.test.sh' ]]; then
+    start_node
+fi
 echo "- Executing $1..."
 $TESTS_FOLDER/$1
 exit_status=$?
