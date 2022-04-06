@@ -24,15 +24,7 @@ function getNetwork(network) {
     }
     return config.networks[network]
   }
-  // network is not passed
-  // if default network is set - return it
-  if (config.defaultNetwork) {
-    if (!config.networks || !config.networks[config.defaultNetwork]) {
-      throw new BlastError(`Missing default network: [${config.defaultNetwork}] from the config file.`)
-    }
-    return config.networks[config.defaultNetwork]
-  }
-  // if default network is missing - return the local network
+  // network is not passed - return the local network
   return localNetwork
 }
 

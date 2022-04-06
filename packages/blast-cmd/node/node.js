@@ -38,7 +38,7 @@ const stopNodeCmd = async function() {
 }
 
 const nodeStatusCmd = async function(argv) {
-  const nodeStatus = await getNodeStatus(false, argv.network)
+  const nodeStatus = await getNodeStatus(argv.network)
   console.log(nodeStatus.info)
 }
 
