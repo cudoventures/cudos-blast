@@ -20,6 +20,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Available functions in global context](#available-functions-in-global-context)
   * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
 * [Network](#network)
+  * [Localhost](#localhost)
   * [Testnet](#testnet)
   * [Mainnet](#mainnet)
 * [Managing accounts](#managing-accounts) 
@@ -292,8 +293,14 @@ blast run scripts/myCustomScript.js -n testnet
 ---
 ## Network
 
-You can connect to a default local node as well as a public one or you can use your own Cudos node. One way to do that is to add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the run command with `--network` or `-n` followed by `{custom_name}`. You can set `defaultNetwork: {custom_name}` in the config to connect to that node automatically. If there is no `defaultNetwork`, run command uses `localNetwork` to connect to the default local node.  
-Here are public Cudos nodes you can use to connect to Cudos network:
+You can connect to the default local node as well as a public one or you can use your own Cudos node. To do that, add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the run command with `--network` or `-n` followed by `{custom_name}`. If no network is passed, blast commands connect to the default local node.  
+Here are Cudos nodes you can use to connect to Cudos network:
+
+### Localhost
+
+| Chain ID      | URL                    |
+| ---           | ---                    |
+| cudos-network | http://localhost:26657 |
 
 ### Testnet
 

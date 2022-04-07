@@ -29,17 +29,18 @@ else
     echo -e $PASSED
 fi
 
-echo -n 'blast run -n [network]...'
-# Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
-#  ignore [defaultNetwork]
-sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
-sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+# executing blast run on local network through --network only if normal run is passing
+if [[ $exit_status != 1 ]]; then
+    echo -n 'blast run -n [network]...'
+    # Add localhost to [networks] in the config
+    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
-if [[ ! `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
-    echo -e $FAILED
-    exit_status=1
-else
-    echo -e $PASSED
+    if [[ ! `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
+        echo -e $FAILED
+        exit_status=1
+    else
+        echo -e $PASSED
+    fi
 fi
 
 rm -r ../$init_folder &> /dev/null || true

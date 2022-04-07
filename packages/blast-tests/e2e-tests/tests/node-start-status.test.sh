@@ -42,17 +42,32 @@ else
     echo -e $PASSED
 fi
 
-echo -n 'blast node status -n [network]...'
-# Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
-#  ignore [defaultNetwork]
-sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
-sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+# executing node status on local network through --network only if test normal status is passing
+if [[ $exit_status != 1 ]]; then
+    echo -n 'blast node status -n [network]...'
+    # Add localhost to [networks] in the config
+    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
-if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
-    echo -e $FAILED
-    exit_status=1
-else
-    echo -e $PASSED
+    if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
+        echo -e $FAILED
+        exit_status=1
+    else
+        echo -e $PASSED
+    fi
+fi
+
+# make sure the local network is considered through --network by failing the status on invalid url
+if [[ $exit_status != 1 ]]; then
+    echo -n 'blast node status -n [invalid_network]...'
+    # Add invalid localhost to [networks] in the config
+    sed -i '' $'s|networks: {|networks: {\tinvalid_localhost_test: \'http://non-existent-localhost:26657\', |' blast.config.js
+
+    if [[ `blast node status -n invalid_localhost_test` =~ 'online' ]]; then
+        echo -e $FAILED
+        exit_status=1
+    else
+        echo -e $PASSED
+    fi
 fi
 
 rm -r ../$init_folder &> /dev/null || true
