@@ -293,7 +293,7 @@ blast run scripts/myCustomScript.js -n testnet
 ---
 ## Network
 
-You can connect to the default local node as well as a public one or you can use your own Cudos node. To do that, add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the run command with `--network` or `-n` followed by `{custom_name}`. If no network is passed, blast commands connect to the default local node.  
+You can connect to the default local node as well as a public one or you can use your own Cudos node. To do that, add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the `run`, `test` or `node status` command with `--network` or `-n` followed by `{custom_name}`. If no network is passed, blast commands connect to the default local node.  
 Here are Cudos nodes you can use to connect to Cudos network:
 
 ### Localhost

@@ -15,7 +15,7 @@ else
     echo -e $PASSED
 fi
 
-# executing blast test on local network through --network only if tests are passing
+# executing blast test on local network through --network; execute only if "blast test" is passing
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast test -n [network]...'
     # Add localhost to [networks] in the config

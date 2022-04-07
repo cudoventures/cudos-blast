@@ -29,7 +29,7 @@ else
     echo -e $PASSED
 fi
 
-# executing blast run on local network through --network only if normal run is passing
+# executing blast run on the local network through --network; execute only if "blast run" is passing
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast run -n [network]...'
     # Add localhost to [networks] in the config

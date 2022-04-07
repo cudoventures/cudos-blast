@@ -10,8 +10,8 @@ async function checkNodeOnline(network) {
   }
 }
 
-async function checkNodeOffline() {
-  const nodeStatus = await getNodeStatus()
+async function checkNodeOffline(network) {
+  const nodeStatus = await getNodeStatus(network)
   if (nodeStatus.isConnected) {
     throw new BlastError('A node is already running.')
   }

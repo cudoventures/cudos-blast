@@ -42,7 +42,7 @@ else
     echo -e $PASSED
 fi
 
-# executing node status on local network through --network only if test normal status is passing
+# executing node status on local network through --network; execute only if "blast node status" is passing
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast node status -n [network]...'
     # Add localhost to [networks] in the config
@@ -56,7 +56,7 @@ if [[ $exit_status != 1 ]]; then
     fi
 fi
 
-# make sure the local network is considered through --network by failing the status on invalid url
+# make sure the local network is considered through --network by failing the "blast node status" on invalid url
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast node status -n [invalid_network]...'
     # Add invalid localhost to [networks] in the config
