@@ -18,6 +18,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Checking node status](#checking-node-status) 
 * [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts-interacting-with-them-and-running-custom-script-files) 
   * [Available functions in global context](#available-functions-in-global-context)
+  * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
 * [Network](#network)
   * [Testnet](#testnet)
   * [Mainnet](#mainnet)
@@ -213,22 +214,22 @@ async function main () {
   // functions such as 'getSigners' and 'getContractFactory' are available in global context
   const [alice, bob] = await getSigners()
 
-  // get contract object of 'alpha' contract in 'contracts/alpha'
-  const contract = await getContractFactory('alpha')
+  // get contract object of 'alpha' contract in 'contracts/alpha' with bob as contract default signer
+  const contract = await getContractFactory('alpha', bob)
 
   // define instantiate message for the contract
   const MSG_INIT = { count: 13 }
 
-  // deploying the contract with bob as a signer
-  const contractAddress = await contract.deploy(MSG_INIT, bob)
+  // deploying the contract with alice as a signer
+  const contractAddress = await contract.deploy(MSG_INIT, alice)
 
   // printing contract address so it can be copied and used in other scripts such as interact.js
-  console.log(`${contractAddress}`)
+  console.log(`Contract deployed at: ${contractAddress}`)
 }
 // ...
 ```
 
-Run the contract with:
+Deploy the contract by running the script:
 
 ```bash
 blast run scripts/deploy.js
@@ -241,7 +242,7 @@ async function main() {
   const [alice, bob] = await getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
 // ...
 ```
 
@@ -260,11 +261,27 @@ blast run newFolder/anotherScripts/myCustomScript.js
 
 ### Available functions in global context
 
-| Function                                               | Descripton                                                                                                                                           | Sample usage                                                                                  |
-| ---                                                    | ---                                                                                                                                                  | ---                                                                                           |
-| getSigners()                                           | set assigned objects as signers in order as in `{project_root}/accounts.json`                                                                        | const [alice, bob] = await getSigners()                                                       |
-| getContractFactory(contractName)                       | get a contract object from contract named `contractName` and sign it witn the first account in `{project_root}/accounts.json`                        | const contract = await getContractFactory('alpha')                                            |
-| getContractFromAddress(contractAddress, signer = null) | get a contract object by address. Default contract signer can be set. If omitted, signer becomes first account in `{project_root}/accounts.json`     | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe') |
+Here is a list of functions you can use in your scripts.
+
+| Function                                                     | Descripton                                                                                                                                                      | Sample usage                                                                                                                                         |
+| ---                                                          | ---                                                                                                                                                             | ---                                                                                                                                                  |
+| async getSigners()                                           | Returns an array of predefined accounts (`{project_root}/accounts.json`) including the auto generated additional accounts                                       | const [alice, bob] = await getSigners()                                                                                                              |
+| async getCustomSigners(privateAccountName = null)            | Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts from `{project_root}/private-accounts.json`.     | const alice = await getCustomSigners('privateAccount1')<br />const allSigners = await getCustomSigners()<br />const bob = allSigners.privateAccount1 |
+| async getContractFactory(contractLabel, signer = null)       | Returns an instance of a new contract by its label. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json`         | const contract = await getContractFactory('alpha', alice)                                                                                            |
+| async getContractFromAddress(contractAddress, signer = null) | Returns an instance of an existing contract by its address. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json` | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')                                                        |
+
+You can get an instance of a contract (e.g. with `getContractFactory()`). Here is the functionality such an instance of a contract can offer. 
+
+### Exposed functions of a contract instance
+
+| Function                               | Descripton                                                                                                                                       | Sample usage                                         |
+| ---                                    | ---                                                                                                                                              | ---                                                  |
+| async deploy(initMsg, label = null)    | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a label other than the default one.                               | const deploy = await contract.deploy(MSG_INIT)       |
+| async execute(msg, signer = null)      | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the contract default one. | const result = await contract.execute(MSG_INCREMENT) |
+| async query(queryMsg, signer = null)   | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the contract default one.  | const count = await contract.query(QUERY_GET_COUNT)  |
+| connectSigner(signer)                  | Sets the given signer as the contract default                                                                                                    | contract.connectSigner(bob)                          |
+| getAddress()                           | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                             | const address = contract.getAddress()                |
+
 
 You can run your scripts on a different node. More information [here](#network). You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
 
@@ -294,7 +311,7 @@ Here are public Cudos nodes you can use to connect to Cudos network:
 ## Managing accounts
 
 By default local Cudos node starts with 10 predefined accounts funded with `acudos`. You can set how many additional random accounts to load when starting a local node in `blast.config.js` under `additionalAccounts`. If any additional accounts are added, `customAccountBalances` field must be set for the amount of tokens that these accounts will be funded with. Predefined and additionally generated accounts are written in `{project_root}/accounts.json`. Another way to manage custom accounts is through `blast keys` command.  
-You can put your private accounts in `{project_root}/private-accounts.json` and add the file to `.gitignore` to prevent exposing them.
+You can put your private accounts in `{project_root}/private-accounts.json`. Initializing a new project automatically adds this file to `.gitignore`. **Make sure you keep `private-accounts.json` in `.gitignore` in order to prevent accidentally committing and exposing your private accounts.** 
 
 ### Listing local node accounts
 
