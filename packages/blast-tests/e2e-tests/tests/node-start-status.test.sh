@@ -35,11 +35,11 @@ if [[ $exit_status == 1 ]]; then
 fi
 cd $init_folder
 
-if [[ ! `blast node status` =~ 'online' ]]; then
+if [[ `blast node status` =~ 'online' ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 echo -n 'blast node status -n [network]...'
@@ -48,11 +48,11 @@ echo -n 'blast node status -n [network]...'
 sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
 sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
-if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
+if [[ `blast node status -n localhost_test` =~ 'online' ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 rm -r ../$init_folder &> /dev/null || true

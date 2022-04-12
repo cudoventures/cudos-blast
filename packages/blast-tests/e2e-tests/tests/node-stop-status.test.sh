@@ -23,11 +23,11 @@ echo -n 'blast node status...'
 if [[ $exit_status == 1 ]]; then
     $compose down &> /dev/null && sleep 5
 fi
-if [[ ! `blast node status` =~ 'offline' ]]; then
+if [[ `blast node status` =~ 'offline' ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 exit $exit_status

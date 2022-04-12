@@ -9,11 +9,11 @@ echo -n 'blast compile...'
 
 blast compile &> /dev/null
 cd artifacts
-if [[ ! `ls` == $COMPILE_FILES ]]; then
+if [[ `ls` == $COMPILE_FILES ]]; then
+    echo -e $PASSED
+else
     echo -e "$FAILED\nInvalid artifacts!" 1>&2
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 echo -n 'blast run...'
@@ -22,11 +22,11 @@ if [[ $exit_status == 1 ]]; then
     docker run --rm -v "`pwd`":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3 &> /dev/null
 fi
 
-if [[ ! `blast run ./scripts/deploy.js` =~ 'cudos' ]]; then
+if [[ `blast run ./scripts/deploy.js` =~ 'cudos' ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 echo -n 'blast run -n [network]...'
@@ -35,11 +35,11 @@ echo -n 'blast run -n [network]...'
 sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
 sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
-if [[ ! `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
+if [[ `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 rm -r ../$init_folder &> /dev/null || true

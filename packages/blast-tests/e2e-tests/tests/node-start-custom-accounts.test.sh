@@ -30,11 +30,11 @@ cd $init_folder
 echo -n 'adding custom accounts...'
 
 cd ..
-if [[ ! `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
+if [[ `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 additional_account=`$COMPOSE cudos-noded keys show $ADDITIONAL_KEY --keyring-backend test -a`
