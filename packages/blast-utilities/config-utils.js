@@ -1,16 +1,17 @@
-const fsExtra = require('fs-extra')
-const process = require('process')
+const fs = require('fs')
 const path = require('path')
 const BlastError = require('./blast-error')
 const { localNetwork } = require('../blast-config/blast-constants')
+const { getProjectRootPath } = require('./package-info')
+
+// Blast config utils
 
 function getConfig() {
-  const CONFIG_PATH = path.join(process.cwd(), 'blast.config.js')
-  if (!fsExtra.pathExistsSync(CONFIG_PATH)) {
+  const CONFIG_PATH = path.join(getProjectRootPath(), 'blast.config.js')
+  if (!fs.existsSync(CONFIG_PATH)) {
     throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${CONFIG_PATH}`)
   }
-  const config = require(CONFIG_PATH)
-  return config
+  return require(CONFIG_PATH)
 }
 
 function getNetwork(network) {
@@ -76,11 +77,29 @@ function getRustOptimizerVersion() {
   return config.rustOptimizerVersion
 }
 
+// Accounts config utils
+
+function getAccounts() {
+  const configPath = path.join(getProjectRootPath(), 'accounts.json')
+  return Object.values(require(configPath))
+}
+
+// Private accounts config utils
+
+function getPrivateAccounts() {
+  const configPath = path.join(getProjectRootPath(), 'private-accounts.json')
+  const privateAccounts = require(configPath)
+  delete privateAccounts.comment
+  return privateAccounts
+}
+
 module.exports = {
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances,
   getRustOptimizerVersion: getRustOptimizerVersion,
-  getNetwork: getNetwork
+  getNetwork: getNetwork,
+  getAccounts: getAccounts,
+  getPrivateAccounts: getPrivateAccounts
 }

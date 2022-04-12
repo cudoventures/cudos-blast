@@ -4,10 +4,10 @@ async function main () {
   const [alice, bob] = await getSigners()
   const fund = [coin(321, "acudos")];
 
-  const contract = await getContractFactory('alpha')
+  const contract = await getContractFactory('alpha', bob)
   
   const MSG_INIT = { count: 13 }
-  const deploy = await contract.deploy(MSG_INIT, bob, fund)
+  const deploy = await contract.deploy(MSG_INIT, fund)
   const contractAddress = deploy.initTx.contractAddress
   console.log(`Contract deployed at: ${contractAddress}`)
 }
