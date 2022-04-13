@@ -18,8 +18,8 @@ fi
 echo -n 'blast test -n [network]...'
 # Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
 #  ignore [defaultNetwork]
-sed -i '' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
-sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+sed -i '.bak' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
+sed -i '.bak' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
 blast test -n localhost_test &> jest.logs.json
 result=`cat jest.logs.json`

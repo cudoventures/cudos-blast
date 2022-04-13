@@ -3,10 +3,11 @@ source ./packages/blast-tests/e2e-tests/vars.sh
 init_folder="$INIT_FOLDER-config-test"
 
 echo -n 'blast node start...'
-cp -R template $init_folder &> /dev/null && cd $init_folder
+cp -R template $init_folder &> /dev/null
+cd $init_folder
 
-sed -i '' 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
-sed -i '' 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
+sed -i '.bak' 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
+sed -i '.bak' 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
 
 blast node start &> /dev/null
 cd ..
