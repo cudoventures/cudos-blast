@@ -6,8 +6,8 @@ echo -n 'blast node start...'
 cp -R template $init_folder &> /dev/null
 cd $init_folder
 
-sed -i '.bak' 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
-sed -i '.bak' 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
+perl -pi -e 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
+perl -pi -e 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
 
 blast node start &> /dev/null
 cd ..

@@ -32,8 +32,8 @@ fi
 echo -n 'blast run -n [network]...'
 # Set [defaultNetwork] to invalid value and add the local network to [networks] to ensure that the passing tests will
 #  ignore [defaultNetwork]
-sed -i '.bak' $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
-sed -i '.bak' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+perl -pi -e $'s|defaultNetwork: \'\'|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|' blast.config.js
+perl -pi -e $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
 if [[ `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
     echo -e $PASSED
