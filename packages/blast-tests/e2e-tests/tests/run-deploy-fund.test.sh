@@ -8,9 +8,9 @@ cd $init_folder
 blast compile &> /dev/null
 
 echo -n 'deploying contract...'
-deployed_contract=`blast run scripts/deploy.js` &> /dev/null
+deployed_contract=`blast run scripts/deploy.js`
 
-if [[ $deployed_contract =~ 'cudos' ]]; then
+if [[ `blast run ./scripts/deploy.js` =~ 'cudos' ]]; then
     echo -e $PASSED
 else
     echo -e $FAILED
