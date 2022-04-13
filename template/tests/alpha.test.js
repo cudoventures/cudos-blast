@@ -8,8 +8,8 @@ describe('alpha contract', () => {
 
   beforeAll(async () => {
     [alice, bob] = await getSigners()
-    contract = await getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, bob)
+    contract = await getContractFactory('alpha', bob)
+    await contract.deploy(MSG_INIT)
   })
 
   test('increment count', async () => {
