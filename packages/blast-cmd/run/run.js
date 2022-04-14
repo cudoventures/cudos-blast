@@ -12,9 +12,9 @@ async function runCmd(argv) {
   process.env.BLAST_NETWORK = argv.network ?? ''
   require('../../blast-utilities/globals')
 
-  const ds = require(`${path.resolve('.')}/${argv.scriptFilePath}`)
+  const runScript = require(`${path.resolve('.')}/${argv.scriptFilePath}`)
 
-  return ds.main()
+  return runScript.main()
 }
 
 module.exports = { runCmd: runCmd }

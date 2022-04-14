@@ -42,5 +42,31 @@ else
     exit_status=1
 fi
 
-rm -r ../$init_folder &> /dev/null || true
+echo -n 'deploy and fund contract...'
+
+perl -pi -e $'s|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|defaultNetwork: \'\'|' blast.config.js
+perl -i -pe $'if($. == 1) {s||const { coin } = require(\'\@cosmjs/stargate\');\n\n|}' ./scripts/deploy.js
+perl -i -pe $'if($. == 4) {s||  const fund = [coin(321, \'acudos\')];\n|}' ./scripts/deploy.js
+perl -pi -e 's|\(MSG_INIT\)|(MSG_INIT, fund)|' ./scripts/deploy.js
+
+deployed_contract=`blast run ./scripts/deploy.js`
+if [[ $deployed_contract =~ 'cudos' ]]; then
+    echo -e $PASSED
+else
+    echo -e $FAILED
+    exit_status=1
+fi
+
+echo -n 'verify contract balance...'
+cd ..
+contract_balance=`$COMPOSE cudos-noded q bank balances ${deployed_contract:22}`
+
+if [[ $contract_balance =~ '321' ]]; then
+    echo -e $PASSED
+else
+    echo -e $FAILED
+    exit_status=1
+fi
+
+rm -r ./$init_folder &> /dev/null || true
 exit $exit_status
