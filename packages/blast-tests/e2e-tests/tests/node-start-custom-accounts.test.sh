@@ -1,6 +1,7 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
 init_folder="$INIT_FOLDER-config-test"
+exit_status=0
 
 echo -n 'blast node start...'
 cp -R template $init_folder &> /dev/null
@@ -22,6 +23,7 @@ until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     sleep $timer
     ((timer=timer+1))
 done;
+exit_status=$?
 if [[ $exit_status == 0 ]]; then
     echo -e $PASSED
 fi

@@ -1,5 +1,6 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
+exit_status=0
 
 echo -n 'blast node stop...'
 cd template
@@ -15,6 +16,7 @@ until [[ ! `docker ps` =~ $CONTAINER_NAME ]]; do
     sleep $timer
     ((timer=timer+1))
 done;
+exit_status=$?
 if [[ $exit_status == 0 ]]; then
     echo -e $PASSED
 fi
