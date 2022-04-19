@@ -17,7 +17,7 @@ if [[ `blast keys ls` =~ $TEST_KEY ]]; then
         exit_status=1  
 fi
 
-if [[ ! $exit_status == 1 ]]; then
+if [[ $exit_status == 0 ]]; then
  echo -e $PASSED
 fi
 

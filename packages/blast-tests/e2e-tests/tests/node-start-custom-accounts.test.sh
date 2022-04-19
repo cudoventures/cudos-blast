@@ -22,7 +22,7 @@ until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     sleep $timer
     ((timer=timer+1))
 done;
-if [[ ! $exit_status == 1 ]]; then
+if [[ $exit_status == 0 ]]; then
     echo -e $PASSED
 fi
 
