@@ -1,23 +1,15 @@
 {
-    "name": "cudos-blast",
+    "name": "root",
     "version": "1.0.1",
-    "description": "",
-    "main": "./packages/blast-cmd/blast-cmd.js",
+    "license": "SEE LICENSE IN EACH PACKAGE'S LICENSE FILE",
+    "private": true,
+    "repository": "github:CudoVentures/cudos-blast",
+    "workspaces": [
+        "packages/*"
+    ],
     "scripts": {
         "lint": "eslint --ext .js,.jsx .",
-        "test": "./packages/blast-tests/e2e-tests/run-tests.sh"
-    },
-    "bin": {
-        "blast": "./packages/blast-cmd/blast-cmd.js"
-    },
-    "dependencies": {
-        "axios": "^0.26.0",
-        "bip39": "^3.0.4",
-        "cudosjs": "^0.0.19",
-        "find-up": "^5.0.0",
-        "fs-extra": "^10.0.0",
-        "jest": "^27.5.1",
-        "yargs": "^17.3.1"
+        "test": "./packages/e2e-tests/run-tests.sh"
     },
     "devDependencies": {
         "eslint": "^8.10.0",
