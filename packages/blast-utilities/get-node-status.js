@@ -6,7 +6,7 @@ async function checkNodeOnline(network) {
   const nodeStatus = await getNodeStatus(network)
   if (!nodeStatus.isConnected) {
     throw new BlastError('The node is offline. \n' +
-      'Make sure you have the correct node URL in the config file and run "blast node start" for a local node')
+      'Make sure you have the correct node URL in the config file or run "blast node start" for a local node')
   }
 }
 
@@ -18,8 +18,7 @@ async function checkNodeOffline(network) {
 }
 
 async function getNodeStatus(network) {
-  const url = getNetwork(network)
-  return await getNodeStatusByUrl(url)
+  return await getNodeStatusByUrl(getNetwork(network))
 }
 
 async function getNodeStatusByUrl(url) {

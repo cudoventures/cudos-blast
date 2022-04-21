@@ -7,8 +7,7 @@ module.exports.config = {
   // optional parameners
   additionalAccounts: 0,
   customAccountBalances: 1000000000000000000,
-  defaultNetwork: '',
   networks: {
-    testnet: 'https://sentry1.gcp-uscentral1.cudos.org:26657'
+    testnet: 'https://sentry1.gcp-uscentral1.cudos.org:36657'
   }
 }
