@@ -33,7 +33,7 @@ fi
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast run -n [network]...'
     # Add localhost to [networks] in the config
-    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+    perl -pi -e $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
     if [[ `blast run ./scripts/deploy.js -n localhost_test` =~ 'cudos' ]]; then
         echo -e $PASSED

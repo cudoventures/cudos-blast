@@ -19,7 +19,7 @@ fi
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast test -n [network]...'
     # Add localhost to [networks] in the config
-    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+    perl -pi -e $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
     blast test -n localhost_test &> jest.logs.json
     result=`cat jest.logs.json`

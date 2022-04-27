@@ -48,7 +48,7 @@ fi
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast node status -n [network]...'
     # Add localhost to [networks] in the config
-    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+    perl -pi -e $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
     if [[ ! `blast node status -n localhost_test` =~ 'online' ]]; then
         echo -e $FAILED
@@ -62,7 +62,7 @@ fi
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast node status -n [invalid_network]...'
     # Add invalid localhost to [networks] in the config
-    sed -i '' $'s|networks: {|networks: {\tinvalid_localhost_test: \'http://non-existent-localhost:26657\', |' blast.config.js
+    perl -pi -e $'s|networks: {|networks: {\tinvalid_localhost_test: \'http://non-existent-localhost:26657\', |' blast.config.js
 
     if [[ `blast node status -n invalid_localhost_test` =~ 'online' ]]; then
         echo -e $FAILED
