@@ -11,6 +11,12 @@ function getConfig() {
   if (!fs.existsSync(CONFIG_PATH)) {
     throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${CONFIG_PATH}`)
   }
+  // setting a blast runtime environment before requiring a possible plugin
+  // if a plugin uses 'bre', the tool will throw error even on e.g. 'blast compile' commands because it will load
+  // plugins when read from blast.config.js
+  if (!globalThis.bre) {
+    globalThis.bre = {}
+  }
   return require(CONFIG_PATH)
 }
 

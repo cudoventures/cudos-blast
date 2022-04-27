@@ -12,12 +12,13 @@ const {
   getConfig
 } = require('./config-utils')
 
-getConfig()
-
+// setting blast runtime environment
+// The right place for creating the object is before global functions and it must be in globals.js
+// because of jest testing
+globalThis.bre = {}
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 const accounts = getAccounts()
 const addressPrefix = getAddressPrefix()
-globalThis.bre = {}
 
 // Returns an array of predefined accounts including the auto generated additional accounts
 globalThis.bre.getSigners = async function() {
@@ -67,9 +68,12 @@ async function getSigner(account) {
   return signer
 }
 
-module.exports = {
-  getSigners: globalThis.bre.getSigners,
-  getCustomSigners: globalThis.bre.getCustomSigners,
-  getContractFactory: globalThis.bre.getContractFactory,
-  getContractFromAddress: globalThis.bre.getContractFromAddress
-}
+getConfig()
+
+// copy core functionality to global scope to avoid breaking changes
+globalThis.getSigners = globalThis.bre.getSigners
+globalThis.getCustomSigners = globalThis.bre.getCustomSigners
+globalThis.getContractFactory = globalThis.bre.getContractFactory
+globalThis.getContractFromAddress = globalThis.bre.getContractFromAddress
+
+module.exports = globalThis.bre
