@@ -8,26 +8,26 @@ docker run --rm -v "`pwd`":/code  --mount type=volume,source="contracts_cache",t
 
 blast test &> jest.logs.json
 result=`cat jest.logs.json`
-if [[ ! $result =~ $TEST_RESULT ]]; then
+if [[ $result =~ $TEST_RESULT ]]; then
+    echo -e $PASSED
+else
     echo -e "$FAILED\n$EXPECTED\n$TEST_RESULT\n$ACTUAL\n$result" 1>&2
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 # executing blast test on local network through --network; execute only if "blast test" is passing
 if [[ $exit_status != 1 ]]; then
     echo -n 'blast test -n [network]...'
     # Add localhost to [networks] in the config
-    sed -i '' $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
+    perl -pi -e $'s|networks: {|networks: {\tlocalhost_test: \'http://localhost:26657\',|' blast.config.js
 
     blast test -n localhost_test &> jest.logs.json
     result=`cat jest.logs.json`
-    if [[ ! $result =~ $TEST_RESULT ]]; then
+    if [[ $result =~ $TEST_RESULT ]]; then
+        echo -e $PASSED
+    else
         echo -e "$FAILED\n$EXPECTED\n$TEST_RESULT\n$ACTUAL\n$result" 1>&2
         exit_status=1
-    else
-        echo -e $PASSED
     fi
 fi
 
