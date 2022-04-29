@@ -215,10 +215,11 @@ async function main () {
   // functions such as 'getSigners' and 'getContractFactory' are available in global context
   const [alice, bob] = await getSigners()
 
-  // get contract object of 'alpha' contract in 'contracts/alpha' with bob as contract default signer
-  const contract = await getContractFactory('alpha', bob)
+  // get contract object of 'alpha' contract in 'contracts/alpha'
+  const contract = await getContractFactory('alpha')
 
   // define instantiate message for the contract
+  // in this message you can set called function and its parameters
   const MSG_INIT = { count: 13 }
 
   // deploying the contract with alice as a signer
@@ -243,7 +244,7 @@ async function main() {
   const [alice, bob] = await getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 // ...
 ```
 
