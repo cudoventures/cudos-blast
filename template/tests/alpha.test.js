@@ -7,10 +7,11 @@ describe('alpha contract', () => {
   let alice, bob, contract
 
   beforeAll(async () => {
+    // default timeout is 15000
     jest.setTimeout(20000);
     [alice, bob] = await getSigners()
-    contract = await getContractFactory('alpha', bob)
-    await contract.deploy(MSG_INIT)
+    contract = await getContractFactory('alpha')
+    await contract.deploy(MSG_INIT, bob)
   })
 
   test('increment count', async () => {

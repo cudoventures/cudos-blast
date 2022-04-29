@@ -27,7 +27,8 @@ module.exports.CudosContract = class CudosContract {
     }
   }
 
-  async deploy(initMsg, funds, label = this.#contractLabel) {
+  async deploy(initMsg, signer = this.#signer, label = this.#contractLabel, funds) {
+    this.#signer = signer
     const uploadTx = await this.#uploadContract()
     const initTx = await this.#initContract(uploadTx.codeId, initMsg, label, funds)
     this.#contractAddress = initTx.contractAddress
@@ -44,10 +45,6 @@ module.exports.CudosContract = class CudosContract {
 
   async query(queryMsg, signer = this.#signer) {
     return await signer.queryContractSmart(this.#contractAddress, queryMsg)
-  }
-
-  connectSigner(signer) {
-    this.#signer = signer
   }
 
   getAddress() {
