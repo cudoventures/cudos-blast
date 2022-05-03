@@ -9,11 +9,11 @@ cd ../../..
 
 test_address=`$COMPOSE cudos-noded keys show $TEST_KEY --keyring-backend test -a`
 balance=`$COMPOSE cudos-noded q bank balances $test_address`
-if [[ ! $balance =~ $BALANCE_AFTER_FUND ]]; then
+if [[ $balance =~ $BALANCE_AFTER_FUND ]]; then
+    echo -e $PASSED
+else
     echo -e "$FAILED\n$EXPECTED\n$BALANCE_AFTER_FUND\n$ACTUAL\n$balance" 1>&2
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 $COMPOSE cudos-noded keys delete $TEST_KEY --keyring-backend test -y &> /dev/null

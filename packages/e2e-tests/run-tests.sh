@@ -6,9 +6,9 @@ if  [[ `docker info` =~ $DOCKER_ERROR ]]; then
     exit $?
 fi
 
-if [[ ! $? == 0 ]]; then
+if [[ $? != 0 ]]; then
     echo -e "Invalid source!" 1>&2
-    exit $?
+    exit 1
 fi
 
 compose='docker compose -f ./packages/blast-core/config/docker-compose-start.yaml -f ./packages/blast-core/config/docker-compose-init.yaml'
@@ -38,15 +38,15 @@ if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
 
 echo '- Executing node-start-custom-accounts.test.sh...'
 $TESTS_FOLDER/node-start-custom-accounts.test.sh
-if [[ ! $? == 0 ]]; then
-    exit_status=$?
+if [[ $? != 0 ]]; then
+    exit_status=1
 fi
 $compose down &> /dev/null && sleep 5
 
 echo '- Executing node-start-status.test.sh...'
 $TESTS_FOLDER/node-start-status.test.sh
-if [[ ! $? == 0 ]]; then
-    exit_status=$?
+if [[ $? != 0 ]]; then
+    exit_status=1
     start_node
 fi
 
@@ -56,16 +56,16 @@ for test in $TESTS_FOLDER/*.test.sh; do
         file_name=${split[4]}
         echo "- Executing $file_name..."
         $test
-        if [[ ! $? == 0 ]]; then
-            exit_status=$?
+        if [[ $? != 0 ]]; then
+            exit_status=1
         fi
     fi
 done
 
 echo '- Executing node-stop-status.test.sh...'
 $TESTS_FOLDER/node-stop-status.test.sh
-if [[ ! $? == 0 ]]; then
-    exit_status=$?
+if [[ $? != 0 ]]; then
+    exit_status=1
 fi
 
 if [[ `docker ps` =~ $CONTAINER_NAME ]]; then

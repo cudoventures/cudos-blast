@@ -27,9 +27,9 @@ module.exports.CudosContract = class CudosContract {
     }
   }
 
-  async deploy(initMsg, label = this.#contractLabel) {
+  async deploy(initMsg, funds, label = this.#contractLabel) {
     const uploadTx = await this.#uploadContract()
-    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
+    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label, funds)
     this.#contractAddress = initTx.contractAddress
     return {
       uploadTx: uploadTx,
@@ -65,14 +65,15 @@ module.exports.CudosContract = class CudosContract {
     )
   }
 
-  async #initContract(codeId, initMsg, label) {
+  async #initContract(codeId, initMsg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
     return await this.#signer.instantiate(
       this.#signer.address,
       codeId,
       initMsg,
       label,
-      instantiateFee
+      instantiateFee,
+      { funds: funds }
     )
   }
 }
