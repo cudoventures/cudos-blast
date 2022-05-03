@@ -6,9 +6,10 @@ describe('alpha contract', () => {
 
   let alice, bob, contract
 
+  // Optional timeout. Default is 15000
+  jest.setTimeout(30 * 1000);
+
   beforeAll(async () => {
-    // default timeout is 15000
-    jest.setTimeout(25000);
     [alice, bob] = await getSigners()
     contract = await getContractFactory('alpha')
     await contract.deploy(MSG_INIT, bob)
