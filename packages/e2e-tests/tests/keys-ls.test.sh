@@ -2,7 +2,7 @@
 source ./packages/e2e-tests/vars.sh
 
 echo -n 'blast keys ls...'
-$COMPOSE cudos-noded keys add $TEST_KEY --keyring-backend test &> /dev/null
+$LOCAL_NODE_EXEC cudos-noded keys add $TEST_KEY --keyring-backend test &> /dev/null
 cd $PATH_TO_TEMPLATE
 if [[ ! `blast keys ls` =~ $TEST_KEY ]]; then
     echo -e $FAILED 1>&2
@@ -10,7 +10,7 @@ if [[ ! `blast keys ls` =~ $TEST_KEY ]]; then
 fi
 
 cd ../../..
-$COMPOSE cudos-noded keys delete $TEST_KEY --keyring-backend test -y &> /dev/null
+$LOCAL_NODE_EXEC cudos-noded keys delete $TEST_KEY --keyring-backend test -y &> /dev/null
 cd $PATH_TO_TEMPLATE
 if [[ `blast keys ls` =~ $TEST_KEY ]]; then
         echo -e $FAILED 1>&2

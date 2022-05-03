@@ -1,11 +1,10 @@
 #!/bin/bash
 source ./packages/e2e-tests/vars.sh
-compose='docker compose -f ./packages/blast-core/config/docker-compose-start.yaml -f ./packages/blast-core/config/docker-compose-init.yaml'
 start_node() {
-    $compose up --build -d &> /dev/null
+    $DOCKER_COMPOSE up --build -d &> /dev/null
     timer=45
     sleep $timer
-    until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
+    until [[ `$LOCAL_NODE_EXEC cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
         sleep $timer
     done;
 }
@@ -20,7 +19,7 @@ if [[ $1 == 'node-start-status.test.sh' || $1 == 'node-start-custom-accounts.tes
         echo "A running node is detected. The end-to-end tests requires a fresh instance of a Blast node. Do you want to restart it?"
         select yn in "Yes" "No"; do
         case $yn in
-            Yes ) echo 'stopping node...'; $compose down &> /dev/null && sleep 5; break;;
+            Yes ) echo 'stopping node...'; $DOCKER_COMPOSE down &> /dev/null && sleep 5; break;;
             No ) exit $?;;
         esac
         done
@@ -28,7 +27,7 @@ if [[ $1 == 'node-start-status.test.sh' || $1 == 'node-start-custom-accounts.tes
     
     $TESTS_FOLDER/$1
     exit_status=$?
-    $compose down &> /dev/null && sleep 5
+    $DOCKER_COMPOSE down &> /dev/null && sleep 5
     exit $exit_status
 fi
 
@@ -43,7 +42,7 @@ exit_status=$?
 
 if [[ `docker ps` =~ $CONTAINER_NAME ]]; then
     echo 'Stopping the node...'
-    $compose down &> /dev/null && sleep 5
+    $DOCKER_COMPOSE down &> /dev/null && sleep 5
 fi
 
 exit $exit_status

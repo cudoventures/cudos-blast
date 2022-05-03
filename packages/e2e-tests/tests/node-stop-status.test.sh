@@ -23,7 +23,7 @@ fi
 
 echo -n 'blast node status...'
 if [[ $exit_status == 1 ]]; then
-    $compose down &> /dev/null && sleep 5
+    $DOCKER_COMPOSE down &> /dev/null && sleep 5
 fi
 if [[ `blast node status` =~ 'offline' ]]; then
     echo -e $PASSED

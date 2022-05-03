@@ -14,7 +14,7 @@ blast node start &> /dev/null
 cd ..
 sleep 45
 timer=30
-until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
+until [[ `$LOCAL_NODE_EXEC cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     if (( $timer > 34 )); then
         echo -e "$FAILED\nNode was not started successfuly!\n'cudos noded q block' does not contain height!" 1>&2
         exit_status=1
@@ -33,17 +33,17 @@ cd $init_folder
 echo -n 'adding custom accounts...'
 
 cd ..
-if [[ `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
+if [[ `$LOCAL_NODE_EXEC cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
     echo -e $PASSED
 else
     echo -e $FAILED
     exit_status=1
 fi
 
-additional_account=`$COMPOSE cudos-noded keys show $ADDITIONAL_KEY --keyring-backend test -a`
+additional_account=`$LOCAL_NODE_EXEC cudos-noded keys show $ADDITIONAL_KEY --keyring-backend test -a`
 
 echo -n 'validating custom balances...'
-if [[ ! `$COMPOSE cudos-noded query bank balances $additional_account` =~ $CUSTOM_BALANCE ]]; then
+if [[ ! `$LOCAL_NODE_EXEC cudos-noded query bank balances $additional_account` =~ $CUSTOM_BALANCE ]]; then
     echo -e $FAILED
     exit_status=1
 else

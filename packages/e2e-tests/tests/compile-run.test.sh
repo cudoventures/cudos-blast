@@ -60,7 +60,7 @@ fi
 
 echo -n 'verify contract balance...'
 cd ..
-contract_balance=`$COMPOSE cudos-noded q bank balances ${deployed_contract:22}`
+contract_balance=`$LOCAL_NODE_EXEC cudos-noded q bank balances ${deployed_contract:22}`
 
 if [[ $contract_balance =~ '321' ]]; then
     echo -e $PASSED

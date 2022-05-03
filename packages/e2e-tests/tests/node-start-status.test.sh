@@ -12,7 +12,7 @@ blast node start &> /dev/null
 cd ..
 sleep 45
 timer=30
-until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
+until [[ `$LOCAL_NODE_EXEC cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     if (( $timer > 34 )); then
         echo -e "$FAILED\nNode was not started successfuly!\n'cudos noded q block' does not contain height!" 1>&2
         exit_status=1
@@ -28,10 +28,10 @@ fi
 
 echo -n 'blast node status...'
 if [[ $exit_status == 1 ]]; then
-    $compose up --build -d &> /dev/null
+    $DOCKER_COMPOSE up --build -d &> /dev/null
     timer=45
     sleep $timer
-    until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
+    until [[ `$LOCAL_NODE_EXEC cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
         sleep $timer
     done;
 fi
