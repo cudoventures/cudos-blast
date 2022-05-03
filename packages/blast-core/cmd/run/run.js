@@ -8,9 +8,9 @@ async function runCmd(argv) {
     throw new BlastError(`Script at location ${path.resolve('.')}/${argv.scriptFilePath} does not exist.`)
   }
   await checkNodeOnline(argv.network)
-  // we pass the selected network to globals.js through process.env
+  // we pass the selected network to bre.js through process.env
   process.env.BLAST_NETWORK = argv.network ?? ''
-  require('../../utilities/globals')
+  require('../../lib/bre')
 
   const runScript = require(`${path.resolve('.')}/${argv.scriptFilePath}`)
 

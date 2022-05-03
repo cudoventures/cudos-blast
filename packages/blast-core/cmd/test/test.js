@@ -9,7 +9,7 @@ const {
 const { checkNodeOnline } = require('../../utilities/get-node-status')
 
 const JS_TESTS_FOLDER_NAME = 'tests'
-const GLOBALS_PATH = path.join(getPackageRootPath(), 'utilities/globals.js')
+const GLOBALS_PATH = path.join(getPackageRootPath(), 'lib/bre.js')
 const JEST_BINARY = path.join(getPackageRootPath(), 'node_modules/.bin/jest')
 
 async function testCmd(argv) {

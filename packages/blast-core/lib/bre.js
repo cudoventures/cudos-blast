@@ -1,4 +1,4 @@
-const { CudosContract } = require('./contract-utils')
+const { CudosContract } = require('./cudos-contract')
 const {
   DirectSecp256k1HdWallet,
   SigningCosmWasmClient,
@@ -10,10 +10,10 @@ const {
   getAccounts,
   getPrivateAccounts,
   getConfig
-} = require('./config-utils')
+} = require('../utilities/config-utils')
 
 // setting blast runtime environment
-// The right place for creating the object is before global functions and it must be in globals.js
+// The right place for creating the object is before global functions and it must be in bre.js
 // because of jest testing
 globalThis.bre = {}
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)

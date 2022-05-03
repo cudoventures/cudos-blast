@@ -4,9 +4,9 @@ const {
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
-const { getGasPrice } = require('./config-utils')
-const BlastError = require('./blast-error')
-const { getProjectRootPath } = require('./package-info')
+const { getGasPrice } = require('../utilities/config-utils')
+const BlastError = require('../utilities/blast-error')
+const { getProjectRootPath } = require('../utilities/package-info')
 
 module.exports.CudosContract = class CudosContract {
   #contractLabel
