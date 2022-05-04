@@ -19,6 +19,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 * [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts-interacting-with-them-and-running-custom-script-files) 
   * [Available functions in global context](#available-functions-in-global-context)
   * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
+  * [Additional options](#additional-options)
 * [Network](#network)
   * [Localhost](#localhost)
   * [Testnet](#testnet)
@@ -283,11 +284,28 @@ You can get an instance of a contract (e.g. with `getContractFactory()`). Here i
 | connectSigner(signer)                  | Sets the given signer as the contract default                                                                                                    | contract.connectSigner(bob)                          |
 | getAddress()                           | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                             | const address = contract.getAddress()                |
 
+### Additional options
 
-You can run your scripts on a different node. More information [here](#network). You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
+* You can run your scripts on a different node. More information [here](#network)
+* You can set a custom address prefix under `addressPrefix` in `blast.config.js`. The default prefix is `cudos`
 
 ```bash
 blast run scripts/myCustomScript.js -n testnet
+```
+
+* You can automatically fund smart contracts with tokens in your scripts
+
+```bash
+const { coin } = require('@cosmjs/stargate')
+
+async function main () {
+  const [alice, bob] = await getSigners()
+  const contract = await getContractFactory('alpha')
+  const MSG_INIT = { count: 13 }
+
+  const tokens = [coin(321, "acudos")]
+  const deploy = await contract.deploy(MSG_INIT, bob, 'alpha', tokens)
+  // ...
 ```
 
 ---
