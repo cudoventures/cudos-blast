@@ -1,36 +1,57 @@
-const bip39 = require('bip39')
 const fs = require('fs')
+const path = require('path')
+const bip39 = require('bip39')
 const { DirectSecp256k1HdWallet } = require('cudosjs')
 
 const { executeNodeMultiCmd } = require('./run-docker-commands')
-const defaultAccounts = require('../blast-config/default-accounts.json')
 const { transferTokensByNameCommand } = require('./blast-helper')
 const { getProjectRootPath } = require('./package-info')
 const BlastError = require('./blast-error')
 const {
+  getAdditionalAccounts,
   getAdditionalAccountsBalances,
   getAddressPrefix
 } = require('./config-utils')
 
-async function createAdditionalAccounts(numberOfAdditionalAccounts) {
-  const accounts = {}
-  const customBalance = getAdditionalAccountsBalances()
-  const addressPrefix = getAddressPrefix()
-  for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
-    const mnemonic = bip39.generateMnemonic(256)
-    const address = await getAddressFromMnemonic(mnemonic, addressPrefix)
-    accounts[`account${10 + i}`] = {
-      mnemonic: mnemonic,
-      address: address
+async function createLocalAccountsFile() {
+  let localAccounts = require('../blast-config/default-accounts.json')
+  const numberOfAdditionalAccounts = getAdditionalAccounts()
+  if (numberOfAdditionalAccounts > 0) {
+    const additionalAccounts = {}
+    const customBalance = getAdditionalAccountsBalances()
+    const addressPrefix = getAddressPrefix()
+    for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
+      const mnemonic = bip39.generateMnemonic(256)
+      const address = await getAddressFromMnemonic(mnemonic, addressPrefix)
+      // save the generated additional account so all accounts can be saved to a file later
+      additionalAccounts[`account${10 + i}`] = {
+        mnemonic: mnemonic,
+        address: address
+      }
+      // add new account from mnemonic to the local node and fund it
+      executeNodeMultiCmd(
+        `echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover --keyring-backend test && ` +
+        transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`)
+      )
     }
-
-    executeNodeMultiCmd(
-      `echo ${mnemonic} | cudos-noded keys add account${10 + i} --recover --keyring-backend test && ` +
-      transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`)
-    )
+    localAccounts = {
+      ...localAccounts,
+      ...additionalAccounts
+    }
   }
-  const accountsToSave = combineAccountObjects(defaultAccounts, accounts)
-  saveAccounts(accountsToSave)
+  saveAccounts(localAccounts)
+}
+
+function getAccounts() {
+  const configPath = path.join(getProjectRootPath(), 'accounts.json')
+  return Object.values(require(configPath))
+}
+
+function getPrivateAccounts() {
+  const configPath = path.join(getProjectRootPath(), 'private-accounts.json')
+  const privateAccounts = require(configPath)
+  delete privateAccounts.comment
+  return privateAccounts
 }
 
 async function getAddressFromMnemonic(mnemonic, addressPrefix) {
@@ -39,20 +60,20 @@ async function getAddressFromMnemonic(mnemonic, addressPrefix) {
   return acc.address
 }
 
-function combineAccountObjects(defaultAccounts, newAccounts) {
-  const prepareDefaultAccounts = JSON.stringify(defaultAccounts).slice(0, -1) + ','
-  const prepareNewAccounts = JSON.stringify(newAccounts).substring(1)
-  return prepareDefaultAccounts.concat(prepareNewAccounts)
-}
-
 function saveAccounts(accounts) {
-  const projectRoot = getProjectRootPath()
-  const parsed = JSON.parse(accounts)
+  const accountFilePath = path.join(getProjectRootPath(), 'accounts.json')
+  // delete accounts file if exists
+  fs.rmSync(accountFilePath, { force: true })
   try {
-    fs.writeFileSync(`${projectRoot}/accounts.json`, JSON.stringify(parsed, 0, 4))
+    // create accounts file as read-only
+    fs.writeFileSync(accountFilePath, JSON.stringify(accounts, 0, 4), { mode: 0o444 })
   } catch (error) {
-    throw new BlastError(`Failed to create file at ${projectRoot}/additional-accounts.json with error: ${error}`)
+    throw new BlastError(`Failed to create file at ${accountFilePath} with error: ${error}`)
   }
 }
 
-module.exports = { createAdditionalAccounts: createAdditionalAccounts }
+module.exports = {
+  createLocalAccountsFile: createLocalAccountsFile,
+  getAccounts: getAccounts,
+  getPrivateAccounts: getPrivateAccounts
+}

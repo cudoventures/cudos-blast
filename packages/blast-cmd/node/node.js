@@ -8,8 +8,7 @@ const {
   checkNodeOnline,
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
-const { getAdditionalAccounts } = require('../../blast-utilities/config-utils')
-const { createAdditionalAccounts } = require('../../blast-utilities/account-utils')
+const { createLocalAccountsFile } = require('../../blast-utilities/account-utils')
 const { delay } = require('../../blast-utilities/blast-helper')
 const BlastError = require('../../blast-utilities/blast-error')
 
@@ -25,11 +24,8 @@ const startNodeCmd = async function(argv) {
   await waitForRunningNode()
   console.log('Cudos Blast local node is ready')
 
-  const additionalAccounts = getAdditionalAccounts()
-  if (additionalAccounts > 0) {
-    console.log('Creating additional accounts ...')
-    await createAdditionalAccounts(additionalAccounts)
-  }
+  await createLocalAccountsFile()
+  console.log('Local accounts information file created')
 }
 
 const stopNodeCmd = async function() {
