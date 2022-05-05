@@ -1,16 +1,28 @@
 const {
   executeCompose,
   executeComposeAsync,
-  checkDockerStatus
+  checkDockerStatus,
+  executeNodeMultiCmd
 } = require('../../blast-utilities/run-docker-commands')
 const {
   getNodeStatus,
   checkNodeOnline,
   checkNodeOffline
 } = require('../../blast-utilities/get-node-status')
-const { createLocalAccountsFile } = require('../../blast-utilities/account-utils')
-const { delay } = require('../../blast-utilities/blast-helper')
+const {
+  generateRandomAccount,
+  createLocalAccountsFile
+} = require('../../blast-utilities/account-utils')
+const {
+  delay,
+  transferTokensByNameCommand
+} = require('../../blast-utilities/blast-helper')
 const BlastError = require('../../blast-utilities/blast-error')
+const {
+  getAdditionalAccounts,
+  getAdditionalAccountsBalances,
+  getAddressPrefix
+} = require('../../blast-utilities/config-utils')
 
 const startNodeCmd = async function(argv) {
   await checkDockerStatus()
@@ -24,7 +36,16 @@ const startNodeCmd = async function(argv) {
   await waitForRunningNode()
   console.log('Cudos Blast local node is ready')
 
-  await createLocalAccountsFile()
+  const additionalAccounts = await addAdditionalAccountsToNode()
+
+  // get all local accounts by merging default with additional ones
+  let localAccounts = require('../../blast-config/default-accounts.json')
+  localAccounts = {
+    ...localAccounts,
+    ...additionalAccounts
+  }
+
+  createLocalAccountsFile(localAccounts)
   console.log('Local accounts information file created')
 }
 
@@ -53,6 +74,26 @@ async function waitForRunningNode() {
   // We need the first block to be mined so we can interact with the node.
   // In order to wait the first block to be mined we have to wait additional ±4 seconds after the nodeStatus is true.
   await delay(4)
+}
+
+async function addAdditionalAccountsToNode() {
+  const numberOfAdditionalAccounts = getAdditionalAccounts()
+  const additionalAccounts = {}
+  if (numberOfAdditionalAccounts > 0) {
+    const customBalance = getAdditionalAccountsBalances()
+    const addressPrefix = getAddressPrefix()
+    for (let i = 1; i <= numberOfAdditionalAccounts; i++) {
+      additionalAccounts[`account${10 + i}`] = await generateRandomAccount(addressPrefix)
+
+      // add new account from mnemonic to the local node and fund it
+      executeNodeMultiCmd(
+        `echo ${additionalAccounts[`account${10 + i}`].mnemonic} | ` +
+        `cudos-noded keys add account${10 + i} --recover --keyring-backend test && ` +
+        transferTokensByNameCommand('faucet', `account${10 + i}`, `${customBalance}`)
+      )
+    }
+  }
+  return additionalAccounts
 }
 
 module.exports = {
