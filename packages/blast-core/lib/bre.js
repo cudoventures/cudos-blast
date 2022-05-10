@@ -8,14 +8,9 @@ const {
   getNetwork,
   getAddressPrefix,
   getAccounts,
-  getPrivateAccounts,
-  getConfig
+  getPrivateAccounts
 } = require('../utilities/config-utils')
 
-// setting blast runtime environment
-// The right place for creating the object is before global functions and it must be in bre.js
-// because of jest testing
-globalThis.bre = {}
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 const accounts = getAccounts()
 const addressPrefix = getAddressPrefix()
@@ -67,8 +62,6 @@ async function getSigner(account) {
   signer.address = address
   return signer
 }
-
-getConfig()
 
 // copy core functionality to global scope to avoid breaking changes
 globalThis.getSigners = globalThis.bre.getSigners
