@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: cd ./packages/blast-core && npm install && npm install -g && cd ../..
+      - run: cd ./packages/blast-core && npm install && cd ../..
         name: Install blast-core dependencies and global command
       - run: npm run test
         name: Run tests
