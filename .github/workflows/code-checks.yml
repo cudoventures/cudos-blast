@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm install -g
+      - run: npm install && npm install -g && cd ./node_modules/.bin && ls
         name: Install dependencies
       - run: cd ./node_modules/.bin && ls && npm run test test.test.sh
         name: Run tests
