@@ -10,7 +10,7 @@ const { checkNodeOnline } = require('../../utilities/get-node-status')
 
 const JS_TESTS_FOLDER_NAME = 'tests'
 const GLOBALS_PATH = path.join(getPackageRootPath(), 'lib/bre.js')
-// const JEST_BINARY = path.join(getPackageRootPath(), 'node_modules/.bin/jest')
+const JEST_BINARY = path.join(getPackageRootPath(), 'node_modules/.bin/jest')
 
 async function testCmd(argv) {
   const TEST_DIR = path.join(getProjectRootPath(), JS_TESTS_FOLDER_NAME)
@@ -23,7 +23,7 @@ async function testCmd(argv) {
 
   process.env.BLAST_NETWORK = argv.network ?? ''
   // here JEST uses only initial globals file setup. process.env (not globals) persist through the new spawned process
-  spawnSync(`npx --no jest ${TEST_DIR} ` +
+  spawnSync(`${JEST_BINARY} ${TEST_DIR} ` +
     `--setupFilesAfterEnv=${GLOBALS_PATH} --testTimeout=15000 --silent --detectOpenHandles`,
   {
     stdio: 'inherit',
