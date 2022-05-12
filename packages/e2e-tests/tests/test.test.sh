@@ -31,5 +31,5 @@ if [[ $exit_status != 1 ]]; then
     fi
 fi
 
-rm -r ../../../$init_folder &> /dev/null || true
+rm -r ../$init_folder &> /dev/null || true
 exit $exit_status

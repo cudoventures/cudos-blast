@@ -23,6 +23,7 @@ async function testCmd(argv) {
 
   process.env.BLAST_NETWORK = argv.network ?? ''
   // here JEST uses only initial globals file setup. process.env (not globals) persist through the new spawned process
+  console.log(`JEST_BINARY: ${JEST_BINARY}\ntest_dir: ${TEST_DIR}\nGLOBALS_PATH: ${GLOBALS_PATH}`)
   spawnSync(`${JEST_BINARY} ${TEST_DIR} ` +
     `--setupFilesAfterEnv=${GLOBALS_PATH} --testTimeout=15000 --silent --detectOpenHandles`,
   {
