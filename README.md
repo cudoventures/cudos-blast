@@ -216,10 +216,11 @@ async function main () {
   // functions such as 'getSigners' and 'getContractFactory' are available in global context
   const [alice, bob] = await getSigners()
 
-  // get contract object of 'alpha' contract in 'contracts/alpha' with bob as contract default signer
-  const contract = await getContractFactory('alpha', bob)
+  // get contract object of 'alpha' contract in 'contracts/alpha'
+  const contract = await getContractFactory('alpha')
 
   // define instantiate message for the contract
+  // in this message you can set called function and its parameters
   const MSG_INIT = { count: 13 }
 
   // deploying the contract with alice as a signer
@@ -244,7 +245,7 @@ async function main() {
   const [alice, bob] = await getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 // ...
 ```
 
@@ -276,13 +277,12 @@ You can get an instance of a contract (e.g. with `getContractFactory()`). Here i
 
 ### Exposed functions of a contract instance
 
-| Function                               | Descripton                                                                                                                                       | Sample usage                                         |
-| ---                                    | ---                                                                                                                                              | ---                                                  |
-| async deploy(initMsg, label = null)    | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a label other than the default one.                               | const deploy = await contract.deploy(MSG_INIT)       |
-| async execute(msg, signer = null)      | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the contract default one. | const result = await contract.execute(MSG_INCREMENT) |
-| async query(queryMsg, signer = null)   | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the contract default one.  | const count = await contract.query(QUERY_GET_COUNT)  |
-| connectSigner(signer)                  | Sets the given signer as the contract default                                                                                                    | contract.connectSigner(bob)                          |
-| getAddress()                           | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                             | const address = contract.getAddress()                |
+| Function                                                            | Descripton                                                                                                                                                                                                                                                                                      | Sample usage                                                         |
+| ---                                                                 | ---                                                                                                                                                                                                                                                                                             | ---                                                                  |
+| async deploy(initMsg, signer = undefined, label = undefined, funds) | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a signer and label other than the default ones. The deployer will become the default signer for the contract. You can also pass funds to automatically add selected amount of cudos to a contract on deployment. | const deploy = await contract.deploy(MSG_INIT, undefined, 'myLabel') |
+| async execute(msg, signer = undefined)                              | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the deployer.                                                                                                                                                            | const result = await contract.execute(MSG_INCREMENT)                 |
+| async query(queryMsg, signer = undefined)                           | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the deployer.                                                                                                                                                             | const count = await contract.query(QUERY_GET_COUNT)                  |
+| getAddress()                                                        | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                                                                                                                                                                            | const address = contract.getAddress()                                |
 
 ### Additional options
 
