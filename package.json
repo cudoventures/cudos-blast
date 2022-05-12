@@ -4,7 +4,7 @@
     "license": "SEE LICENSE IN EACH PACKAGE'S LICENSE FILE",
     "private": true,
     "repository": "github:CudoVentures/cudos-blast",
-    "TEST-workspaces": [
+    "workspaces": [
         "packages/*"
     ],
     "scripts": {

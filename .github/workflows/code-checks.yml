@@ -12,7 +12,7 @@ jobs:
         with:
           node-version: 16
       - run: npm install
-        name: Install dependencies
+        name: Install root dependencies
       - run: npm run lint
         name: Run a linter check
   run-tests:
@@ -27,4 +27,4 @@ jobs:
       - run: cd packages/blast-core && npm install && npm install -g
         name: Install blast-core dependencies and global command
       - run: npm run test test.test.sh
-        name: Run tests
+        name: Run e2e tests
