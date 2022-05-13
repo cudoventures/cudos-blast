@@ -3,6 +3,8 @@ source ./packages/blast-tests/e2e-tests/vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 cp -R template $init_folder &> /dev/null
+#manually supply the testing folder with accounts.json
+cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/accounts.json"
 cd $init_folder
 
 echo -n 'blast compile...'
@@ -69,5 +71,5 @@ else
     exit_status=1
 fi
 
-rm -r ./$init_folder &> /dev/null || true
+rm -r -f ./$init_folder &> /dev/null || true
 exit $exit_status

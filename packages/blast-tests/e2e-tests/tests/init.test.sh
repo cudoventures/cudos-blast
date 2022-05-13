@@ -12,5 +12,5 @@ else
     exit_status=1
 fi
 
-rm -r ../$INIT_FOLDER &> /dev/null
+rm -r -f ../$INIT_FOLDER &> /dev/null
 exit $exit_status

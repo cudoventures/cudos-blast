@@ -2,6 +2,7 @@
 
 export TESTS_FOLDER='./packages/blast-tests/e2e-tests/tests'
 export INIT_FOLDER='./test-blast-init'
+export DEFAULT_ACCOUNTS_FILE_PATH='./packages/blast-config/default-accounts.json'
 export CONTAINER_NAME='cudos_blast_node'
 export DOCKER_ERROR='Cannot connect to the Docker daemon'
 export COMPOSE='docker compose -f ./packages/blast-config/docker-compose-start.yaml -f ./packages/blast-config/docker-compose-init.yaml exec -T cudos-node'
@@ -26,7 +27,6 @@ checksums.txt
 checksums_intermediate.txt'
 export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
-accounts.json
 blast.config.js
 contracts
 jsconfig.json
@@ -34,6 +34,5 @@ package.json
 private-accounts.json
 scripts
 tests'
-
 export TEMPLATE_SCRIPTS_FILES='deploy.js
 interact.js'

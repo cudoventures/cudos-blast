@@ -6,10 +6,12 @@ const {
 } = require('cudosjs')
 const {
   getNetwork,
-  getAddressPrefix,
+  getAddressPrefix
+} = require('./config-utils')
+const {
   getAccounts,
   getPrivateAccounts
-} = require('./config-utils')
+} = require('./account-utils')
 
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 const accounts = getAccounts()
