@@ -4,7 +4,7 @@
 name: Node.js Publish CI
 on:
   release:
-    types: [created]
+    types: [created,edited]
 jobs:
   build:
     runs-on: ubuntu-latest
