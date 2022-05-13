@@ -72,30 +72,11 @@ function getRustOptimizerVersion() {
   return config.rustOptimizerVersion
 }
 
-// Accounts config utils
-
-function getAccounts() {
-  const configPath = path.join(getProjectRootPath(), 'accounts.json')
-  return Object.values(require(configPath))
-}
-
-// Private accounts config utils
-
-function getPrivateAccounts() {
-  const configPath = path.join(getProjectRootPath(), 'private-accounts.json')
-  const privateAccounts = require(configPath)
-  delete privateAccounts.comment
-  return privateAccounts
-}
-
 module.exports = {
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances,
   getRustOptimizerVersion: getRustOptimizerVersion,
-  getNetwork: getNetwork,
-  getAccounts: getAccounts,
-  getPrivateAccounts: getPrivateAccounts,
-  getConfig: getConfig
+  getNetwork: getNetwork
 }

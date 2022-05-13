@@ -3,7 +3,10 @@ source ./vars.sh
 init_folder="$INIT_FOLDER-test"
 
 echo -n 'blast test...'
-cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null && cd $init_folder
+cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null
+#manually supply the testing folder with accounts.json
+cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/accounts.json"
+cd $init_folder
 docker run --rm -v "`pwd`":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.3 &> /dev/null
 
 blast test &> jest.logs.json
@@ -31,5 +34,5 @@ if [[ $exit_status != 1 ]]; then
     fi
 fi
 
-rm -r ../../../$init_folder &> /dev/null || true
+rm -r -f ../$init_folder &> /dev/null || true
 exit $exit_status

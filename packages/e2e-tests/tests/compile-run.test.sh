@@ -3,6 +3,8 @@ source ./vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null
+#manually supply the testing folder with accounts.json
+cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/accounts.json"
 cd $init_folder
 
 echo -n 'blast compile...'
@@ -45,10 +47,10 @@ fi
 
 echo -n 'deploy and fund contract...'
 
-perl -pi -e $'s|defaultNetwork: \'https://an-inhospitable-node.cudos.org:26657\'|defaultNetwork: \'\'|' blast.config.js
+# tweak the deploy script to get cudos and pass it to the deploy function
 perl -i -pe $'if($. == 1) {s||const { coin } = require(\'\@cosmjs/stargate\');\n\n|}' ./scripts/deploy.js
 perl -i -pe $'if($. == 4) {s||  const fund = [coin(321, \'acudos\')];\n|}' ./scripts/deploy.js
-perl -pi -e 's|\(MSG_INIT\)|(MSG_INIT, fund)|' ./scripts/deploy.js
+perl -pi -e 's|deploy\(MSG_INIT|deploy(MSG_INIT, undefined, undefined, fund|' ./scripts/deploy.js
 
 deployed_contract=`blast run ./scripts/deploy.js`
 if [[ $deployed_contract =~ 'cudos' ]]; then
@@ -69,5 +71,5 @@ else
     exit_status=1
 fi
 
-rm -r ./$init_folder &> /dev/null || true
+rm -r -f ./$init_folder &> /dev/null || true
 exit $exit_status
