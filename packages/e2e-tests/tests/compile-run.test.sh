@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null

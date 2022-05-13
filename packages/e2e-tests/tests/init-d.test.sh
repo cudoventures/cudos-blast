@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 
 echo -n 'blast init -d...'
 blast init -d $INIT_FOLDER &> /dev/null && cd $INIT_FOLDER

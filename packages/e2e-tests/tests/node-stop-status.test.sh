@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 exit_status=0
 
 echo -n 'blast node stop...'

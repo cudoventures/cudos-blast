@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 start_node() {
     $DOCKER_COMPOSE up --build -d &> /dev/null
     timer=45

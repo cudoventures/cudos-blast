@@ -1,5 +1,5 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 
 if  [[ `docker info` =~ $DOCKER_ERROR ]]; then
     echo -e "Cannot connect to the Docker daemon. Is the docker daemon running?" 1>&2
@@ -21,7 +21,7 @@ start_node() {
 }
 
 if [[ $1 ]]; then
-    ./packages/e2e-tests/run-single-test.sh $1
+    ./run-single-test.sh $1
     exit $?
 fi
 

@@ -1,10 +1,10 @@
 #!/bin/bash
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 
 echo -n 'blast keys add...'
 cd $PATH_TO_TEMPLATE
 blast keys add $TEST_KEY -t &> /dev/null
-cd ../../..
+cd ../..
 
 if [[ `$LOCAL_NODE_EXEC cudos-noded keys list --keyring-backend test` =~ $TEST_KEY ]]; then
     echo -e $PASSED

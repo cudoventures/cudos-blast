@@ -1,6 +1,6 @@
 {
     "name": "root",
-    "version": "1.0.1",
+    "version": "1.0.0",
     "license": "SEE LICENSE IN EACH PACKAGE'S LICENSE FILE",
     "private": true,
     "repository": "github:CudoVentures/cudos-blast",
@@ -9,7 +9,8 @@
     ],
     "scripts": {
         "lint": "eslint --ext .js,.jsx .",
-        "test": "./packages/e2e-tests/run-tests.sh"
+        "test": "npm test -w @cudos/blast-e2e-tests",
+        "testt": "./packages/e2e-tests/run-tests.sh"
     },
     "devDependencies": {
         "eslint": "^8.10.0",

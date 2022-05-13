@@ -12,7 +12,7 @@
 #!/bin/bash
 
 # "source" lets you use the contents of a file
-source ./packages/e2e-tests/vars.sh
+source ./vars.sh
 
 # 'echo' prints out the string
 # -n flag tells your terminal to stay on the same line after printing out the message
