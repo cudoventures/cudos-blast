@@ -9,31 +9,28 @@ const BlastError = require('./blast-error')
 const { getProjectRootPath } = require('./package-info')
 
 module.exports.CudosContract = class CudosContract {
-  #contractName
+  #contractLabel
   #signer
   #contractAddress
   #wasmPath
   #gasPrice
 
-  constructor(contractName, signer, deployedContractAddress = null) {
-    this.#contractName = contractName
+  constructor(contractLabel, signer, deployedContractAddress = null) {
+    this.#contractLabel = contractLabel
     this.#signer = signer
     this.#contractAddress = deployedContractAddress
-    this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractName}.wasm`)
+    this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractLabel}.wasm`)
     this.#gasPrice = GasPrice.fromString(getGasPrice())
 
-    if (!this.#isDeployed() && !fs.existsSync(this.#wasmPath)) {
-      throw new BlastError(`Contract with name ${contractName} was not found, did you compile it?`)
+    if (deployedContractAddress === null && !fs.existsSync(this.#wasmPath)) {
+      throw new BlastError(`Contract with label ${contractLabel} was not found, did you compile it?`)
     }
   }
 
-  async deploy(initMsg, owner = this.#signer, label = this.#contractName) {
-    if (this.#isDeployed()) {
-      throw new BlastError('Contract is already deployed!')
-    }
-    this.#signer = owner
+  async deploy(initMsg, signer = this.#signer, label = this.#contractLabel, funds) {
+    this.#signer = signer
     const uploadTx = await this.#uploadContract()
-    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label)
+    const initTx = await this.#initContract(uploadTx.codeId, initMsg, label, funds)
     this.#contractAddress = initTx.contractAddress
     return {
       uploadTx: uploadTx,
@@ -65,18 +62,15 @@ module.exports.CudosContract = class CudosContract {
     )
   }
 
-  async #initContract(codeId, initMsg, label) {
+  async #initContract(codeId, initMsg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
     return await this.#signer.instantiate(
       this.#signer.address,
       codeId,
       initMsg,
       label,
-      instantiateFee
+      instantiateFee,
+      { funds: funds }
     )
-  }
-
-  #isDeployed() {
-    return this.#contractAddress !== null
   }
 }

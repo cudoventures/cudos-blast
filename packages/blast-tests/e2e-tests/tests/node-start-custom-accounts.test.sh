@@ -1,12 +1,14 @@
 #!/bin/bash
 source ./packages/blast-tests/e2e-tests/vars.sh
 init_folder="$INIT_FOLDER-config-test"
+exit_status=0
 
 echo -n 'blast node start...'
-cp -R template $init_folder &> /dev/null && cd $init_folder
+cp -R template $init_folder &> /dev/null
+cd $init_folder
 
-sed -i '' 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
-sed -i '' 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
+perl -pi -e 's/additionalAccounts: 0/additionalAccounts: 1/' blast.config.js
+perl -pi -e 's/customAccountBalances: 1000000000000000000/customAccountBalances: 500/' blast.config.js
 
 blast node start &> /dev/null
 cd ..
@@ -21,7 +23,8 @@ until [[ `$COMPOSE cudos-noded q block` =~ $VALID_BLOCK_STATUS ]]; do
     sleep $timer
     ((timer=timer+1))
 done;
-if [[ ! $exit_status == 1 ]]; then
+exit_status=$?
+if [[ $exit_status == 0 ]]; then
     echo -e $PASSED
 fi
 
@@ -30,11 +33,11 @@ cd $init_folder
 echo -n 'adding custom accounts...'
 
 cd ..
-if [[ ! `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
+if [[ `$COMPOSE cudos-noded keys list --keyring-backend test` =~ $ADDITIONAL_KEY ]]; then
+    echo -e $PASSED
+else
     echo -e $FAILED
     exit_status=1
-else
-    echo -e $PASSED
 fi
 
 additional_account=`$COMPOSE cudos-noded keys show $ADDITIONAL_KEY --keyring-backend test -a`
@@ -47,5 +50,5 @@ else
     echo -e $PASSED
 fi
 
-rm -r $init_folder &> /dev/null || true
+rm -r -f $init_folder &> /dev/null || true
 exit $exit_status

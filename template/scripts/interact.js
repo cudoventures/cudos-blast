@@ -7,16 +7,13 @@ async function main() {
   console.log('Initial count: ' + count.count)
 
   const MSG_INCREMENT = { increment: {} }
-  const result = await contract.execute(MSG_INCREMENT, bob)
+  const result = await contract.execute(MSG_INCREMENT)
   console.log(result)
 
   count = await contract.query(QUERY_GET_COUNT, alice)
   console.log('Count after increment: ' + count.count)
 }
 
-main()
-  .then(() => process.exit(0))
-  .catch(error => {
-    console.error(`${error}`)
-    process.exit(1)
-  })
+module.exports = {
+  main: main
+};

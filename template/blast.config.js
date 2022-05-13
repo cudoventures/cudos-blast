@@ -1,16 +1,13 @@
-/* eslint-disable quote-props */
-const accounts = require('./accounts.json')
-const privateAccounts = require('./private-accounts.json')
+/* eslint-disable object-curly-newline */
 module.exports.config = {
-  name: 'template',
-  network: 'cudos',
-  defaultAccount: 'account1',
-  accounts: accounts,
-  privateAccounts: privateAccounts,
   addressPrefix: 'cudos',
+  gasPrice: '250acudos',
+  rustOptimizerVersion: '0.12.3',
+
+  // optional parameners
   additionalAccounts: 0,
   customAccountBalances: 1000000000000000000,
-  gasPrice: '250acudos',
-  networkUrl: 'http://localhost:26657',
-  rustOptimizerVersion: '0.12.3'
+  networks: {
+    testnet: 'https://sentry1.gcp-uscentral1.cudos.org:36657'
+  }
 }

@@ -1,31 +1,38 @@
-const fsExtra = require('fs-extra')
-const process = require('process')
+const fs = require('fs')
 const path = require('path')
 const BlastError = require('./blast-error')
+const { localNetwork } = require('../blast-config/blast-constants')
+const { getProjectRootPath } = require('./package-info')
+
+// Blast config utils
 
 function getConfig() {
-  const CONFIG_PATH = path.join(process.cwd(), 'blast.config.js')
-  if (!fsExtra.pathExistsSync(CONFIG_PATH)) {
+  const CONFIG_PATH = path.join(getProjectRootPath(), 'blast.config.js')
+  if (!fs.existsSync(CONFIG_PATH)) {
     throw new BlastError(`Config file was not found! Make sure that blast.config.js exists at ${CONFIG_PATH}`)
   }
-  const config = require(CONFIG_PATH)
-  return config
+  return require(CONFIG_PATH)
 }
 
-function getNetworkUrl() {
+function getNetwork(network) {
   const { config } = getConfig()
 
-  if (!config.networkUrl) {
-    throw new BlastError('Missing networkUrl in the config file.')
+  if (network) {
+  // network is passed - return it
+    if (!config.networks || !config.networks[network]) {
+      throw new BlastError(`Missing network: [${network}] from the config file.`)
+    }
+    return config.networks[network]
   }
-  return config.networkUrl
+  // network is not passed - return the local network
+  return localNetwork
 }
 
 function getGasPrice() {
   const { config } = getConfig()
 
   if (!config.gasPrice) {
-    throw new BlastError('Missing gasPrice in the config file.')
+    throw new BlastError('Missing [gasPrice] from the config file.')
   }
   return config.gasPrice
 }
@@ -34,9 +41,8 @@ function getAddressPrefix() {
   const { config } = getConfig()
 
   if (!config.addressPrefix) {
-    throw new BlastError('Missing network in the config file.')
+    throw new BlastError('Missing [addressPrefix] from the config file.')
   }
-
   return config.addressPrefix
 }
 
@@ -49,7 +55,7 @@ function getAdditionalAccountsBalances() {
   const { config } = getConfig()
 
   if (!config.customAccountBalances) {
-    throw new BlastError('Missing [customAccountBalances] in the config file.')
+    throw new BlastError('Missing [customAccountBalances] from the config file.')
   }
   return config.customAccountBalances
 }
@@ -58,16 +64,16 @@ function getRustOptimizerVersion() {
   const { config } = getConfig()
 
   if (!config.rustOptimizerVersion) {
-    throw new BlastError('Missing rustOptimizerVersion in the config file.')
+    throw new BlastError('Missing [rustOptimizerVersion] from the config file.')
   }
   return config.rustOptimizerVersion
 }
 
 module.exports = {
-  getNetworkUrl: getNetworkUrl,
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances,
-  getRustOptimizerVersion: getRustOptimizerVersion
+  getRustOptimizerVersion: getRustOptimizerVersion,
+  getNetwork: getNetwork
 }
