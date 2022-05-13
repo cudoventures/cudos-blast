@@ -19,6 +19,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 * [Deploying smart contracts, interacting with them and running custom script files](#deploying-smart-contracts-interacting-with-them-and-running-custom-script-files) 
   * [Available functions in global context](#available-functions-in-global-context)
   * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
+  * [Additional options](#additional-options)
 * [Network](#network)
   * [Localhost](#localhost)
   * [Testnet](#testnet)
@@ -215,10 +216,11 @@ async function main () {
   // functions such as 'getSigners' and 'getContractFactory' are available in global context
   const [alice, bob] = await getSigners()
 
-  // get contract object of 'alpha' contract in 'contracts/alpha' with bob as contract default signer
-  const contract = await getContractFactory('alpha', bob)
+  // get contract object of 'alpha' contract in 'contracts/alpha'
+  const contract = await getContractFactory('alpha')
 
   // define instantiate message for the contract
+  // in this message you can set called function and its parameters
   const MSG_INIT = { count: 13 }
 
   // deploying the contract with alice as a signer
@@ -243,7 +245,7 @@ async function main() {
   const [alice, bob] = await getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
+  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 // ...
 ```
 
@@ -275,19 +277,35 @@ You can get an instance of a contract (e.g. with `getContractFactory()`). Here i
 
 ### Exposed functions of a contract instance
 
-| Function                               | Descripton                                                                                                                                       | Sample usage                                         |
-| ---                                    | ---                                                                                                                                              | ---                                                  |
-| async deploy(initMsg, label = null)    | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a label other than the default one.                               | const deploy = await contract.deploy(MSG_INIT)       |
-| async execute(msg, signer = null)      | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the contract default one. | const result = await contract.execute(MSG_INCREMENT) |
-| async query(queryMsg, signer = null)   | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the contract default one.  | const count = await contract.query(QUERY_GET_COUNT)  |
-| connectSigner(signer)                  | Sets the given signer as the contract default                                                                                                    | contract.connectSigner(bob)                          |
-| getAddress()                           | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                             | const address = contract.getAddress()                |
+| Function                                                            | Descripton                                                                                                                                                                                                                                                                                      | Sample usage                                                         |
+| ---                                                                 | ---                                                                                                                                                                                                                                                                                             | ---                                                                  |
+| async deploy(initMsg, signer = undefined, label = undefined, funds) | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a signer and label other than the default ones. The deployer will become the default signer for the contract. You can also pass funds to automatically add selected amount of cudos to a contract on deployment. | const deploy = await contract.deploy(MSG_INIT, undefined, 'myLabel') |
+| async execute(msg, signer = undefined)                              | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the deployer.                                                                                                                                                            | const result = await contract.execute(MSG_INCREMENT)                 |
+| async query(queryMsg, signer = undefined)                           | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the deployer.                                                                                                                                                             | const count = await contract.query(QUERY_GET_COUNT)                  |
+| getAddress()                                                        | Returns the address of a deloyed contract or `null` if the contract is not deployed.                                                                                                                                                                                                            | const address = contract.getAddress()                                |
 
+### Additional options
 
-You can run your scripts on a different node. More information [here](#network). You can set a custom address prefix under `addressPrefix` in `blast.config.js`. Default is `cudos`.
+* You can run your scripts on a different node. More information [here](#network)
+* You can set a custom address prefix under `addressPrefix` in `blast.config.js`. The default prefix is `cudos`
 
 ```bash
 blast run scripts/myCustomScript.js -n testnet
+```
+
+* You can automatically fund smart contracts with tokens in your scripts
+
+```bash
+const { coin } = require('@cosmjs/stargate')
+
+async function main () {
+  const [alice, bob] = await getSigners()
+  const contract = await getContractFactory('alpha')
+  const MSG_INIT = { count: 13 }
+
+  const tokens = [coin(321, "acudos")]
+  const deploy = await contract.deploy(MSG_INIT, bob, 'alpha', tokens)
+  // ...
 ```
 
 ---
