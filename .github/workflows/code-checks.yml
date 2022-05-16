@@ -1,4 +1,4 @@
-on: pull_request
+on: push
 name: Code Checks
 
 jobs:
@@ -11,8 +11,8 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm install -g
-        name: Install dependencies
+      - run: npm install
+        name: Install root dependencies
       - run: npm run lint
         name: Run a linter check
   run-tests:
@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm install -g
-        name: Install dependencies
-      - run: npm run test
-        name: Run tests
+      - run: npm --prefix ./packages/blast-core i && npm --prefix ./packages/blast-core i -g
+        name: Install blast-core dependencies and global command
+      - run: npm run test test.test.sh
+        name: Run e2e tests
