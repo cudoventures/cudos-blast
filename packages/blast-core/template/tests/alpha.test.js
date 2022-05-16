@@ -10,8 +10,8 @@ describe('alpha contract', () => {
   jest.setTimeout(30 * 1000);
 
   beforeAll(async () => {
-    [alice, bob] = await bre.getSigners()
-    contract = await bre.getContractFactory('alpha')
+    [alice, bob] = await getSigners()
+    contract = await getContractFactory('alpha')
     await contract.deploy(MSG_INIT, bob)
   })
 
