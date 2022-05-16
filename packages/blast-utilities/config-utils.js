@@ -93,6 +93,11 @@ function getPrivateAccounts() {
   return privateAccounts
 }
 
+function getCommands() {
+  const { config } = getConfig()
+  return config.commands
+}
+
 module.exports = {
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
@@ -101,5 +106,6 @@ module.exports = {
   getRustOptimizerVersion: getRustOptimizerVersion,
   getNetwork: getNetwork,
   getAccounts: getAccounts,
-  getPrivateAccounts: getPrivateAccounts
+  getPrivateAccounts: getPrivateAccounts,
+  getCommands: getCommands
 }
