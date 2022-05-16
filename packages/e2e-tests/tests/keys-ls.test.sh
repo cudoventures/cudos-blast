@@ -9,7 +9,7 @@ if [[ ! `blast keys ls` =~ $TEST_KEY ]]; then
     exit_status=1
 fi
 
-cd ../..
+cd ..
 $LOCAL_NODE_EXEC cudos-noded keys delete $TEST_KEY --keyring-backend test -y &> /dev/null
 cd $PATH_TO_TEMPLATE
 if [[ `blast keys ls` =~ $TEST_KEY ]]; then

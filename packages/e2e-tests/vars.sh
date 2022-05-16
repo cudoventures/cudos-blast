@@ -3,7 +3,7 @@
 export TESTS_FOLDER='./tests'
 export INIT_FOLDER='./test-blast-init'
 export PATH_TO_TEMPLATE='../blast-core/template'
-export DEFAULT_ACCOUNTS_FILE_PATH='./packages/blast-config/default-accounts.json'
+export DEFAULT_ACCOUNTS_FILE_PATH='../blast-core/config/default-accounts.json'
 export CONTAINER_NAME='cudos_blast_node'
 export DOCKER_ERROR='Cannot connect to the Docker daemon'
 export LOCAL_NODE_EXEC='docker compose -f ../blast-core/config/docker-compose-start.yaml -f ../blast-core/config/docker-compose-init.yaml exec -T cudos-node'

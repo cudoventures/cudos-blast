@@ -39,7 +39,7 @@ const startNodeCmd = async function(argv) {
   const additionalAccounts = await addAdditionalAccountsToNode()
 
   // get all local accounts by merging default with additional ones
-  let localAccounts = require('../../blast-config/default-accounts.json')
+  let localAccounts = require('../../config/default-accounts.json')
   localAccounts = {
     ...localAccounts,
     ...additionalAccounts

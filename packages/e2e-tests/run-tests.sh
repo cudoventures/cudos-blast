@@ -52,7 +52,7 @@ fi
 for test in $TESTS_FOLDER/*.test.sh; do
     if [[ ! $test =~ 'node' ]]; then
         split=(${test//// })
-        file_name=${split[4]}
+        file_name=${split[2]}
         echo "- Executing $file_name..."
         $test
         if [[ $? != 0 ]]; then

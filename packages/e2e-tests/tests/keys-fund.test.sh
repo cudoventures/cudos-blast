@@ -6,7 +6,7 @@ echo -n 'blast keys fund...'
 $LOCAL_NODE_EXEC cudos-noded keys add $TEST_KEY --keyring-backend test &> /dev/null
 cd $PATH_TO_TEMPLATE
 blast keys fund $TEST_KEY -t 1 &> /dev/null
-cd ../..
+cd ..
 
 test_address=`$LOCAL_NODE_EXEC cudos-noded keys show $TEST_KEY --keyring-backend test -a`
 balance=`$LOCAL_NODE_EXEC cudos-noded q bank balances $test_address`
