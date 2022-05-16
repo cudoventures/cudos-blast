@@ -11,8 +11,8 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm install -g
-        name: Install dependencies
+      - run: npm install
+        name: Install root dependencies
       - run: npm run lint
         name: Run a linter check
   run-tests:
@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm install -g
-        name: Install dependencies
+      - run: npm run install-core
+        name: Install blast-core dependencies and blast as a global command
       - run: npm run test
-        name: Run tests
+        name: Run e2e tests

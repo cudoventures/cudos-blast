@@ -18,7 +18,8 @@
         "blast": "./cmd/blast-cmd.js"
     },
     "scripts": {
-        "lint": "eslint --ext .js,.jsx ."
+        "lint": "eslint --ext .js,.jsx .",
+        "install-global": "npm install -g"
     },
     "engines": {
         "node": ">=12.5.0"
