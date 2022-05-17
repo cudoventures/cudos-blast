@@ -1,3 +1,5 @@
+const bre = require('cudos-blast')
+
 async function main () {
   const [alice, bob] = await bre.getSigners()
   const contract = await bre.getContractFactory('alpha')
