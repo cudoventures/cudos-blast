@@ -1,6 +1,6 @@
 {
     "name": "cudos-blast",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "license": "GNU GENERAL PUBLIC",
     "repository": "github:CudoVentures/cudos-blast",
     "description": "Cudos Blast is a Node.js CLI tool designed to work with the Cudos blockchain. It allows you to scaffold, compile and test your Rust smart contracts.",

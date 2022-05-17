@@ -10,7 +10,7 @@
     "scripts": {
         "lint": "eslint --ext .js,.jsx .",
         "test": "npm test -w @cudos/blast-e2e-tests",
-        "install-core": "npm --prefix ./packages/blast-core install && npm run install-global -w cudos-blast"
+        "install-cmd": "npm run install-global -w cudos-blast"
     },
     "devDependencies": {
         "eslint": "^8.15.0",

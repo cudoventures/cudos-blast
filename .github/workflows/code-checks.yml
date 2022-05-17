@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm run install-core
+      - run: npm install && npm run install-cmd
         name: Install blast-core dependencies and blast as a global command
       - run: npm run test
         name: Run e2e tests
