@@ -214,17 +214,20 @@ You can use the supplied `{project_root}/scripts/deploy.js` to deploy a sample s
 ```bash
 async function main () {
   // functions such as 'getSigners' and 'getContractFactory' are available in global context
-  const [alice, bob] = await getSigners()
+  const [alice, bob] = await bre.getSigners()
 
   // get contract object of 'alpha' contract in 'contracts/alpha'
-  const contract = await getContractFactory('alpha')
+  const contract = await bre.getContractFactory('alpha')
 
   // define instantiate message for the contract
   // in this message you can set called function and its parameters
   const MSG_INIT = { count: 13 }
 
-  // deploying the contract with alice as a signer
-  const contractAddress = await contract.deploy(MSG_INIT, alice)
+  // deploying the contract with bob as a signer (default signer would be alice)
+  const deploy = await contract.deploy(MSG_INIT, bob)
+
+  // get useful info such as contractAddress from deploy transaction
+  const contractAddress = deploy.initTx.contractAddress
 
   // printing contract address so it can be copied and used in other scripts such as interact.js
   console.log(`Contract deployed at: ${contractAddress}`)
@@ -242,10 +245,10 @@ When the contract is deployed, its address will be printed. Then you can edit `{
 
 ```bash
 async function main() {
-  const [alice, bob] = await getSigners()
+  const [alice, bob] = await bre.getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
+  const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
 // ...
 ```
 
@@ -255,7 +258,13 @@ and run the script to interact with the deployed smart contract.
 blast run scripts/interact.js
 ```
 
-You are free to use these files as templates or create your own custom `.js` scripts. You can specify your own script file path. 
+When running scripts through `blast run` the `bre` object in injected. It provides various useful functions to interact with cudos blockchain network. You can also `require` the `cudos-blast` library to access the same functions.
+
+```bash
+const bre = require('cudos-blast')
+```
+
+You are free to use these sample files as templates or create your own custom `.js` scripts. You can specify your own script file path. 
 
 ```bash
 blast run scripts/myCustomScript.js
@@ -266,12 +275,12 @@ blast run newFolder/anotherScripts/myCustomScript.js
 
 Here is a list of functions you can use in your scripts.
 
-| Function                                                     | Descripton                                                                                                                                                      | Sample usage                                                                                                                                         |
-| ---                                                          | ---                                                                                                                                                             | ---                                                                                                                                                  |
-| async getSigners()                                           | Returns an array of predefined accounts (`{project_root}/accounts.json`) including the auto generated additional accounts                                       | const [alice, bob] = await getSigners()                                                                                                              |
-| async getCustomSigners(privateAccountName = null)            | Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts from `{project_root}/private-accounts.json`.     | const alice = await getCustomSigners('privateAccount1')<br />const allSigners = await getCustomSigners()<br />const bob = allSigners.privateAccount1 |
-| async getContractFactory(contractLabel, signer = null)       | Returns an instance of a new contract by its label. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json`         | const contract = await getContractFactory('alpha', alice)                                                                                            |
-| async getContractFromAddress(contractAddress, signer = null) | Returns an instance of an existing contract by its address. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json` | const contract = await getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')                                                        |
+| Function                                                     | Descripton                                                                                                                                                      | Sample usage                                                                                                                                                 |
+| ---                                                          | ---                                                                                                                                                             | ---                                                                                                                                                          |
+| async getSigners()                                           | Returns an array of predefined accounts (`{project_root}/accounts.json`) including the auto generated additional accounts                                       | const [alice, bob] = await bre.getSigners()                                                                                                                  |
+| async getCustomSigners(privateAccountName = null)            | Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts from `{project_root}/private-accounts.json`.     | const alice = await bre.getCustomSigners('privateAccount1')<br />const allSigners = await bre.getCustomSigners()<br />const bob = allSigners.privateAccount1 |
+| async getContractFactory(contractLabel, signer = null)       | Returns an instance of a new contract by its label. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json`         | const contract = await bre.getContractFactory('alpha', alice)                                                                                                |
+| async getContractFromAddress(contractAddress, signer = null) | Returns an instance of an existing contract by its address. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json` | const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')                                                            |
 
 You can get an instance of a contract (e.g. with `getContractFactory()`). Here is the functionality such an instance of a contract can offer. 
 
