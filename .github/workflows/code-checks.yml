@@ -1,4 +1,4 @@
-on: pull_request
+on: push
 name: Code Checks
 
 jobs:
@@ -24,7 +24,7 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm run install-core
+      - run: npm install && npm run install-core
         name: Install blast-core dependencies and blast as a global command
       - run: npm run test
         name: Run e2e tests
