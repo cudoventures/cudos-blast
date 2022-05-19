@@ -1,0 +1,14 @@
+{
+  "name": "blast-cow",
+  "version": "1.0.0",
+  "description": "",
+  "main": "print.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "John Doe",
+  "license": "ISC",
+  "dependencies": {
+    "cowsay": "^1.5.0"
+  }
+}
