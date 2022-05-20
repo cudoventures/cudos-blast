@@ -6,9 +6,14 @@ const { DirectSecp256k1HdWallet } = require('cudosjs')
 const { getProjectRootPath } = require('./package-info')
 const BlastError = require('./blast-error')
 
+let localAccounts
+
 function getAccounts() {
-  const configPath = path.join(getProjectRootPath(), 'accounts.json')
-  return Object.values(require(configPath))
+  if (!localAccounts) {
+    const configPath = path.join(getProjectRootPath(), 'accounts.json')
+    localAccounts = Object.values(require(configPath))
+  }
+  return localAccounts
 }
 
 function getPrivateAccounts() {

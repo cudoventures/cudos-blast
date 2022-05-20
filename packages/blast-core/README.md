@@ -224,7 +224,7 @@ async function main () {
   const MSG_INIT = { count: 13 }
 
   // deploying the contract with bob as a signer (default signer would be alice)
-  const deploy = await contract.deploy(MSG_INIT, bob)
+  const deploy = await contract.deploy(MSG_INIT, { signer: bob })
 
   // get useful info such as contractAddress from deploy transaction
   const contractAddress = deploy.initTx.contractAddress

@@ -3,7 +3,7 @@ const bre = require('cudos-blast')
 describe('alpha contract', () => {
   // Optional timeout. Default is 15000
   jest.setTimeout(30 * 1000);
-  
+
   const MSG_INIT = { count: 13 }
   const MSG_INCREMENT = { increment: {} }
   const MSG_RESET = { reset: { count: 1 } }
@@ -14,7 +14,7 @@ describe('alpha contract', () => {
   beforeAll(async () => {
     [alice, bob] = await bre.getSigners()
     contract = await bre.getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, bob)
+    await contract.deploy(MSG_INIT, { signer: bob })
   })
 
   test('increment count', async () => {

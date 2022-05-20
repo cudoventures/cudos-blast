@@ -1,27 +1,22 @@
 const { CudosContract } = require('./cudos-contract')
-const {
-  DirectSecp256k1HdWallet,
-  SigningCosmWasmClient,
-  CosmWasmClient
-} = require('cudosjs')
-const {
-  getNetwork,
-  getAddressPrefix
-} = require('../utilities/config-utils')
+const { getNetwork } = require('../utilities/config-utils')
 const {
   getAccounts,
   getPrivateAccounts
 } = require('../utilities/account-utils')
+const {
+  getSigner,
+  getDefaultLocalSigner,
+  getContractInfo
+} = require('../utilities/network-utils')
 
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
-const accounts = getAccounts()
-const addressPrefix = getAddressPrefix()
 
-// Returns an array of predefined accounts including the auto generated additional accounts
+// Returns an array of predefined local accounts including the auto generated additional accounts
 globalThis.bre.getSigners = async function() {
   const signers = []
-  for (const acc of accounts) {
-    signers.push(await getSigner(acc))
+  for (const acc of getAccounts()) {
+    signers.push(await getSigner(nodeUrl, acc.mnemonic))
   }
   return signers
 }
@@ -30,39 +25,25 @@ globalThis.bre.getSigners = async function() {
 globalThis.bre.getCustomSigners = async function(privateAccountName) {
   const privateAccounts = getPrivateAccounts()
   if (privateAccountName) {
-    return await getSigner(privateAccounts[privateAccountName])
+    return await getSigner(nodeUrl, privateAccounts[privateAccountName].mnemonic)
   }
   const signers = {}
   for (const accountProperty in privateAccounts) {
-    signers[accountProperty] = await getSigner(privateAccounts[accountProperty])
+    signers[accountProperty] = await getSigner(nodeUrl, privateAccounts[accountProperty].mnemonic)
   }
   return signers
 }
 
-// Returns an instance of a new contract by its label. A custom signer can be set.
-globalThis.bre.getContractFactory = async function(contractLabel, signer = null) {
-  signer = signer ?? await getSigner(accounts[0])
-  return new CudosContract(contractLabel, signer)
+// Returns an instance of a new contract by its label
+globalThis.bre.getContractFactory = async function(contractLabel) {
+  return new CudosContract(contractLabel)
 }
 
 // Returns an instance of an existing contract by its address. A custom signer can be set.
 globalThis.bre.getContractFromAddress = async function(contractAddress, signer = null) {
-  const contractInfo = await getContractInfo(contractAddress)
-  signer = signer ?? await getSigner(accounts[0])
+  const contractInfo = await getContractInfo(nodeUrl, contractAddress)
+  signer = signer ?? await getDefaultLocalSigner(nodeUrl)
   return new CudosContract(contractInfo.label, signer, contractAddress)
-}
-
-async function getContractInfo(contractAddress) {
-  const client = await CosmWasmClient.connect(nodeUrl)
-  return await client.getContract(contractAddress)
-}
-
-async function getSigner(account) {
-  const wallet = await DirectSecp256k1HdWallet.fromMnemonic(account.mnemonic, { prefix: addressPrefix })
-  const signer = await SigningCosmWasmClient.connectWithSigner(nodeUrl, wallet)
-  const address = (await wallet.getAccounts())[0].address
-  signer.address = address
-  return signer
 }
 
 // copy core functionality to global scope to avoid breaking changes
