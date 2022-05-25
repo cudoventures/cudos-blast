@@ -13,77 +13,155 @@ const {
 const { getDefaultLocalSigner } = require('../utilities/network-utils')
 
 module.exports.CudosContract = class CudosContract {
-  #contractLabel
-  #signer
-  #contractAddress
+  #label
   #wasmPath
+  #codeId
+  #contractAddress
+  #signer
   #gasPrice
 
-  constructor(contractLabel, signer, deployedContractAddress = null) {
-    this.#contractLabel = contractLabel
-    this.#signer = signer
-    this.#contractAddress = deployedContractAddress
+  constructor(contractLabel) {
+    this.#label = contractLabel
     this.#gasPrice = GasPrice.fromString(getGasPrice())
-
-    if (deployedContractAddress === null) {
-      this.#wasmPath = path.join(getProjectRootPath(), `artifacts/${contractLabel}.wasm`)
-      if (!fs.existsSync(this.#wasmPath)) {
-        throw new BlastError(`Contract with label ${contractLabel} was not found, did you compile it?`)
-      }
-    }
   }
 
-  async deploy(initMsg, options = {}) {
-    if (options.signer) {
-      this.#signer = options.signer
-    } else if (this.#contractAddress === null) {
-      this.#signer = await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+  static constructLocal(label) {
+    const wasmPath = path.join(getProjectRootPath(), `artifacts/${label}.wasm`)
+    if (!fs.existsSync(wasmPath)) {
+      throw new BlastError(`Contract with label ${label} was not found. Only compiled contracts can be accepted`)
     }
-    if (!options.label) {
-      options.label = this.#contractLabel
+    const cudosContract = new CudosContract(label)
+    cudosContract.#wasmPath = wasmPath
+    return cudosContract
+  }
+
+  static constructUploaded(codeId, label, signer) {
+    const cudosContract = new CudosContract(label)
+    cudosContract.#codeId = codeId
+    cudosContract.#signer = signer
+    return cudosContract
+  }
+
+  static constructDeployed(label, codeId, contractAddress, signer) {
+    const cudosContract = new CudosContract(label)
+    cudosContract.#codeId = codeId
+    cudosContract.#contractAddress = contractAddress
+    cudosContract.#signer = signer
+    return cudosContract
+  }
+
+  // Uploads the contract to the network
+  // Options can contain: signer
+  async uploadCode(options = {}) {
+    if (this.#isUploaded()) {
+      throw new BlastError(`Cannot upload contract with  ${null}. Contract is already uploaded`)
     }
-    const uploadTx = await this.#uploadContract()
-    const initTx = await this.#initContract(uploadTx.codeId, initMsg, this.#contractLabel, options.funds)
-    this.#contractAddress = initTx.contractAddress
+    this.#signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    const uploadTx = await this.#uploadContract(this.#signer)
+    this.#codeId = uploadTx.codeId
+    return uploadTx
+  }
+
+  // Instantiates uploaded code without assigning the new contract to current contract object instance
+  // Options can contain: signer, label, funds
+  async instantiate(msg, codeId, options = {}) {
+    if (!this.#isUploaded()) {
+      throw new BlastError('Cannot instantiate contract. Contract is not uploaded. ' +
+        'Contract\'s code must exist on the network before instantiating')
+    }
+    options.signer = options.signer ?? this.#signer
+    options.label = options.label ?? this.#label
+    const instantiateTx = await this.#instantiateContract(options.signer, codeId, msg, options.label, options.funds)
+    return instantiateTx
+  }
+
+  // Uploads code, instantiates the contract and assign it to current contract object instance
+  // Options can contain: signer, label, funds
+  async deploy(msg, options = {}) {
+    if (this.#isUploaded()) {
+      throw new BlastError(`Cannot deploy contract labeled ${this.#label}. Contract is already uploaded. ` +
+      'Only new contracts can be deployed. Use "instantiate" for uploaded contracts')
+    }
+    this.#signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    options.label = options.label ?? this.#label
+    const uploadTx = await this.#uploadContract(this.#signer)
+    this.#codeId = uploadTx.codeId
+    const instantiateTx = await this.#instantiateContract(
+      this.#signer, uploadTx.codeId, msg, options.label, options.funds)
+    this.#label = options.label
+    this.#contractAddress = instantiateTx.contractAddress
     return {
       uploadTx: uploadTx,
-      initTx: initTx
+      initTx: instantiateTx
     }
   }
 
   async execute(msg, signer = this.#signer) {
+    if (!this.#isDeployed()) {
+      throw new BlastError(`Cannot execute with message: ${msg}.\nContract is not deployed`)
+    }
     const fee = calculateFee(1_500_000, this.#gasPrice)
     return await signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
 
-  async query(queryMsg, signer = this.#signer) {
-    return await signer.queryContractSmart(this.#contractAddress, queryMsg)
+  async query(msg, signer = this.#signer) {
+    if (!this.#isDeployed()) {
+      throw new BlastError(`Cannot query with message: ${msg}.\nContract is not deployed`)
+    }
+    return await signer.queryContractSmart(this.#contractAddress, msg)
   }
 
   getAddress() {
+    if (!this.#isDeployed()) {
+      throw new BlastError(`Cannot get address of a contract labeled: ${this.label}. Contract is not deployed`)
+    }
     return this.#contractAddress
   }
 
-  async #uploadContract() {
+  getCodeId() {
+    if (!this.#isUploaded()) {
+      throw new BlastError(`Cannot get code ID of a contract with label: ${this.label}. Contract is not uploaded`)
+    }
+    return this.#codeId
+  }
+
+  getLabel() {
+    return this.#label
+  }
+
+  // dev
+  getSignerAddress() {
+    return this.#signer.address
+  }
+
+  async #uploadContract(signer) {
     // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
     const uploadFee = calculateFee(1_500_000, this.#gasPrice)
-    return await this.#signer.upload(
+    return await signer.upload(
       this.#signer.address,
       wasm,
       uploadFee
     )
   }
 
-  async #initContract(codeId, initMsg, label, funds) {
+  async #instantiateContract(signer, codeId, msg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
-    return await this.#signer.instantiate(
+    return await signer.instantiate(
       this.#signer.address,
       codeId,
-      initMsg,
+      msg,
       label,
       instantiateFee,
       { funds: funds }
     )
+  }
+
+  #isUploaded() {
+    return this.#codeId
+  }
+
+  #isDeployed() {
+    return this.#contractAddress
   }
 }
