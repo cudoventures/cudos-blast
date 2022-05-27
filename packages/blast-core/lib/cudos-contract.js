@@ -50,9 +50,8 @@ module.exports.CudosContract = class CudosContract {
     return cudosContract
   }
 
-  // Uploads the contract to the network
-  // Options can contain: signer
-  async uploadCode(options = {}) {
+  // Uploads the contract's code to the network
+  async uploadCode(options = { signer: null }) {
     if (this.#isUploaded()) {
       throw new BlastError(`Cannot upload contract with  ${null}. Contract is already uploaded`)
     }
@@ -63,21 +62,24 @@ module.exports.CudosContract = class CudosContract {
   }
 
   // Instantiates uploaded code without assigning the new contract to current contract object instance
-  // Options can contain: signer, label, funds
-  async instantiate(msg, codeId, options = {}) {
+  async instantiate(msg, options = {
+    signer: null, label: null, funds: null
+  }) {
     if (!this.#isUploaded()) {
       throw new BlastError('Cannot instantiate contract. Contract is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
     options.signer = options.signer ?? this.#signer
     options.label = options.label ?? this.#label
-    const instantiateTx = await this.#instantiateContract(options.signer, codeId, msg, options.label, options.funds)
+    const instantiateTx = await this.#instantiateContract(
+      options.signer, this.#codeId, msg, options.label, options.funds)
     return instantiateTx
   }
 
   // Uploads code, instantiates the contract and assign it to current contract object instance
-  // Options can contain: signer, label, funds
-  async deploy(msg, options = {}) {
+  async deploy(msg, options = {
+    signer: null, label: null, funds: null
+  }) {
     if (this.#isUploaded()) {
       throw new BlastError(`Cannot deploy contract labeled ${this.#label}. Contract is already uploaded. ` +
       'Only new contracts can be deployed. Use "instantiate" for uploaded contracts')
