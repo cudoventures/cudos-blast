@@ -16,6 +16,4 @@ async function main() {
   console.log('Count after increment: ' + count.count)
 }
 
-module.exports = {
-  main: main
-};
+module.exports = { main: main }
