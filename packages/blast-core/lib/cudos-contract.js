@@ -6,11 +6,8 @@ const path = require('path')
 const fs = require('fs')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
-const {
-  getNetwork,
-  getGasPrice
-} = require('../utilities/config-utils')
-const { getDefaultLocalSigner } = require('../utilities/network-utils')
+const { getGasPrice } = require('../utilities/config-utils')
+const { getDefaultSigner } = require('../utilities/network-utils')
 
 module.exports.CudosContract = class CudosContract {
   #contractLabel
@@ -37,7 +34,7 @@ module.exports.CudosContract = class CudosContract {
     if (options.signer) {
       this.#signer = options.signer
     } else if (this.#contractAddress === null) {
-      this.#signer = await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+      this.#signer = await getDefaultSigner()
     }
     if (!options.label) {
       options.label = this.#contractLabel

@@ -3,8 +3,8 @@ source ./vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null
-#manually supply the testing folder with accounts.json
-cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/accounts.json"
+#manually supply the testing folder with local-accounts.json
+cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/local-accounts.json"
 cd $init_folder
 
 echo -n 'blast compile...'
