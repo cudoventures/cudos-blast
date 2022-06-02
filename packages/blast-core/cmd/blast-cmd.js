@@ -5,7 +5,17 @@ const { hideBin } = require('yargs/helpers')
 const commands = require('./commands')
 const BlastError = require('../utilities/blast-error')
 
+const { getTasks } = require('../lib/task')
+const { getConfig } = require('../utilities/config-utils')
+
+
 async function main() {
+  if (hideBin(process.argv)[0] != 'init') {
+    getConfig()
+  }
+  const customTasks = getTasks()
+  // console.log(customTasks);
+  
   await yargs(hideBin(process.argv))
     .scriptName('blast')
     .usage('Usage: $0 <command> [arguments] [command options]')
@@ -16,6 +26,7 @@ async function main() {
     .command(commands.nodeInfo)
     .command(commands.runInfo)
     .command(commands.keysInfo)
+    .command(customTasks)
     .demandCommand(1, 'No command specified!') // user must specify atleast one command
     .recommendCommands()
     .strict() // checks if the command or optional parameters are specified, if not - user friendly error
