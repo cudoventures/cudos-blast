@@ -51,7 +51,7 @@ module.exports.CudosContract = class CudosContract {
     const contractInfo = await getContractInfo(getNetwork(process.env.BLAST_NETWORK), contractAddress)
     const cudosContract = new CudosContract(contractInfo.label)
     cudosContract.#codeId = contractInfo.codeId
-    cudosContract.#contractAddress = contractInfo.contractAddress
+    cudosContract.#contractAddress = contractInfo.address
     cudosContract.#creator = contractInfo.creator
     return cudosContract
   }
@@ -59,7 +59,7 @@ module.exports.CudosContract = class CudosContract {
   // Uploads the contract's code to the network
   async uploadCode(options = { signer: null }) {
     if (this.#isUploaded()) {
-      throw new BlastError(`Cannot upload contract with  ${null}. Contract is already uploaded`)
+      throw new BlastError('Cannot upload contract that is already uploaded')
     }
     options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
     const uploadTx = await this.#uploadContract(options.signer)
@@ -73,7 +73,7 @@ module.exports.CudosContract = class CudosContract {
     signer: null, label: null, funds: null
   }) {
     if (!this.#isUploaded()) {
-      throw new BlastError('Cannot instantiate contract. Contract is not uploaded. ' +
+      throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
     options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
@@ -108,7 +108,7 @@ module.exports.CudosContract = class CudosContract {
 
   async execute(msg, signer = null) {
     if (!this.#isDeployed()) {
-      throw new BlastError(`Cannot execute with message: ${msg}.\nContract is not deployed`)
+      throw new BlastError('Cannot use "execute()" on non-deployed contracts')
     }
     signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
     const fee = calculateFee(1_500_000, this.#gasPrice)
@@ -117,7 +117,7 @@ module.exports.CudosContract = class CudosContract {
 
   async query(msg, signer = null) {
     if (!this.#isDeployed()) {
-      throw new BlastError(`Cannot query with message: ${msg}.\nContract is not deployed`)
+      throw new BlastError('Cannot use "query()" on non-deployed contracts')
     }
     signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
     return await signer.queryContractSmart(this.#contractAddress, msg)
