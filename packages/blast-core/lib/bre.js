@@ -4,11 +4,7 @@ const {
   getAccounts,
   getPrivateAccounts
 } = require('../utilities/account-utils')
-const {
-  getSigner,
-  getDefaultLocalSigner,
-  getContractInfo
-} = require('../utilities/network-utils')
+const { getSigner } = require('../utilities/network-utils')
 
 const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 
@@ -40,16 +36,13 @@ globalThis.bre.getContractFactory = async function(label) {
 }
 
 // Returns an instance of a contract that is uploaded but not instantiated. A custom signer can be set.
-globalThis.bre.getContractFromCodeId = async function(codeId, label, signer = null) {
-  signer = signer ?? await getDefaultLocalSigner(nodeUrl)
-  return CudosContract.constructUploaded(codeId, label, signer)
+globalThis.bre.getContractFromCodeId = async function(codeId) {
+  return await CudosContract.constructUploaded(codeId)
 }
 
 // Returns an instance of an existing contract by its address. A custom signer can be set.
-globalThis.bre.getContractFromAddress = async function(contractAddress, signer = null) {
-  const contractInfo = await getContractInfo(nodeUrl, contractAddress)
-  signer = signer ?? await getDefaultLocalSigner(nodeUrl)
-  return CudosContract.constructDeployed(contractInfo.label, contractInfo.codeId, contractAddress, signer)
+globalThis.bre.getContractFromAddress = async function(contractAddress) {
+  return await CudosContract.constructDeployed(contractAddress)
 }
 
 // copy core functionality to global scope to avoid breaking changes

@@ -28,8 +28,14 @@ async function getContractInfo(nodeUrl, contractAddress) {
   }
 }
 
+async function getCodeDetails(nodeUrl, codeId) {
+  const client = await CosmWasmClient.connect(nodeUrl)
+  return await client.getCodeDetails(codeId)
+}
+
 module.exports = {
   getSigner: getSigner,
   getDefaultLocalSigner: getDefaultLocalSigner,
-  getContractInfo: getContractInfo
+  getContractInfo: getContractInfo,
+  getCodeDetails: getCodeDetails
 }
