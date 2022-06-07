@@ -18,7 +18,7 @@ async function checkNodeOffline(network) {
 }
 
 async function getNodeStatus(network) {
-  return await getNodeStatusByUrl(getNetwork(network))
+  return getNodeStatusByUrl(getNetwork(network))
 }
 
 async function getNodeStatusByUrl(url) {
