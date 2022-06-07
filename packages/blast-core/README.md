@@ -258,7 +258,7 @@ and run the script to interact with the deployed smart contract.
 blast run scripts/interact.js
 ```
 
-When running scripts through `blast run` the `bre` object in injected. It provides various useful functions to interact with cudos blockchain network. You can also `require` the `cudos-blast` library to access the same functions.
+When running scripts through `blast run` the `bre` object in injected. It provides various useful functions to interact with cudos blockchain network. You can also `require` the `cudos-blast` library to access the same functions and enable your code editor's intellisense.
 
 ```bash
 const bre = require('cudos-blast')
