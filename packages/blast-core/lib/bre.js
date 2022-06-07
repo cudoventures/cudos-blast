@@ -29,10 +29,4 @@ globalThis.bre.getContractFromAddress = async function(contractAddress, signer =
   return new CudosContract(contractInfo.label, signer, contractAddress)
 }
 
-// copy core functionality to global scope to avoid breaking changes
-globalThis.getSigners = globalThis.bre.getSigners
-globalThis.getCustomSigners = globalThis.bre.getCustomSigners
-globalThis.getContractFactory = globalThis.bre.getContractFactory
-globalThis.getContractFromAddress = globalThis.bre.getContractFromAddress
-
 module.exports = globalThis.bre
