@@ -35,6 +35,12 @@ const testInfo = {
   describe: 'Run the JavaScript tests',
   builder: (yargs) => {
     getNetworkOption(yargs)
+    yargs.option('debug', {
+      alias: 'd',
+      type: 'boolean',
+      default: false,
+      description: 'Enable message logging and expand result information'
+    })
       .version(false)
   },
   handler: testCmd
