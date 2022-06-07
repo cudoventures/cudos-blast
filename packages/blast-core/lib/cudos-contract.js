@@ -33,7 +33,8 @@ module.exports.CudosContract = class CudosContract {
   async deploy(initMsg, options = {}) {
     if (options.signer) {
       this.#signer = options.signer
-    } else if (this.#contractAddress === null) {
+    }
+    if (!options.signer && this.#contractAddress === null) {
       this.#signer = await getDefaultSigner()
     }
     if (!options.label) {
@@ -50,11 +51,11 @@ module.exports.CudosContract = class CudosContract {
 
   async execute(msg, signer = this.#signer) {
     const fee = calculateFee(1_500_000, this.#gasPrice)
-    return await signer.execute(signer.address, this.#contractAddress, msg, fee)
+    return signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
 
   async query(queryMsg, signer = this.#signer) {
-    return await signer.queryContractSmart(this.#contractAddress, queryMsg)
+    return signer.queryContractSmart(this.#contractAddress, queryMsg)
   }
 
   getAddress() {
@@ -65,7 +66,7 @@ module.exports.CudosContract = class CudosContract {
     // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
     const uploadFee = calculateFee(1_500_000, this.#gasPrice)
-    return await this.#signer.upload(
+    return this.#signer.upload(
       this.#signer.address,
       wasm,
       uploadFee
@@ -74,7 +75,7 @@ module.exports.CudosContract = class CudosContract {
 
   async #initContract(codeId, initMsg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
-    return await this.#signer.instantiate(
+    return this.#signer.instantiate(
       this.#signer.address,
       codeId,
       initMsg,

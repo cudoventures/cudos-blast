@@ -39,7 +39,7 @@ function getAccounts() {
 async function getContractInfo(contractAddress) {
   const client = await CosmWasmClient.connect(nodeUrl)
   try {
-    return await client.getContract(contractAddress)
+    return client.getContract(contractAddress)
   } catch (error) {
     throw new BlastError(`Failed to get contract info from address: ${contractAddress}. Error: ${error.message}`)
   }
