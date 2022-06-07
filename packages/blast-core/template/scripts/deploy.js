@@ -5,7 +5,7 @@ async function main () {
   const contract = await bre.getContractFactory('alpha')
   
   const MSG_INIT = { count: 13 }
-  const deploy = await contract.deploy(MSG_INIT, bob)
+  const deploy = await contract.deploy(MSG_INIT, { signer: bob })
   const contractAddress = deploy.initTx.contractAddress
   console.log(`Contract deployed at: ${contractAddress}`)
 }
