@@ -21,7 +21,7 @@ globalThis.bre.getSigners = async function() {
 globalThis.bre.getCustomSigners = async function(privateAccountName) {
   const privateAccounts = getPrivateAccounts()
   if (privateAccountName) {
-    return await getSigner(nodeUrl, privateAccounts[privateAccountName].mnemonic)
+    return getSigner(nodeUrl, privateAccounts[privateAccountName].mnemonic)
   }
   const signers = {}
   for (const accountProperty in privateAccounts) {

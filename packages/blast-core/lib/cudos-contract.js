@@ -112,7 +112,7 @@ module.exports.CudosContract = class CudosContract {
     }
     signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
     const fee = calculateFee(1_500_000, this.#gasPrice)
-    return await signer.execute(signer.address, this.#contractAddress, msg, fee)
+    return signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
 
   async query(msg, signer = null) {
@@ -152,7 +152,7 @@ module.exports.CudosContract = class CudosContract {
     // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
     const uploadFee = calculateFee(1_500_000, this.#gasPrice)
-    return await signer.upload(
+    return signer.upload(
       signer.address,
       wasm,
       uploadFee
@@ -161,7 +161,7 @@ module.exports.CudosContract = class CudosContract {
 
   async #instantiateContract(signer, codeId, msg, label, funds) {
     const instantiateFee = calculateFee(500_000, this.#gasPrice)
-    return await signer.instantiate(
+    return signer.instantiate(
       signer.address,
       codeId,
       msg,

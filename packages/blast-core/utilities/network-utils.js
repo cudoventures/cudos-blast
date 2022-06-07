@@ -16,13 +16,13 @@ async function getSigner(nodeUrl, mnemonic) {
 }
 
 async function getDefaultLocalSigner(nodeUrl) {
-  return await getSigner(nodeUrl, getAccounts()[0].mnemonic)
+  return getSigner(nodeUrl, getAccounts()[0].mnemonic)
 }
 
 async function getContractInfo(nodeUrl, contractAddress) {
   const client = await CosmWasmClient.connect(nodeUrl)
   try {
-    return await client.getContract(contractAddress)
+    return client.getContract(contractAddress)
   } catch (error) {
     throw new BlastError(`Failed to get contract info from address: ${contractAddress}. Error: ${error.message}`)
   }
