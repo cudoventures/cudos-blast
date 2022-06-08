@@ -3,8 +3,8 @@ source ./vars.sh
 
 init_folder="$INIT_FOLDER-compile"
 cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null
-#manually supply the testing folder with accounts.json
-cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/accounts.json"
+#manually supply the testing folder with local-accounts.json
+cp -f $DEFAULT_ACCOUNTS_FILE_PATH "$init_folder/local-accounts.json"
 cd $init_folder
 
 echo -n 'blast compile...'
@@ -50,7 +50,7 @@ echo -n 'deploy and fund contract...'
 # tweak the deploy script to get cudos and pass it to the deploy function
 perl -i -pe $'if($. == 1) {s||const { coin } = require(\'\@cosmjs/stargate\');\n\n|}' ./scripts/deploy.js
 perl -i -pe $'if($. == 4) {s||  const fund = [coin(321, \'acudos\')];\n|}' ./scripts/deploy.js
-perl -pi -e 's|deploy\(MSG_INIT|deploy(MSG_INIT, { funds: fund}|' ./scripts/deploy.js
+perl -pi -e 's|deploy\(MSG_INIT, {|deploy(MSG_INIT, { funds: fund, |' ./scripts/deploy.js
 
 deployed_contract=`blast run ./scripts/deploy.js`
 if [[ $deployed_contract =~ 'cudos' ]]; then

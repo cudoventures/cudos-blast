@@ -1,35 +1,18 @@
 const { CudosContract } = require('./cudos-contract')
-const { getNetwork } = require('../utilities/config-utils')
-const {
-  getAccounts,
-  getPrivateAccounts
-} = require('../utilities/account-utils')
 const {
   getSigner,
-  getDefaultLocalSigner,
+  getDefaultSigner,
+  getAccounts,
   getContractInfo
 } = require('../utilities/network-utils')
 
-const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
-
-// Returns an array of predefined local accounts including the auto generated additional accounts
+// For the local node: returns an array of predefined local accounts including the auto generated additional accounts
+// For other networks: returns an array of user-defined private accounts from private-accounts.json
 globalThis.bre.getSigners = async function() {
+  const accounts = getAccounts()
   const signers = []
-  for (const acc of getAccounts()) {
-    signers.push(await getSigner(nodeUrl, acc.mnemonic))
-  }
-  return signers
-}
-
-// Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts.
-globalThis.bre.getCustomSigners = async function(privateAccountName) {
-  const privateAccounts = getPrivateAccounts()
-  if (privateAccountName) {
-    return getSigner(nodeUrl, privateAccounts[privateAccountName].mnemonic)
-  }
-  const signers = {}
-  for (const accountProperty in privateAccounts) {
-    signers[accountProperty] = await getSigner(nodeUrl, privateAccounts[accountProperty].mnemonic)
+  for (const acc of accounts) {
+    signers.push(await getSigner(acc.mnemonic))
   }
   return signers
 }
@@ -41,15 +24,9 @@ globalThis.bre.getContractFactory = async function(contractLabel) {
 
 // Returns an instance of an existing contract by its address. A custom signer can be set.
 globalThis.bre.getContractFromAddress = async function(contractAddress, signer = null) {
-  const contractInfo = await getContractInfo(nodeUrl, contractAddress)
-  signer = signer ?? await getDefaultLocalSigner(nodeUrl)
+  const contractInfo = await getContractInfo(contractAddress)
+  signer = signer ?? await getDefaultSigner()
   return new CudosContract(contractInfo.label, signer, contractAddress)
 }
-
-// copy core functionality to global scope to avoid breaking changes
-globalThis.getSigners = globalThis.bre.getSigners
-globalThis.getCustomSigners = globalThis.bre.getCustomSigners
-globalThis.getContractFactory = globalThis.bre.getContractFactory
-globalThis.getContractFromAddress = globalThis.bre.getContractFromAddress
 
 module.exports = globalThis.bre
