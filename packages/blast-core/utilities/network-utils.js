@@ -45,7 +45,7 @@ async function getContractInfo(contractAddress) {
   }
 }
 
-async function getCodeDetails(nodeUrl, codeId) {
+async function getCodeDetails(codeId) {
   const client = await CosmWasmClient.connect(nodeUrl)
   return client.getCodeDetails(codeId)
 }

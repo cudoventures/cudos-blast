@@ -6,10 +6,7 @@ const path = require('path')
 const fs = require('fs')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
-const {
-  getNetwork,
-  getGasPrice
-} = require('../utilities/config-utils')
+const { getGasPrice } = require('../utilities/config-utils')
 const {
   getDefaultSigner,
   getContractInfo,
@@ -39,7 +36,7 @@ module.exports.CudosContract = class CudosContract {
   }
 
   static async constructUploaded(codeId) {
-    const codeDetails = await getCodeDetails(getNetwork(process.env.BLAST_NETWORK), codeId)
+    const codeDetails = await getCodeDetails(codeId)
     const cudosContract = new CudosContract()
     cudosContract.#codeId = codeId
     cudosContract.#creator = codeDetails.creator
@@ -47,7 +44,7 @@ module.exports.CudosContract = class CudosContract {
   }
 
   static async constructDeployed(contractAddress) {
-    const contractInfo = await getContractInfo(getNetwork(process.env.BLAST_NETWORK), contractAddress)
+    const contractInfo = await getContractInfo(contractAddress)
     const cudosContract = new CudosContract()
     cudosContract.#label = contractInfo.label
     cudosContract.#codeId = contractInfo.codeId
@@ -88,15 +85,15 @@ module.exports.CudosContract = class CudosContract {
   }) {
     if (this.#isUploaded()) {
       throw new BlastError('Cannot deploy contract that is already uploaded. Only new contracts can be deployed. ' +
-      'Use "instantiate" for uploaded contracts')
+        'Use "instantiate" for uploaded contracts')
     }
     options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer
-    const instantiateTx = await this.#instantiateContract(
-      options.signer, uploadTx.codeId, msg, label, options.funds)
+    const instantiateTx = await this.#instantiateContract(options.signer, uploadTx.codeId, msg, label, options.funds)
     this.#contractAddress = instantiateTx.contractAddress
+    this.#label = label
     return {
       uploadTx: uploadTx,
       instantiateTx: instantiateTx
