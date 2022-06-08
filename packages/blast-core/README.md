@@ -136,10 +136,10 @@ describe('alpha contract', () => {
 
   // deploying alpha contract once before test cases
   beforeAll(async () => {
-    // function 'getSigners' is available in global context
-    [alice, bob] = await getSigners()
-    contract = await getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, bob)
+    // 'bre' is available in global context
+    [alice, bob] = await bre.getSigners()
+    contract = await bre.getContractFactory('alpha')
+    await contract.deploy(MSG_INIT, { signer: bob })
   })
 
   // positive test case
@@ -164,6 +164,12 @@ Run all test files with
 ```bash
 blast test
 blast test -n testnet
+```
+
+You can also run the tests with enabled console logging and additional information to the result. To do this use `--debug` or `-d`
+
+```bash
+blast test --debug
 ```
 
 ---
