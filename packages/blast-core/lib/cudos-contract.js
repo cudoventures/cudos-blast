@@ -24,8 +24,7 @@ module.exports.CudosContract = class CudosContract {
   #creator
   #gasPrice
 
-  constructor(contractLabel) {
-    this.#label = contractLabel
+  constructor() {
     this.#gasPrice = GasPrice.fromString(getGasPrice())
   }
 
@@ -34,7 +33,7 @@ module.exports.CudosContract = class CudosContract {
     if (!fs.existsSync(wasmPath)) {
       throw new BlastError(`Contract with label ${label} was not found. Only compiled contracts can be accepted`)
     }
-    const cudosContract = new CudosContract(label)
+    const cudosContract = new CudosContract()
     cudosContract.#wasmPath = wasmPath
     return cudosContract
   }
@@ -49,7 +48,8 @@ module.exports.CudosContract = class CudosContract {
 
   static async constructDeployed(contractAddress) {
     const contractInfo = await getContractInfo(getNetwork(process.env.BLAST_NETWORK), contractAddress)
-    const cudosContract = new CudosContract(contractInfo.label)
+    const cudosContract = new CudosContract()
+    cudosContract.#label = contractInfo.label
     cudosContract.#codeId = contractInfo.codeId
     cudosContract.#contractAddress = contractInfo.address
     cudosContract.#creator = contractInfo.creator
@@ -69,40 +69,37 @@ module.exports.CudosContract = class CudosContract {
   }
 
   // Instantiates uploaded code without assigning the new contract to current contract object instance
-  async instantiate(msg, options = {
-    signer: null, label: null, funds: null
+  async instantiate(msg, label, options = {
+    signer: null, funds: null
   }) {
     if (!this.#isUploaded()) {
       throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
     options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
-    options.label = options.label ?? this.#label
     const instantiateTx = await this.#instantiateContract(
-      options.signer, this.#codeId, msg, options.label, options.funds)
+      options.signer, this.#codeId, msg, label, options.funds)
     return instantiateTx
   }
 
   // Uploads code, instantiates the contract and assign it to current contract object instance
-  async deploy(msg, options = {
-    signer: null, label: null, funds: null
+  async deploy(msg, label, options = {
+    signer: null, funds: null
   }) {
     if (this.#isUploaded()) {
-      throw new BlastError(`Cannot deploy contract labeled ${this.#label}. Contract is already uploaded. ` +
-      'Only new contracts can be deployed. Use "instantiate" for uploaded contracts')
+      throw new BlastError('Cannot deploy contract that is already uploaded. Only new contracts can be deployed. ' +
+      'Use "instantiate" for uploaded contracts')
     }
     options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
-    options.label = options.label ?? this.#label
     const uploadTx = await this.#uploadContract(options.signer)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer
     const instantiateTx = await this.#instantiateContract(
-      options.signer, uploadTx.codeId, msg, options.label, options.funds)
-    this.#label = options.label
+      options.signer, uploadTx.codeId, msg, label, options.funds)
     this.#contractAddress = instantiateTx.contractAddress
     return {
       uploadTx: uploadTx,
-      initTx: instantiateTx
+      instantiateTx: instantiateTx
     }
   }
 
@@ -120,7 +117,7 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot use "query()" on non-deployed contracts')
     }
     signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
-    return await signer.queryContractSmart(this.#contractAddress, msg)
+    return signer.queryContractSmart(this.#contractAddress, msg)
   }
 
   getAddress() {
@@ -172,10 +169,16 @@ module.exports.CudosContract = class CudosContract {
   }
 
   #isUploaded() {
-    return this.#codeId
+    if (this.#codeId) {
+      return true
+    }
+    return false
   }
 
   #isDeployed() {
-    return this.#contractAddress
+    if (this.#contractAddress) {
+      return true
+    }
+    return false
   }
 }

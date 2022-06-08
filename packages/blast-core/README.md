@@ -139,7 +139,7 @@ describe('alpha contract', () => {
     // function 'getSigners' is available in global context
     [alice, bob] = await getSigners()
     contract = await getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, bob)
+    await contract.deploy(MSG_INIT, 'alpha', {signer: bob})
   })
 
   // positive test case
@@ -224,10 +224,10 @@ async function main () {
   const MSG_INIT = { count: 13 }
 
   // deploying the contract with bob as a signer (default signer would be alice)
-  const deploy = await contract.deploy(MSG_INIT, { signer: bob })
+  const deploy = await contract.deploy(MSG_INIT, 'alpha', { signer: bob })
 
   // get useful info such as contractAddress from deploy transaction
-  const contractAddress = deploy.initTx.contractAddress
+  const contractAddress = deploy.instantiateTx.contractAddress
 
   // printing contract address so it can be copied and used in other scripts such as interact.js
   console.log(`Contract deployed at: ${contractAddress}`)
@@ -248,7 +248,7 @@ async function main() {
   const [alice, bob] = await bre.getSigners()
 
   // replace the address with the new one from your deployed smart contract
-  const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe', bob)
+  const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')
 // ...
 ```
 
@@ -280,8 +280,8 @@ Here is a list of functions you can use in your scripts.
 | async getSigners()                                           | Returns an array of predefined accounts (`{project_root}/accounts.json`) including the auto generated additional accounts                                                    | const [alice, bob] = await bre.getSigners()                                                                                                                  |
 | async getCustomSigners(privateAccountName = null)            | Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts from `{project_root}/private-accounts.json`.                  | const alice = await bre.getCustomSigners('privateAccount1')<br />const allSigners = await bre.getCustomSigners()<br />const bob = allSigners.privateAccount1 |
 | async getContractFactory(contractLabel)                      | Returns an instance of a new contract by its label.                                                                                                                          | const contract = await bre.getContractFactory('alpha')                                                                                                       |
-| async getContractFromCodeId(codeId, label, signer = null)    | Returns an instance of a contract that is uploaded but not instantiated. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json` | const contract = await bre.getContractFromCodeId(123, 'alpha', alice)                                                                                        |
-| async getContractFromAddress(contractAddress, signer = null) | Returns an instance of an existing contract by its address. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json`              | const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')                                                            |
+| async getContractFromCodeId(codeId)                          | Returns an instance of a contract that is uploaded but not instantiated. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json` | const contract = await bre.getContractFromCodeId(123, 'alpha', alice)                                                                                        |
+| async getContractFromAddress(contractAddress)                | Returns an instance of an existing contract by its address. A custom signer can be set. Default signer is the first account from `{project_root}/accounts.json`              | const contract = await bre.getContractFromAddress('cudos1uul3yzm2lgskp3dxpj0zg558hppxk6pt8t00qe')                                                            |
 
 You can get an instance of a contract (e.g. with `getContractFactory()`). Here is the functionality such an instance of a contract can offer. 
 
@@ -290,8 +290,8 @@ You can get an instance of a contract (e.g. with `getContractFactory()`). Here i
 | Function                                                                             | Descripton                                                                                                                                                                                                                                                                                      | Sample usage                                                            |
 | ---                                                                                  | ---                                                                                                                                                                                                                                                                                             | ---                                                                     |
 | async uploadCode(options = { signer: null })                                         | Uploads the contract's source code on the network so it can be optimally used to instantiate a contract multiple times with different initial state. You can deploy with a signer other than the default one. The uploader will become the default signer for the contract.                     | const uploadTx = await contract.uploadCode()                            |
-| async instantiate(msg, codeId, options = { signer: null, label: null, funds: null }) | Instantiates an uploaded contract using its codeId. Can be used for undeployed as well as already deployed contracts. The new instantiated contract does not override the current contract object, and therefore it is designed to be accessed by its address.                                  | const instantiateTx = await contract.instantiate(MSG_INIT)              |
-| async deploy(msg, options = { signer: null, label: null, funds: null })              | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a signer and label other than the default ones. The deployer will become the default signer for the contract. You can also pass funds to automatically add selected amount of cudos to a contract on deployment. | const deployTxs = await contract.deploy(MSG_INIT, { label: 'myLabel' }) |
+| async instantiate(msg, label, options = { signer: null, funds: null })               | Instantiates an uploaded contract using its codeId. Can be used for undeployed as well as already deployed contracts. The new instantiated contract does not override the current contract object, and therefore it is designed to be accessed by its address.                                  | const instantiateTx = await contract.instantiate(MSG_INIT)              |
+| async deploy(msg, label, options = { signer: null, funds: null })                    | Deploys the conttract with the given `initMsg`. Optionally you can deploy with a signer and label other than the default ones. The deployer will become the default signer for the contract. You can also pass funds to automatically add selected amount of cudos to a contract on deployment. | const deployTxs = await contract.deploy(MSG_INIT, { label: 'myLabel' }) |
 | async execute(msg, signer = null)                                                    | Executes a transaction within the contract with the given message. Optionally you can execute with a signer other than the deployer.                                                                                                                                                            | const result = await contract.execute(MSG_INCREMENT, alice)             |
 | async query(queryMsg, signer = null)                                                 | Executes a query within the contract with the given message. Optionally you can make a query with a signer other than the deployer.                                                                                                                                                             | const count = await contract.query(QUERY_GET_COUNT)                     |
 | getAddress()                                                                         | Returns the address of a deloyed contract. Throws error if the contract is not deployed.                                                                                                                                                                                                        | const address = contract.getAddress()                                   |

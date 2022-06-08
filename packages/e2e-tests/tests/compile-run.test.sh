@@ -66,7 +66,7 @@ echo -n 'deploy and fund contract...'
 # tweak the deploy script to get cudos and pass it to the deploy function
 perl -i -pe $'if($. == 1) {s||const { coin } = require(\'\@cosmjs/stargate\')\n\n|}' ./scripts/deploy.js
 perl -i -pe $'if($. == 4) {s||const fund = [coin(321, \'acudos\')]\n|}' ./scripts/deploy.js
-perl -pi -e 's|deploy\(MSG_INIT, {|deploy(MSG_INIT, { funds: fund,|' ./scripts/deploy.js
+perl -pi -e 's|{ signer: alice }|{ signer: alice, funds: fund}|' ./scripts/deploy.js
 
 
 deployed_contract=`blast run ./scripts/deploy.js`

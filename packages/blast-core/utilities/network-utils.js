@@ -30,7 +30,7 @@ async function getContractInfo(nodeUrl, contractAddress) {
 
 async function getCodeDetails(nodeUrl, codeId) {
   const client = await CosmWasmClient.connect(nodeUrl)
-  return await client.getCodeDetails(codeId)
+  return client.getCodeDetails(codeId)
 }
 
 module.exports = {
