@@ -11,7 +11,7 @@ const {
   getGasPrice
 } = require('../utilities/config-utils')
 const {
-  getDefaultLocalSigner,
+  getDefaultSigner,
   getContractInfo,
   getCodeDetails
 } = require('../utilities/network-utils')
@@ -61,7 +61,7 @@ module.exports.CudosContract = class CudosContract {
     if (this.#isUploaded()) {
       throw new BlastError('Cannot upload contract that is already uploaded')
     }
-    options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer
@@ -76,7 +76,7 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
-    options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    options.signer = options.signer ?? await getDefaultSigner()
     const instantiateTx = await this.#instantiateContract(
       options.signer, this.#codeId, msg, label, options.funds)
     return instantiateTx
@@ -90,7 +90,7 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot deploy contract that is already uploaded. Only new contracts can be deployed. ' +
       'Use "instantiate" for uploaded contracts')
     }
-    options.signer = options.signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer
@@ -107,7 +107,7 @@ module.exports.CudosContract = class CudosContract {
     if (!this.#isDeployed()) {
       throw new BlastError('Cannot use "execute()" on non-deployed contracts')
     }
-    signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    signer = signer ?? await getDefaultSigner()
     const fee = calculateFee(1_500_000, this.#gasPrice)
     return signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
@@ -116,7 +116,7 @@ module.exports.CudosContract = class CudosContract {
     if (!this.#isDeployed()) {
       throw new BlastError('Cannot use "query()" on non-deployed contracts')
     }
-    signer = signer ?? await getDefaultLocalSigner(getNetwork(process.env.BLAST_NETWORK))
+    signer = signer ?? await getDefaultSigner()
     return signer.queryContractSmart(this.#contractAddress, msg)
   }
 
@@ -135,6 +135,9 @@ module.exports.CudosContract = class CudosContract {
   }
 
   getLabel() {
+    if (!this.#isDeployed()) {
+      return null
+    }
     return this.#label
   }
 

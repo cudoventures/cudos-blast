@@ -1,31 +1,16 @@
 const { CudosContract } = require('./cudos-contract')
-const { getNetwork } = require('../utilities/config-utils')
 const {
-  getAccounts,
-  getPrivateAccounts
-} = require('../utilities/account-utils')
-const { getSigner } = require('../utilities/network-utils')
+  getSigner,
+  getAccounts
+} = require('../utilities/network-utils')
 
-const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
-
-// Returns an array of predefined local accounts including the auto generated additional accounts
+// For the local node: returns an array of predefined local accounts including the auto generated additional accounts
+// For other networks: returns an array of user-defined private accounts from private-accounts.json
 globalThis.bre.getSigners = async function() {
+  const accounts = getAccounts()
   const signers = []
-  for (const acc of getAccounts()) {
-    signers.push(await getSigner(nodeUrl, acc.mnemonic))
-  }
-  return signers
-}
-
-// Returns a single signer when private account name is passed. Otherwise, return object with all parsed accounts.
-globalThis.bre.getCustomSigners = async function(privateAccountName) {
-  const privateAccounts = getPrivateAccounts()
-  if (privateAccountName) {
-    return getSigner(nodeUrl, privateAccounts[privateAccountName].mnemonic)
-  }
-  const signers = {}
-  for (const accountProperty in privateAccounts) {
-    signers[accountProperty] = await getSigner(nodeUrl, privateAccounts[accountProperty].mnemonic)
+  for (const acc of accounts) {
+    signers.push(await getSigner(acc.mnemonic))
   }
   return signers
 }
@@ -37,18 +22,12 @@ globalThis.bre.getContractFactory = async function(label) {
 
 // Returns an instance of a contract that is uploaded but not instantiated. A custom signer can be set.
 globalThis.bre.getContractFromCodeId = async function(codeId) {
-  return await CudosContract.constructUploaded(codeId)
+  return CudosContract.constructUploaded(codeId)
 }
 
 // Returns an instance of an existing contract by its address. A custom signer can be set.
 globalThis.bre.getContractFromAddress = async function(contractAddress) {
-  return await CudosContract.constructDeployed(contractAddress)
+  return CudosContract.constructDeployed(contractAddress)
 }
-
-// copy core functionality to global scope to avoid breaking changes
-globalThis.getSigners = globalThis.bre.getSigners
-globalThis.getCustomSigners = globalThis.bre.getCustomSigners
-globalThis.getContractFactory = globalThis.bre.getContractFactory
-globalThis.getContractFromAddress = globalThis.bre.getContractFromAddress
 
 module.exports = globalThis.bre
