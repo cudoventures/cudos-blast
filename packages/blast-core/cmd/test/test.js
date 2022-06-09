@@ -19,7 +19,7 @@ async function testCmd(argv) {
     JS_TESTS_FOLDER_NAME)
   }
   await checkNodeOnline(argv.network)
-  const silent = argv.debug ? '' : '--silent'
+  const silent = argv.silent ? '--silent' : ''
   console.log('Running JavaScript tests...')
 
   process.env.BLAST_NETWORK = argv.network ?? ''

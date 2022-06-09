@@ -166,10 +166,10 @@ blast test
 blast test -n testnet
 ```
 
-You can also run the tests with enabled console logging and additional information to the result. To do this use `--debug` or `-d`
+You can also run the tests with disabled console logging and show only essential test result information. To do this use `--silent` or `-s`
 
 ```bash
-blast test --debug
+blast test --silent
 ```
 
 ---

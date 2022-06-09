@@ -35,11 +35,11 @@ const testInfo = {
   describe: 'Run the JavaScript tests',
   builder: (yargs) => {
     getNetworkOption(yargs)
-    yargs.option('debug', {
-      alias: 'd',
+    yargs.option('silent', {
+      alias: 's',
       type: 'boolean',
       default: false,
-      description: 'Enable message logging and expand result information'
+      description: 'Disable message logging and show only essential result information'
     })
       .version(false)
   },
