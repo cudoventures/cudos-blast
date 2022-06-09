@@ -61,7 +61,7 @@ module.exports.CudosContract = class CudosContract {
     options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)
     this.#codeId = uploadTx.codeId
-    this.#creator = options.signer
+    this.#creator = options.signer.address
     return uploadTx
   }
 
@@ -74,8 +74,7 @@ module.exports.CudosContract = class CudosContract {
         'Contract\'s code must exist on the network before instantiating')
     }
     options.signer = options.signer ?? await getDefaultSigner()
-    const instantiateTx = await this.#instantiateContract(
-      options.signer, this.#codeId, msg, label, options.funds)
+    const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds)
     return instantiateTx
   }
 
