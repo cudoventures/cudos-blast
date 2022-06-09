@@ -29,7 +29,7 @@ async function getDefaultSigner() {
   if (!accounts[0]) {
     throw new BlastError('Cannot get default signer. First account from accounts file is missing')
   }
-  return getSigner(nodeUrl, accounts[0].mnemonic)
+  return getSigner(accounts[0].mnemonic)
 }
 
 function getAccounts() {
