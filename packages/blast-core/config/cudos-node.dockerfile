@@ -1,4 +1,4 @@
-FROM cudos/binary:0.4
+FROM cudos/binary:1.0.0
 
 ARG INIT=0
 
