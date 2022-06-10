@@ -9,6 +9,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 * [Installation](#installation) 
   * [Local Installation](#local-installation) 
   * [Global Installation](#global-installation) 
+* [Help and version](#help-and-version) 
 * [Initializing a project](#initializing-a-project) 
 * [Compiling smart contracts](#compiling-smart-contracts) 
 * [Running Rust tests](#running-rust-tests) 
@@ -30,7 +31,6 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Adding a new local node account](#adding-a-new-local-node-account) 
   * [Removing an existing local node account](#removing-an-existing-local-node-account) 
   * [Funding an existing local node account](#funding-an-existing-local-node-account) 
-* [Help and version](#help-and-version) 
 
 ## Installation
 
@@ -58,14 +58,36 @@ Create an npm project by going to an empty folder, then run
 
 ### Global Installation
 
-You can let npm entirely manage Cudos Blast package just by using `npx cudos-blast` to directly run commands. That way you will always be using the latest version of Cudos Blast so it is possible to have future compatibility issues. We recommend running
-`npm install cudos-blast -g` 
+You can let npm completely manage Cudos Blast package just by using `npx cudos-blast` to directly run commands. That way you will always be using the latest version of Cudos Blast so it is possible to have future compatibility issues. We recommend running
+
+```bash
+npm install cudos-blast -g
+```
+
 to install globally and using Cudos Blast by `blast` as all the examples in this guide do.
+
+---
+## Help and version
+
+Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
+
+```bash
+blast --help
+blast help
+blast node --help
+blast node start help
+```
+
+You can display `cudos-blast` version number using `--version`.
+
+```bash
+blast --version
+```
 
 ---
 ## Initializing a project
 
-To scaffold a sample project navigate to empty directory and run
+To scaffold a sample project navigate to empty directory (or your npm project for local cudos-blast installation) and run
 
 ```bash
 blast init
@@ -375,21 +397,3 @@ blast keys fund myAccount1 --tokens 1000000
 ```
 
 The tokens are funded from the default local node faucet in `acudos`.
-
----
-## Help and version
-
-Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
-
-```bash
-blast --help
-blast help
-blast node --help
-blast node start help
-```
-
-You can display `cudos-blast` version number using `--version`.
-
-```bash
-blast --version
-```
