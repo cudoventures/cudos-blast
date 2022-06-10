@@ -7,7 +7,8 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
 ## Table of Contents
 
 * [Installation](#installation) 
-* [Help and version](#help-and-version) 
+  * [Local Installation](#local-installation) 
+  * [Global Installation](#global-installation) 
 * [Initializing a project](#initializing-a-project) 
 * [Compiling smart contracts](#compiling-smart-contracts) 
 * [Running Rust tests](#running-rust-tests) 
@@ -29,6 +30,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Adding a new local node account](#adding-a-new-local-node-account) 
   * [Removing an existing local node account](#removing-an-existing-local-node-account) 
   * [Funding an existing local node account](#funding-an-existing-local-node-account) 
+* [Help and version](#help-and-version) 
 
 ## Installation
 
@@ -36,7 +38,7 @@ Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) in
 
 | Prerequisite   | Minimum version | Recommended version |
 | ---            | ---             | ---                 |
-| Node.js        | 12.5.0          | 16.10.0             |
+| Node.js        | 14.15.0         | 16.10.0             |
 | npm            | 6.9.0           | 7.24.0              |
 | Docker engine  | 19.03.13        | 20.10.12            |
 | Docker compose | 1.27.4          | 1.29.2              |  
@@ -44,38 +46,23 @@ Make sure you have [Node.js](https://nodejs.org/en/download/package-manager/) in
 > For Windows users we recommend using Windows Subsystem for Linux ([WSL](https://docs.microsoft.com/en-us/windows/wsl/install-manual#downloading-distros)).
 > To avoid permission issues with `WSL`, you may have to [change](https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally#manually-change-npms-default-directory) `npm` default directory. 
 
-Install Cudos Blast package:
+Cudos Blast can be used through a local installation in your project or by installing it globally.
 
-```bash
-npm install cudos-blast
-```
+### Local Installation
 
-Install Cudos Blast globally:
+Create an npm project by going to an empty folder, then run
+`npm init`
+ and follow the instructions. Once your project is ready, run 
+`npm install cudos-blast`
+ To use your local installation of Cudos Blast, use `npx blast`
 
-```bash
-npm install -g cudos-blast
-```
+### Global Installation
 
----
-## Help and version
-
-Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
-
-```bash
-blast --help
-blast help
-blast node --help
-blast node start help
-```
-
-You can display `cudos-blast` version number using `--version`.
-
-```bash
-blast --version
-```
+You can let npm entirely manage Cudos Blast package just by using `npx cudos-blast` to directly run commands. That way you will always be using the latest version of Cudos Blast so it is possible to have future compatibility issues. We recommend running
+`npm install cudos-blast -g` 
+to install globally and using Cudos Blast by `blast` as all the examples in this guide do.
 
 ---
-
 ## Initializing a project
 
 To scaffold a sample project navigate to empty directory and run
@@ -388,3 +375,21 @@ blast keys fund myAccount1 --tokens 1000000
 ```
 
 The tokens are funded from the default local node faucet in `acudos`.
+
+---
+## Help and version
+
+Run `--help` or `help` on any `blast` command to show all available subcommands, parameters and additional information. 
+
+```bash
+blast --help
+blast help
+blast node --help
+blast node start help
+```
+
+You can display `cudos-blast` version number using `--version`.
+
+```bash
+blast --version
+```
