@@ -19,12 +19,13 @@ async function testCmd(argv) {
     JS_TESTS_FOLDER_NAME)
   }
   await checkNodeOnline(argv.network)
+  const silent = argv.silent ? '--silent' : ''
   console.log('Running JavaScript tests...')
 
   process.env.BLAST_NETWORK = argv.network ?? ''
   // here JEST uses only initial globals file setup. process.env (not globals) persist through the new spawned process
   spawnSync(`${JEST_BINARY} ${TEST_DIR} ` +
-    `--setupFilesAfterEnv=${GLOBALS_PATH} --testTimeout=15000 --silent --detectOpenHandles`,
+    `--setupFilesAfterEnv=${GLOBALS_PATH} --testTimeout=15000 ${silent} --detectOpenHandles`,
   {
     stdio: 'inherit',
     shell: true
