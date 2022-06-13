@@ -35,6 +35,12 @@ const testInfo = {
   describe: 'Run the JavaScript tests',
   builder: (yargs) => {
     getNetworkOption(yargs)
+    yargs.option('silent', {
+      alias: 's',
+      type: 'boolean',
+      default: false,
+      description: 'Disable message logging and show only essential result information'
+    })
       .version(false)
   },
   handler: testCmd
