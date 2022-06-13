@@ -27,8 +27,8 @@ async function generateRandomAccount(addressPrefix) {
   const mnemonic = bip39.generateMnemonic(256)
   const address = await getAddressFromMnemonic(mnemonic, addressPrefix)
   return {
-    mnemonic: mnemonic,
-    address: address
+    address: address,
+    mnemonic: mnemonic
   }
 }
 
