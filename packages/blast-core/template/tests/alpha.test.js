@@ -14,7 +14,7 @@ describe('alpha contract', () => {
   beforeAll(async () => {
     [alice, bob] = await bre.getSigners()
     contract = await bre.getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, { signer: bob })
+    await contract.deploy(MSG_INIT, 'alpha', { signer: bob })
   })
 
   test('increment count', async () => {
