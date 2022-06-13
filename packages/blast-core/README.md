@@ -136,10 +136,10 @@ describe('alpha contract', () => {
 
   // deploying alpha contract once before test cases
   beforeAll(async () => {
-    // function 'getSigners' is available in global context
-    [alice, bob] = await getSigners()
-    contract = await getContractFactory('alpha')
-    await contract.deploy(MSG_INIT, 'alpha', {signer: bob})
+    // 'bre' is available in global context
+    [alice, bob] = await bre.getSigners()
+    contract = await bre.getContractFactory('alpha')
+    await contract.deploy(MSG_INIT, 'alpha', { signer: bob })
   })
 
   // positive test case
@@ -164,6 +164,12 @@ Run all test files with
 ```bash
 blast test
 blast test -n testnet
+```
+
+You can also run the tests with disabled console logging and show only essential test result information. To do this use `--silent` or `-s`
+
+```bash
+blast test --silent
 ```
 
 ---
