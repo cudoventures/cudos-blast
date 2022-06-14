@@ -29,7 +29,7 @@ async function getDefaultSigner() {
   if (!accounts[0]) {
     throw new BlastError('Cannot get default signer. First account from accounts file is missing')
   }
-  return getSigner(nodeUrl, accounts[0].mnemonic)
+  return getSigner(accounts[0].mnemonic)
 }
 
 function getAccounts() {
@@ -45,9 +45,15 @@ async function getContractInfo(contractAddress) {
   }
 }
 
+async function getCodeDetails(codeId) {
+  const client = await CosmWasmClient.connect(nodeUrl)
+  return client.getCodeDetails(codeId)
+}
+
 module.exports = {
   getSigner: getSigner,
   getDefaultSigner: getDefaultSigner,
   getAccounts: getAccounts,
-  getContractInfo: getContractInfo
+  getContractInfo: getContractInfo,
+  getCodeDetails: getCodeDetails
 }

@@ -1,9 +1,7 @@
 const { CudosContract } = require('./cudos-contract')
 const {
   getSigner,
-  getDefaultSigner,
-  getAccounts,
-  getContractInfo
+  getAccounts
 } = require('../utilities/network-utils')
 
 // For the local node: returns an array of predefined local accounts including the auto generated additional accounts
@@ -18,15 +16,18 @@ globalThis.bre.getSigners = async function() {
 }
 
 // Returns an instance of a new contract by its label
-globalThis.bre.getContractFactory = async function(contractLabel) {
-  return new CudosContract(contractLabel)
+globalThis.bre.getContractFactory = async function(label) {
+  return CudosContract.constructLocal(label)
+}
+
+// Returns an instance of a contract that is uploaded but not instantiated. A custom signer can be set.
+globalThis.bre.getContractFromCodeId = async function(codeId) {
+  return CudosContract.constructUploaded(codeId)
 }
 
 // Returns an instance of an existing contract by its address. A custom signer can be set.
-globalThis.bre.getContractFromAddress = async function(contractAddress, signer = null) {
-  const contractInfo = await getContractInfo(contractAddress)
-  signer = signer ?? await getDefaultSigner()
-  return new CudosContract(contractInfo.label, signer, contractAddress)
+globalThis.bre.getContractFromAddress = async function(contractAddress) {
+  return CudosContract.constructDeployed(contractAddress)
 }
 
 module.exports = globalThis.bre
