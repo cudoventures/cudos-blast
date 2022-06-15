@@ -1,0 +1,11 @@
+{
+    "name": "@cudos/blast-e2e-tests",
+    "version": "1.0.0",
+    "license": "GNU GENERAL PUBLIC",
+    "private": true,
+    "repository": "github:CudoVentures/cudos-blast",
+    "description": "e2e tests for Cudos Blast",
+    "scripts": {
+        "test": "./run-tests.sh"
+    }
+}

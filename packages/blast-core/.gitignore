@@ -1,5 +1,5 @@
 node_modules/
 .idea/
 .vscode
+template/**/artifacts/
 **/.DS_Store
-test-blast-init*/
