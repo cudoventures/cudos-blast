@@ -18,12 +18,18 @@ const {
 } = require('../utilities/network-utils')
 const { GAS_AUTO } = require('../config/blast-constants')
 
+let gasFee
+
+// set gasFee once and when needed
 function getGasFee() {
-  if (getGasLimit() === GAS_AUTO) {
-    return getGasMultiplier() === GAS_AUTO ? GAS_AUTO : getGasMultiplier()
-  } else {
-    return calculateFee(getGasLimit(), GasPrice.fromString(getGasPrice()))
+  if (typeof gasFee === 'undefined') {
+    if (getGasLimit() === GAS_AUTO) {
+      gasFee = getGasMultiplier() === GAS_AUTO ? GAS_AUTO : getGasMultiplier()
+    } else {
+      gasFee = calculateFee(getGasLimit(), GasPrice.fromString(getGasPrice()))
+    }
   }
+  return gasFee
 }
 
 module.exports.CudosContract = class CudosContract {
