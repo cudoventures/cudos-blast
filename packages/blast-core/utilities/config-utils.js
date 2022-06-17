@@ -1,7 +1,11 @@
 const fs = require('fs')
 const path = require('path')
 const BlastError = require('./blast-error')
-const { localNetwork } = require('../config/blast-constants')
+const {
+  DEFAULT_DENOM,
+  GAS_AUTO,
+  LOCAL_NETWORK
+} = require('../config/blast-constants')
 const { getProjectRootPath } = require('./package-info')
 
 // creating global Blast runtime environment to hold exposed core fuctions and possible plugins
@@ -28,7 +32,7 @@ function getNetwork(network) {
     return config.networks[network]
   }
   // network is not passed - return the local network
-  return localNetwork
+  return LOCAL_NETWORK
 }
 
 function getGasPrice() {
@@ -37,7 +41,25 @@ function getGasPrice() {
   if (!config.gasPrice) {
     throw new BlastError('Missing [gasPrice] from the config file.')
   }
-  return config.gasPrice
+  return config.gasPrice + DEFAULT_DENOM
+}
+
+function getGasLimit() {
+  const { config } = getConfig()
+
+  if (!config.gasLimit) {
+    return GAS_AUTO
+  }
+  return config.gasLimit
+}
+
+function getGasMultiplier() {
+  const { config } = getConfig()
+
+  if (!config.gasMultiplier) {
+    return GAS_AUTO
+  }
+  return config.gasMultiplier
 }
 
 function getAddressPrefix() {
@@ -74,6 +96,8 @@ function getRustOptimizerVersion() {
 
 module.exports = {
   getGasPrice: getGasPrice,
+  getGasLimit: getGasLimit,
+  getGasMultiplier: getGasMultiplier,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances,

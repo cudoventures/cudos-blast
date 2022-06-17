@@ -6,12 +6,25 @@ const path = require('path')
 const fs = require('fs')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
-const { getGasPrice } = require('../utilities/config-utils')
+const {
+  getGasPrice,
+  getGasLimit,
+  getGasMultiplier
+} = require('../utilities/config-utils')
 const {
   getDefaultSigner,
   getContractInfo,
   getCodeDetails
 } = require('../utilities/network-utils')
+const { GAS_AUTO } = require('../config/blast-constants')
+
+function getGasFee() {
+  if (getGasLimit() === GAS_AUTO) {
+    return getGasMultiplier() === GAS_AUTO ? GAS_AUTO : getGasMultiplier()
+  } else {
+    return calculateFee(getGasLimit(), GasPrice.fromString(getGasPrice()))
+  }
+}
 
 module.exports.CudosContract = class CudosContract {
   #label
@@ -19,11 +32,6 @@ module.exports.CudosContract = class CudosContract {
   #codeId
   #contractAddress
   #creator
-  #gasPrice
-
-  constructor() {
-    this.#gasPrice = GasPrice.fromString(getGasPrice())
-  }
 
   static constructLocal(label) {
     const wasmPath = path.join(getProjectRootPath(), `artifacts/${label}.wasm`)
@@ -104,7 +112,7 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot use "execute()" on non-deployed contracts')
     }
     signer = signer ?? await getDefaultSigner()
-    const fee = calculateFee(1_500_000, this.#gasPrice)
+    const fee = getGasFee()
     return signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
 
@@ -147,7 +155,7 @@ module.exports.CudosContract = class CudosContract {
   async #uploadContract(signer) {
     // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
-    const uploadFee = calculateFee(1_500_000, this.#gasPrice)
+    const uploadFee = getGasFee()
     return signer.upload(
       signer.address,
       wasm,
@@ -156,7 +164,7 @@ module.exports.CudosContract = class CudosContract {
   }
 
   async #instantiateContract(signer, codeId, msg, label, funds) {
-    const instantiateFee = calculateFee(500_000, this.#gasPrice)
+    const instantiateFee = getGasFee()
     return signer.instantiate(
       signer.address,
       codeId,

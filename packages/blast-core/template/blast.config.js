@@ -1,10 +1,12 @@
 /* eslint-disable object-curly-newline */
 module.exports.config = {
   addressPrefix: 'cudos',
-  gasPrice: '250acudos',
   rustOptimizerVersion: '0.12.6',
+  gasPrice: 250,
 
   // optional parameners
+  gasLimit: 'auto',
+  gasMultiplier: 'auto',
   additionalAccounts: 0,
   customAccountBalances: 1000000000000000000,
   networks: {
