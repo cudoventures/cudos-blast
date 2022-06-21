@@ -413,14 +413,60 @@ The tokens are funded from the default local node faucet in `acudos`.
 ---
 ## Creating a custom task
 
-This guide will explore the creation of tasks in Blast, which are the core component used for automation.
+Every fuctionality of Blast is defined as a task.
+In addition to do the default Blast tasks you can define a custom one to fit your needs.
+You can list all available tasks in your project by runing one of the following:
 
-### Adding a new local node account
-
-To add a new account named `myAccount1` to the local node key storage run
-  
 ```bash
-blast keys add myAccount1
+blast
+blast --help
+blast help
 ```
 
-After adding the new account, it is automatically funded with `acudos` tokens from the default local node faucet.
+To add a new task you have to set it up in the `blast.config.js` file. It is a good practice to split your code into several files and `require` them from the config file for more complex tasks.
+
+For this guide we can create a sample task to print some params from cli
+
+lets add the following line in our `blast.config.js`:
+  
+```js
+task("print", "Prints a custom parameter").setAction(async () => {});
+```
+
+After adding it, you should be able to see the task and its description in `blast --help`.
+
+```bash
+Usage: blast <command> [arguments] [command options]
+
+Commands:
+  blast init                  Create a sample project
+  blast compile               Compile the smart contracts in the workspace in
+                              alphabetical order
+  blast test                  Run the JavaScript tests
+  blast rusttest              Run smart contracts rust tests
+  blast node                  Manage a local CUDOS node
+  blast run <scriptFilePath>  Run a single script
+  blast keys                  Manage node accounts (keys)
+  blast print                 Prints a custom parameter
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+```
+now let's add a param to our task
+
+```js
+task("print", "Prints a custom parameter")
+  .addParam("param", "Our custom parameter")
+  .setAction(async (argv) => {
+    console.log(`Printing our param... ${argv.param}`)
+  });
+```
+
+now we can invoke it simply by running:
+
+```bash
+blast print --param "important thing to print"
+```
+
+you can add as many parameteres with `.addParam()` as you need.

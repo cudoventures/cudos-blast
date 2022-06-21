@@ -10,8 +10,6 @@ cd $init_folder
 perl -pi -e 's/\/\* eslint-disable object-curly-newline \*\//task("test-task", "Running a test task").addParam("param", "Adding a custom param").setAction(function (argv) {
   console.log(argv.param)})/' blast.config.js
 
-# blast test-task --param testParam
-
 if [[ `blast test-task --param testParam` =~ 'testParam' ]]; then
     echo -e $PASSED
 else
