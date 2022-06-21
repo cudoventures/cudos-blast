@@ -389,3 +389,18 @@ blast keys fund myAccount1 --tokens 1000000
 ```
 
 The tokens are funded from the default local node faucet in `acudos`.
+
+---
+## Creating a custom task
+
+This guide will explore the creation of tasks in Blast, which are the core component used for automation.
+
+### Adding a new local node account
+
+To add a new account named `myAccount1` to the local node key storage run
+  
+```bash
+blast keys add myAccount1
+```
+
+After adding the new account, it is automatically funded with `acudos` tokens from the default local node faucet.
