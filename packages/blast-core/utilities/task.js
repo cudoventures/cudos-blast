@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const customTasks = []
 
 class Task {
@@ -27,7 +28,7 @@ class Task {
   }
 }
 
-const task = (name, description) => {
+task = (name, description) => {
   return new Task(name, description)
 }
 

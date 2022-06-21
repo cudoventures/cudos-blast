@@ -7,7 +7,8 @@ echo -n 'blast custom task...'
 cp -R $PATH_TO_TEMPLATE $init_folder &> /dev/null
 cd $init_folder
 
-perl -pi -e 's/\/\* eslint-disable object-curly-newline \*\//task("test-task", "Running a test task").addParam("param", "Adding a custom param").setAction(function (argv) {
+perl -pi -e 's/\/\* eslint-disable object-curly-newline \*\//require("cudos-blast\/utilities\/task")
+task("test-task", "Running a test task").addParam("param", "Adding a custom param").setAction(function (argv) {
   console.log(argv.param)})/' blast.config.js
 
 if [[ `blast test-task --param testParam` =~ 'testParam' ]]; then
