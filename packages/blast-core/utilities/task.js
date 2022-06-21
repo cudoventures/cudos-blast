@@ -1,12 +1,10 @@
-let customTasks = []
+const customTasks = []
 
 class Task {
-
   constructor(name, description) {
-
     this.task = {
-      "command": name,
-      "describe": description,
+      command: name,
+      describe: description,
       builder: {}
     }
   }
@@ -18,7 +16,7 @@ class Task {
       type: 'string',
       demandOption: true
     }
-      
+
     return this
   }
 
@@ -29,7 +27,7 @@ class Task {
   }
 }
 
-task = (name, description) => {
+const task = (name, description) => {
   return new Task(name, description)
 }
 

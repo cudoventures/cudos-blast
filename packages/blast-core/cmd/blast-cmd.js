@@ -8,10 +8,8 @@ const BlastError = require('../utilities/blast-error')
 const { customTasks } = require('../utilities/task')
 const { getConfig } = require('../utilities/config-utils')
 
-
 async function main() {
-  
-  if (hideBin(process.argv)[0] != 'init') {
+  if (hideBin(process.argv)[0] !== 'init') {
     getConfig()
   }
 
