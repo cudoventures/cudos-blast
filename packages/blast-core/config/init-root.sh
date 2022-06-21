@@ -11,7 +11,7 @@ CHAIN_ID="cudos-network"
 TIMEOUT_COMMIT="5s" #5s originally
 KEYPASSWD='123123123' #at least 8 characters
 
-MIN_SELF_DELEGATION="2000000000000000000000000" # minimum tokens sto stake multiplyer by 1 000 000 for validator01
+MIN_SELF_DELEGATION="20000000000000000000000000" # minimum tokens sto stake multiplyer by 1 000 000 for validator01
 
 # slashing parameters
 JAIL_DURATION="600s" #600s originally
@@ -132,7 +132,7 @@ PRIVATE_SALE_OFFER_ADDRESS=$(cudos-noded keys show private-sale-offer -a --keyri
 cudos-noded add-genesis-account $ROOT_VALIDATOR_01_ADDRESS "100000000000000000000100000${BOND_DENOM},1cudosAdmin"
 cudos-noded add-genesis-account $VALIDATOR_02_ADDRESS "100000000000000100000${BOND_DENOM},1cudosAdmin"
 cudos-noded add-genesis-account $VALIDATOR_03_ADDRESS "100000000000000100000${BOND_DENOM},1cudosAdmin"
-cudos-noded gentx root-validator-01 "${MIN_SELF_DELEGATION}${BOND_DENOM}" "0x9fdE6D55dDa637806DbF016a03B6970613630333" "cudos1g6wvv0fk2q5m2xh0yk2app0ewp6f6aum7v2j7y" --chain-id $CHAIN_ID --keyring-backend test
+cudos-noded gentx root-validator-01 "100000000000000000000100000${BOND_DENOM}" --min-self-delegation="${MIN_SELF_DELEGATION}" "0x9fdE6D55dDa637806DbF016a03B6970613630333" "cudos1g6wvv0fk2q5m2xh0yk2app0ewp6f6aum7v2j7y" --chain-id $CHAIN_ID --keyring-backend test
 
 # test validator creation on genesis
 cudos-noded keys add genesis-validator --keyring-backend test

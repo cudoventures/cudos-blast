@@ -6,24 +6,29 @@ const { DirectSecp256k1HdWallet } = require('cudosjs')
 const { getProjectRootPath } = require('./package-info')
 const BlastError = require('./blast-error')
 
-function getAccounts() {
-  const configPath = path.join(getProjectRootPath(), 'accounts.json')
-  return Object.values(require(configPath))
+let localAccounts
+
+function getLocalAccounts() {
+  if (!localAccounts) {
+    const configPath = path.join(getProjectRootPath(), 'local-accounts.json')
+    localAccounts = Object.values(require(configPath))
+  }
+  return localAccounts
 }
 
 function getPrivateAccounts() {
   const configPath = path.join(getProjectRootPath(), 'private-accounts.json')
   const privateAccounts = require(configPath)
   delete privateAccounts.comment
-  return privateAccounts
+  return Object.values(privateAccounts)
 }
 
 async function generateRandomAccount(addressPrefix) {
   const mnemonic = bip39.generateMnemonic(256)
   const address = await getAddressFromMnemonic(mnemonic, addressPrefix)
   return {
-    mnemonic: mnemonic,
-    address: address
+    address: address,
+    mnemonic: mnemonic
   }
 }
 
@@ -34,7 +39,7 @@ async function getAddressFromMnemonic(mnemonic, addressPrefix) {
 }
 
 function createLocalAccountsFile(accounts) {
-  const accountFilePath = path.join(getProjectRootPath(), 'accounts.json')
+  const accountFilePath = path.join(getProjectRootPath(), 'local-accounts.json')
   // delete accounts file if exists
   fs.rmSync(accountFilePath, { force: true })
   try {
@@ -46,7 +51,7 @@ function createLocalAccountsFile(accounts) {
 }
 
 module.exports = {
-  getAccounts: getAccounts,
+  getLocalAccounts: getLocalAccounts,
   getPrivateAccounts: getPrivateAccounts,
   generateRandomAccount: generateRandomAccount,
   createLocalAccountsFile: createLocalAccountsFile
