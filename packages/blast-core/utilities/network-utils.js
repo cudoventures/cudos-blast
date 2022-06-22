@@ -20,7 +20,7 @@ const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 
 async function getSigner(mnemonic) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: getAddressPrefix() })
-  // gasPrice in signing client is considered when auto gas is used
+  // gasPrice in signing client is considered only when auto gas is used
   const signer = await SigningCosmWasmClient.connectWithSigner(
     nodeUrl, wallet, { gasPrice: GasPrice.fromString(getGasPrice()) })
   const address = (await wallet.getAccounts())[0].address
