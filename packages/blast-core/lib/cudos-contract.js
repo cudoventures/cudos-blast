@@ -159,7 +159,6 @@ module.exports.CudosContract = class CudosContract {
   }
 
   async #uploadContract(signer) {
-    // TODO: pass gasLimit as a param or read it from config
     const wasm = fs.readFileSync(this.#wasmPath)
     const uploadFee = getGasFee()
     return signer.upload(
