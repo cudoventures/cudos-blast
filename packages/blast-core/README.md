@@ -22,6 +22,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Available functions in global context](#available-functions-in-global-context)
   * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
   * [Additional options](#additional-options)
+* [Creating a custom task](#creating-a-custom-task)
 * [Network](#network)
   * [Localhost](#localhost)
   * [Testnet](#testnet)
@@ -338,6 +339,69 @@ async function main () {
 ```
 
 ---
+## Creating a custom task
+
+Cudos Blast allows the creation of custom tasks that can easily run commonly used operations or help manage your workflow.
+To add a new task you have to set it up in the `blast.config.js` file.
+
+It is a good practice to split your code into several files and `require` them from the config file for more complex tasks.
+
+For this guide we can create a sample task to print some params from cli
+
+lets add the following line in our `blast.config.js` outside of the scope of `module.exports`:
+  
+```js
+require('cudos-blast/utilities/task.js')
+
+task("print", "Prints a custom parameter").setAction(async () => {});
+```
+
+After adding it, you should be able to see the task and its description in `blast --help`.
+
+```bash
+Usage: blast <command> [arguments] [command options]
+
+Commands:
+  blast init                  Create a sample project
+  blast compile               Compile the smart contracts in the workspace in
+                              alphabetical order
+  blast test                  Run the JavaScript tests
+  blast rusttest              Run smart contracts rust tests
+  blast node                  Manage a local CUDOS node
+  blast run <scriptFilePath>  Run a single script
+  blast keys                  Manage node accounts (keys)
+  blast print                 Prints a custom parameter
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+```
+now let's add a param to our task
+
+```js
+require('cudos-blast/utilities/task.js')
+task("print", "Prints a custom parameter")
+  .addParam("param", "Our custom parameter")
+  .setAction(async (argv) => {
+    console.log(`Printing our param... ${argv.param}`)
+  });
+
+module.exports.config = {
+// ...
+
+```
+
+now we can invoke it simply by running:
+
+```bash
+blast print --param "important thing to print"
+```
+
+You can add as many parameteres with `.addParam()` as you need.
+
+One you should know is that every task must end with `.setAction()` so it can take it's place.
+
+---
 ## Network
 
 You can connect to the default local node as well as a public one or you can use your own Cudos node. To do that, add a `{custom_name}: {node_url}` to `networks` field in `blast.config.js`, then call the `run`, `test` or `node status` command with `--network` or `-n` followed by `{custom_name}`. If no network is passed, blast commands connect to the default local node.  
@@ -409,64 +473,3 @@ blast keys fund myAccount1 --tokens 1000000
 ```
 
 The tokens are funded from the default local node faucet in `acudos`.
-
----
-## Creating a custom task
-
-Every fuctionality of Blast is defined as a task.
-In addition to do the default Blast tasks you can define a custom one to fit your needs.
-You can list all available tasks in your project by runing one of the following:
-
-```bash
-blast
-blast --help
-blast help
-```
-
-To add a new task you have to set it up in the `blast.config.js` file. It is a good practice to split your code into several files and `require` them from the config file for more complex tasks.
-
-For this guide we can create a sample task to print some params from cli
-
-lets add the following line in our `blast.config.js`:
-  
-```js
-task("print", "Prints a custom parameter").setAction(async () => {});
-```
-
-After adding it, you should be able to see the task and its description in `blast --help`.
-
-```bash
-Usage: blast <command> [arguments] [command options]
-
-Commands:
-  blast init                  Create a sample project
-  blast compile               Compile the smart contracts in the workspace in
-                              alphabetical order
-  blast test                  Run the JavaScript tests
-  blast rusttest              Run smart contracts rust tests
-  blast node                  Manage a local CUDOS node
-  blast run <scriptFilePath>  Run a single script
-  blast keys                  Manage node accounts (keys)
-  blast print                 Prints a custom parameter
-
-Options:
-  --version  Show version number                                       [boolean]
-  --help     Show help                                                 [boolean]
-```
-now let's add a param to our task
-
-```js
-task("print", "Prints a custom parameter")
-  .addParam("param", "Our custom parameter")
-  .setAction(async (argv) => {
-    console.log(`Printing our param... ${argv.param}`)
-  });
-```
-
-now we can invoke it simply by running:
-
-```bash
-blast print --param "important thing to print"
-```
-
-you can add as many parameteres with `.addParam()` as you need.
