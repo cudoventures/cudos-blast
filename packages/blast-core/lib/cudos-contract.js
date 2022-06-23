@@ -4,7 +4,7 @@ const {
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
-const { coin } = require('@cosmjs/stargate')
+const { parseCoins } = require('@cosmjs/stargate')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
 const { getGasPrice } = require('../utilities/config-utils')
@@ -13,6 +13,7 @@ const {
   getContractInfo,
   getCodeDetails
 } = require('../utilities/network-utils')
+const { DEFAULT_DENOM } = require('../config/blast-constants')
 
 module.exports.CudosContract = class CudosContract {
   #label
@@ -75,7 +76,7 @@ module.exports.CudosContract = class CudosContract {
         'Contract\'s code must exist on the network before instantiating')
     }
     if (options.funds) {
-      options.funds = [coin(options.funds.amount, options.funds.token)]
+      options.funds = parseCoins(options.funds + DEFAULT_DENOM)
     }
     options.signer = options.signer ?? await getDefaultSigner()
     const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds)
@@ -91,7 +92,7 @@ module.exports.CudosContract = class CudosContract {
         'Use "instantiate" for uploaded contracts')
     }
     if (options.funds) {
-      options.funds = [coin(options.funds.amount, options.funds.token)]
+      options.funds = parseCoins(options.funds + DEFAULT_DENOM)
     }
     options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)
