@@ -342,7 +342,7 @@ From `blast.config.js` you can specify the gas parameters shown below.
 
 | Gas Parameter | Required | Default       | Description                                        |
 | ---           | ---      | ---           | ---                                                |
-| gasPrice      | yes      | -             | tokens per unit of gas in format `<amount><denom>` |
+| gasPrice      | yes      | -             | tokens per unit of gas in format `<amount>acudos`  |
 | gasLimit      | no       | "auto"        | the maximum limit of gas a transaction can consume |
 | gasMultiplier | no       | "auto" or 1.3 | gasLimit multiplier                                |
 
