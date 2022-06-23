@@ -48,7 +48,7 @@ const testInfo = {
 
 const rustTestInfo = {
   command: 'rusttest',
-  describe: 'Run smart contract\'s rust tests',
+  describe: 'Run smart contracts\' rust tests',
   builder: (yargs) => {
     yargs.option('quiet', {
       alias: 'q',
