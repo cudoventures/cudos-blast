@@ -4,6 +4,7 @@ const {
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
+const { coin } = require('@cosmjs/stargate')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
 const { getGasPrice } = require('../utilities/config-utils')
@@ -73,6 +74,9 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
+    if (options.funds) {
+      options.funds = [coin(options.funds.amount, options.funds.token)]
+    }
     options.signer = options.signer ?? await getDefaultSigner()
     const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds)
     return instantiateTx
@@ -85,6 +89,9 @@ module.exports.CudosContract = class CudosContract {
     if (this.#isUploaded()) {
       throw new BlastError('Cannot deploy contract that is already uploaded. Only new contracts can be deployed. ' +
         'Use "instantiate" for uploaded contracts')
+    }
+    if (options.funds) {
+      options.funds = [coin(options.funds.amount, options.funds.token)]
     }
     options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer)

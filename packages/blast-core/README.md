@@ -333,7 +333,7 @@ async function main () {
   const MSG_INIT = { count: 13 }
 
   const tokens = [coin(321, "acudos")]
-  const deploy = await contract.deploy(MSG_INIT, bob, 'alpha', tokens)
+  const deploy = await contract.deploy(MSG_INIT, 'alpha', { signer: bob, funds: tokens })
   // ...
 ```
 
