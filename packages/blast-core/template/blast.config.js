@@ -2,7 +2,7 @@
 module.exports.config = {
   addressPrefix: 'cudos',
   rustOptimizerVersion: '0.12.6',
-  gasPrice: 250,
+  gasPrice: '250acudos',
 
   // optional parameners
   gasLimit: 'auto',

@@ -2,7 +2,6 @@ const fs = require('fs')
 const path = require('path')
 const BlastError = require('./blast-error')
 const {
-  DEFAULT_DENOM,
   GAS_AUTO,
   LOCAL_NETWORK
 } = require('../config/blast-constants')
@@ -41,7 +40,7 @@ function getGasPrice() {
   if (!config.gasPrice) {
     throw new BlastError('Missing [gasPrice] from the config file.')
   }
-  return config.gasPrice + DEFAULT_DENOM
+  return config.gasPrice
 }
 
 function getGasLimit() {
