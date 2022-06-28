@@ -1,8 +1,9 @@
-const bre = require('cudos-blast')
+// You can require Blast Runtime Environment explicitly to enable your code editor's IntelliSense
+// const bre = require('cudos-blast')
 
 describe('alpha contract', () => {
   // Optional timeout. Default is 15000
-  jest.setTimeout(30 * 1000);
+  jest.setTimeout(30 * 1000)
 
   const MSG_INIT = { count: 13 }
   const MSG_INCREMENT = { increment: {} }
