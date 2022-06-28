@@ -24,8 +24,8 @@ async function testCmd(argv) {
 
   process.env.BLAST_NETWORK = argv.network ?? ''
   // here JEST uses only initial globals file setup. process.env (not globals) persist through the new spawned process
-  spawnSync(`npx --no --prefix ${getPackageRootPath()} jest ${testDir} ` +
-    `--setupFilesAfterEnv=${globalsPath} --testTimeout=15000 ${silent} --detectOpenHandles`,
+  spawnSync(`npx --no --prefix "${getPackageRootPath()}" jest "${testDir}" ` +
+    `--setupFilesAfterEnv="${globalsPath}" --testTimeout=15000 ${silent} --detectOpenHandles`,
   {
     stdio: 'inherit',
     shell: true
