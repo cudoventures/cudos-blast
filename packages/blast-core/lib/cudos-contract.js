@@ -1,10 +1,10 @@
 const {
   GasPrice,
-  calculateFee
+  calculateFee,
+  parseCoins
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
-const { parseCoins } = require('@cosmjs/stargate')
 const BlastError = require('../utilities/blast-error')
 const { getProjectRootPath } = require('../utilities/package-info')
 const { getGasPrice } = require('../utilities/config-utils')
