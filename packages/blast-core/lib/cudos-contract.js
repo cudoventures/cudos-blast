@@ -15,14 +15,11 @@ const {
 const { GAS_AUTO } = require('../config/blast-constants')
 
 function getGasFee(gasLimit, gasMultiplier) {
-  if (!gasLimit) {
-    gasLimit = GAS_AUTO
-  }
-  if (!gasMultiplier) {
-    gasMultiplier = GAS_AUTO
-  }
-  if (gasLimit === GAS_AUTO) {
-    return gasMultiplier === GAS_AUTO ? GAS_AUTO : gasMultiplier
+  if (!gasLimit || gasLimit === GAS_AUTO) {
+    if (!gasMultiplier || gasMultiplier === GAS_AUTO) {
+      return GAS_AUTO
+    }
+    return gasMultiplier
   }
   return calculateFee(gasLimit, GasPrice.fromString(getGasPrice()))
 }
