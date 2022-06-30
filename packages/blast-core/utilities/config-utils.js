@@ -1,10 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 const BlastError = require('./blast-error')
-const {
-  GAS_AUTO,
-  LOCAL_NETWORK
-} = require('../config/blast-constants')
+const { LOCAL_NETWORK } = require('../config/blast-constants')
 const { getProjectRootPath } = require('./package-info')
 
 // creating global Blast runtime environment to hold exposed core fuctions and possible plugins
@@ -43,24 +40,6 @@ function getGasPrice() {
   return config.gasPrice
 }
 
-function getGasLimit() {
-  const { config } = getConfig()
-
-  if (!config.gasLimit) {
-    return GAS_AUTO
-  }
-  return config.gasLimit
-}
-
-function getGasMultiplier() {
-  const { config } = getConfig()
-
-  if (!config.gasMultiplier) {
-    return GAS_AUTO
-  }
-  return config.gasMultiplier
-}
-
 function getAddressPrefix() {
   const { config } = getConfig()
 
@@ -95,8 +74,6 @@ function getRustOptimizerVersion() {
 
 module.exports = {
   getGasPrice: getGasPrice,
-  getGasLimit: getGasLimit,
-  getGasMultiplier: getGasMultiplier,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
   getAdditionalAccountsBalances: getAdditionalAccountsBalances,
