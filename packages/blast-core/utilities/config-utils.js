@@ -73,6 +73,7 @@ function getRustOptimizerVersion() {
 }
 
 module.exports = {
+  getConfig: getConfig,
   getGasPrice: getGasPrice,
   getAddressPrefix: getAddressPrefix,
   getAdditionalAccounts: getAdditionalAccounts,
