@@ -12,6 +12,17 @@ const {
   getContractInfo,
   getCodeDetails
 } = require('../utilities/network-utils')
+const { GAS_AUTO } = require('../config/blast-constants')
+
+function getGasFee(gasLimit, gasMultiplier) {
+  if (!gasLimit || gasLimit === GAS_AUTO) {
+    if (!gasMultiplier || gasMultiplier === GAS_AUTO) {
+      return GAS_AUTO
+    }
+    return gasMultiplier
+  }
+  return calculateFee(gasLimit, GasPrice.fromString(getGasPrice()))
+}
 
 module.exports.CudosContract = class CudosContract {
   #label
@@ -19,11 +30,6 @@ module.exports.CudosContract = class CudosContract {
   #codeId
   #contractAddress
   #creator
-  #gasPrice
-
-  constructor() {
-    this.#gasPrice = GasPrice.fromString(getGasPrice())
-  }
 
   static constructLocal(label) {
     const wasmPath = path.join(getProjectRootPath(), `artifacts/${label}.wasm`)
@@ -54,12 +60,14 @@ module.exports.CudosContract = class CudosContract {
   }
 
   // Uploads the contract's code to the network
-  async uploadCode(options = { signer: null }) {
+  async uploadCode(options = {
+    signer: null, gasLimit: null, gasMultiplier: null
+  }) {
     if (this.#isUploaded()) {
       throw new BlastError('Cannot upload contract that is already uploaded')
     }
     options.signer = options.signer ?? await getDefaultSigner()
-    const uploadTx = await this.#uploadContract(options.signer)
+    const uploadTx = await this.#uploadContract(options.signer, options.gasLimit, options.gasMultiplier)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer.address
     return uploadTx
@@ -67,14 +75,15 @@ module.exports.CudosContract = class CudosContract {
 
   // Instantiates uploaded code without assigning the new contract to current contract object instance
   async instantiate(msg, label, options = {
-    signer: null, funds: null
+    signer: null, funds: null, gasLimit: null, gasMultiplier: null
   }) {
     if (!this.#isUploaded()) {
       throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
     options.signer = options.signer ?? await getDefaultSigner()
-    const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds)
+    const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds,
+      options.gasLimit, options.gasMultiplier)
     return instantiateTx
   }
 
@@ -87,10 +96,11 @@ module.exports.CudosContract = class CudosContract {
         'Use "instantiate" for uploaded contracts')
     }
     options.signer = options.signer ?? await getDefaultSigner()
-    const uploadTx = await this.#uploadContract(options.signer)
+    const uploadTx = await this.#uploadContract(options.signer, GAS_AUTO, GAS_AUTO)
     this.#codeId = uploadTx.codeId
     this.#creator = options.signer.address
-    const instantiateTx = await this.#instantiateContract(options.signer, uploadTx.codeId, msg, label, options.funds)
+    const instantiateTx = await this.#instantiateContract(options.signer, uploadTx.codeId, msg, label, options.funds,
+      GAS_AUTO, GAS_AUTO)
     this.#contractAddress = instantiateTx.contractAddress
     this.#label = label
     return {
@@ -99,12 +109,14 @@ module.exports.CudosContract = class CudosContract {
     }
   }
 
-  async execute(msg, signer = null) {
+  async execute(msg, signer = null, options = {
+    gasLimit: null, gasMultiplier: null
+  }) {
     if (!this.#isDeployed()) {
       throw new BlastError('Cannot use "execute()" on non-deployed contracts')
     }
     signer = signer ?? await getDefaultSigner()
-    const fee = calculateFee(1_500_000, this.#gasPrice)
+    const fee = getGasFee(options.gasLimit, options.gasMultiplier)
     return signer.execute(signer.address, this.#contractAddress, msg, fee)
   }
 
@@ -144,10 +156,9 @@ module.exports.CudosContract = class CudosContract {
     return this.#creator
   }
 
-  async #uploadContract(signer) {
-    // TODO: pass gasLimit as a param or read it from config
+  async #uploadContract(signer, gasLimit, gasMultiplier) {
     const wasm = fs.readFileSync(this.#wasmPath)
-    const uploadFee = calculateFee(1_500_000, this.#gasPrice)
+    const uploadFee = getGasFee(gasLimit, gasMultiplier)
     return signer.upload(
       signer.address,
       wasm,
@@ -155,8 +166,8 @@ module.exports.CudosContract = class CudosContract {
     )
   }
 
-  async #instantiateContract(signer, codeId, msg, label, funds) {
-    const instantiateFee = calculateFee(500_000, this.#gasPrice)
+  async #instantiateContract(signer, codeId, msg, label, funds, gasLimit, gasMultiplier) {
+    const instantiateFee = getGasFee(gasLimit, gasMultiplier)
     return signer.instantiate(
       signer.address,
       codeId,

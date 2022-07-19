@@ -8,8 +8,9 @@ const BlastError = require('./blast-error')
 
 let localAccounts
 
+// set localAccounts once and when needed
 function getLocalAccounts() {
-  if (!localAccounts) {
+  if (typeof localAccounts === 'undefined') {
     const configPath = path.join(getProjectRootPath(), 'local-accounts.json')
     localAccounts = Object.values(require(configPath))
   }
