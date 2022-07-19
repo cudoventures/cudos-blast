@@ -2,9 +2,15 @@
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
 
 name: Node.js Publish CI
-on:
+on: 
+  workflow_dispatch: 
+    inputs:
+      version:
+        description: Bump Version
+        default: v1.0.2
+        required: true
   release:
-    types: [created]
+    types: [created,edited]
 jobs:
   build:
     runs-on: ubuntu-latest
