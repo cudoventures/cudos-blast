@@ -1,5 +1,6 @@
 /* eslint-disable object-curly-newline */
 module.exports = {
   DEFAULT_DENOM: 'acudos',
-  localNetwork: 'http://localhost:26657'
+  GAS_AUTO: 'auto',
+  LOCAL_NETWORK: 'http://localhost:26657'
 }

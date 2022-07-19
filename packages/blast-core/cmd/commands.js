@@ -5,6 +5,7 @@ const { rustTestCmd } = require('./rusttest/rusttest.js')
 const { runCmd } = require('./run/run.js')
 const keys = require('./keys/keys.js')
 const node = require('./node/node.js')
+const { DEFAULT_DENOM } = require('../config/blast-constants')
 
 const initInfo = {
   command: 'init',
@@ -113,7 +114,7 @@ const keysInfo = {
           alias: 't',
           type: 'string',
           required: true,
-          describe: 'The amount of tokens in acudos. Example: --tokens 100000'
+          describe: `The amount of tokens in ${DEFAULT_DENOM}. Example: --tokens 100000`
         })
       }, keys.keysFundCmd)
       .demandCommand(1, 'No command specified!') // user must specify atleast one command

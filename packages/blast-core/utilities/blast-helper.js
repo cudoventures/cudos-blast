@@ -1,3 +1,4 @@
+const { DEFAULT_DENOM } = require('../config/blast-constants')
 
 async function delay(n) {
   return new Promise(function(resolve) {
@@ -7,7 +8,7 @@ async function delay(n) {
 
 function transferTokensByNameCommand(fromName, toName, amount) {
   return `cudos-noded tx bank send ${fromName} $(cudos-noded keys show ${toName} --keyring-backend test -a) ` +
-    `${amount}acudos --keyring-backend test --chain-id cudos-network --yes`
+    `${amount}${DEFAULT_DENOM} --keyring-backend test --chain-id cudos-network --yes`
 }
 
 module.exports = {
