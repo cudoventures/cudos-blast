@@ -333,15 +333,12 @@ blast run scripts/myCustomScript.js -n testnet
 * You can automatically fund smart contracts with tokens in your scripts
 
 ```bash
-const { coin } = require('@cosmjs/stargate')
-
 async function main () {
   const [alice, bob] = await getSigners()
   const contract = await getContractFactory('alpha')
   const MSG_INIT = { count: 13 }
 
-  const tokens = [coin(321, "acudos")]
-  const deploy = await contract.deploy(MSG_INIT, bob, 'alpha', tokens)
+  const deploy = await contract.deploy(MSG_INIT, 'alpha', { signer: bob, fund: 123 })
   // ...
 ```
 

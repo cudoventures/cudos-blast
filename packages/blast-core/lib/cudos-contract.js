@@ -1,6 +1,7 @@
 const {
   GasPrice,
-  calculateFee
+  calculateFee,
+  parseCoins
 } = require('cudosjs')
 const path = require('path')
 const fs = require('fs')
@@ -12,7 +13,10 @@ const {
   getContractInfo,
   getCodeDetails
 } = require('../utilities/network-utils')
-const { GAS_AUTO } = require('../config/blast-constants')
+const {
+  DEFAULT_DENOM,
+  GAS_AUTO
+} = require('../config/blast-constants')
 
 function getGasFee(gasLimit, gasMultiplier) {
   if (!gasLimit || gasLimit === GAS_AUTO) {
@@ -81,6 +85,9 @@ module.exports.CudosContract = class CudosContract {
       throw new BlastError('Cannot instantiate contract that is not uploaded. ' +
         'Contract\'s code must exist on the network before instantiating')
     }
+    if (options.funds) {
+      options.funds = parseCoins(options.funds + DEFAULT_DENOM)
+    }
     options.signer = options.signer ?? await getDefaultSigner()
     const instantiateTx = await this.#instantiateContract(options.signer, this.#codeId, msg, label, options.funds,
       options.gasLimit, options.gasMultiplier)
@@ -94,6 +101,9 @@ module.exports.CudosContract = class CudosContract {
     if (this.#isUploaded()) {
       throw new BlastError('Cannot deploy contract that is already uploaded. Only new contracts can be deployed. ' +
         'Use "instantiate" for uploaded contracts')
+    }
+    if (options.funds) {
+      options.funds = parseCoins(options.funds + DEFAULT_DENOM)
     }
     options.signer = options.signer ?? await getDefaultSigner()
     const uploadTx = await this.#uploadContract(options.signer, GAS_AUTO, GAS_AUTO)
