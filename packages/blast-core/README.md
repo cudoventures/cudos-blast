@@ -22,6 +22,7 @@ By using this tool you can also spin up a local [`Cudos node`](https://github.co
   * [Available functions in global context](#available-functions-in-global-context)
   * [Exposed functions of a contract instance](#exposed-functions-of-a-contract-instance)
   * [Additional options](#additional-options)
+* [Creating a custom task](#creating-a-custom-task)
 * [Network](#network)
   * [Localhost](#localhost)
   * [Testnet](#testnet)
@@ -301,17 +302,24 @@ You can get an instance of a contract (e.g. with `getContractFactory()`). Here i
 
 ### Exposed functions of a contract instance
 
-| Function                                                               | Descripton                                                                                                                                                                                                                                                                                                                                      | Sample usage                                                            |
-| ---                                                                    | ---                                                                                                                                                                                                                                                                                                                                             | ---                                                                     |
-| async uploadCode(options = { signer: null })                           | Uploads the contract's source code on the network so it can be optimally used to instantiate a contract multiple times with different initial state. The default signer is the first one returned by `getSigners()`                                                                                                                             | const uploadTx = await contract.uploadCode()                            |
-| async instantiate(msg, label, options = { signer: null, funds: null }) | Instantiates an uploaded contract with given `initMsg` and `label`. The default signer is the first one returned by `getSigners()`.  Can be used for undeployed as well as already deployed contracts. The new instantiated contract does not override the current contract object, and therefore it is designed to be accessed by its address. | const instantiateTx = await contract.instantiate(MSG_INIT)              |
-| async deploy(msg, label, options = { signer: null, funds: null })      | Deploys the conttract with the given `initMsg`. The default signer is the first one returned by `getSigners()`. You cannot use `deploy` on an instance ot contract whose code is already uploaded.                                                                                                                                              | const deployTxs = await contract.deploy(MSG_INIT, { label: 'myLabel' }) |
-| async execute(msg, signer = null)                                      | Executes a transaction within the contract with the given message. The default signer is the first one returned by `getSigners()`                                                                                                                                                                                                               | const result = await contract.execute(MSG_INCREMENT, alice)             |
-| async query(queryMsg, signer = null)                                   | Executes a query within the contract with the given message. The default signer is the first one returned by `getSigners()`                                                                                                                                                                                                                     | const count = await contract.query(QUERY_GET_COUNT)                     |
-| getAddress()                                                           | Returns the address of a deployed contract or null if undeployed.                                                                                                                                                                                                                                                                               | const address = contract.getAddress()                                   |
-| getCodeId()                                                            | Returns the code ID of an uploaded contract or null if unuploaded.                                                                                                                                                                                                                                                                              | const codeId = contract.getCodeId()                                     |
-| getLabel()                                                             | Returns the label of the contract or null if undeployed.                                                                                                                                                                                                                                                                                        | const label = contract.getLabel()                                       |
-| getCreator()                                                           | Returns the address of the contract's creator or null if unuploaded.                                                                                                                                                                                                                                                                            | const label = contract.getCreator()                                     |
+| Function                                                                                                    | Descripton                                                                                                                                                                                                                                                                                                                                      | Sample usage                                                            |
+| ---                                                                                                         | ---                                                                                                                                                                                                                                                                                                                                             | ---                                                                     |
+| async uploadCode(options = { signer: null, gasLimit: null, gasMultiplier: null })                           | Uploads the contract's source code on the network so it can be optimally used to instantiate a contract multiple times with different initial state.                                                                                                                              | const uploadTx = await contract.uploadCode()                            |
+| async instantiate(msg, label, options = { signer: null, funds: null, gasLimit: null, gasMultiplier: null }) | Instantiates an uploaded contract with given `initMsg` and `label`. Can be used for undeployed as well as already deployed contracts. The new instantiated contract does not override the current contract object, and therefore it is designed to be accessed by its address. | const instantiateTx = await contract.instantiate(MSG_INIT)              |
+| async deploy(msg, label, options = { signer: null, funds: null })                                           | Deploys the conttract with the given `initMsg`. You cannot use `deploy` on an instance ot contract whose code is already uploaded.                                                                                                                                              | const deployTxs = await contract.deploy(MSG_INIT, { label: 'myLabel' }) |
+| async execute(msg, signer = null, options = { gasLimit: null, gasMultiplier: null })                        | Executes a transaction within the contract with the given message.                                                                                                                                                                                                              | const result = await contract.execute(MSG_INCREMENT, alice)             |
+| async query(queryMsg, signer = null)                                                                        | Executes a query within the contract with the given message.                                                                                                                                                                                                                     | const count = await contract.query(QUERY_GET_COUNT)                     |
+| getAddress()                                                                                                | Returns the address of a deployed contract or null if undeployed.                                                                                                                                                                                                                                                                               | const address = contract.getAddress()                                   |
+| getCodeId()                                                                                                 | Returns the code ID of an uploaded contract or null if unuploaded.                                                                                                                                                                                                                                                                              | const codeId = contract.getCodeId()                                     |
+| getLabel()                                                                                                  | Returns the label of the contract or null if undeployed.                                                                                                                                                                                                                                                                                        | const label = contract.getLabel()                                       |
+| getCreator()                                                                                                | Returns the address of the contract's creator or null if unuploaded.                                                                                                                                                                                                                                                                            | const label = contract.getCreator()                                     |
+  
+| Options object                                                         | Descripton                                                          
+| ---                                                                    | ---                                                                 
+| options = { signer }        | The signer to execute the functionality with. The default signer is the first one returned by `getSigners()`.                 |
+| options = { funds }         | The amount of tokens to fund the newly created contract.                                                                      |
+| options = { gasLimit }      | The maximum limit of gas a transaction can consume. Defaults to "auto".                                                        |
+| options = { gasMultiplier } | `gasLimit` multiplier. Defaults to "auto" or 1.3. `gasMultiplier` is taken into consideration only when auto `gasLimit` is used. |
 
 ### Additional options
 
@@ -325,17 +333,78 @@ blast run scripts/myCustomScript.js -n testnet
 * You can automatically fund smart contracts with tokens in your scripts
 
 ```bash
-const { coin } = require('@cosmjs/stargate')
-
 async function main () {
   const [alice, bob] = await getSigners()
   const contract = await getContractFactory('alpha')
   const MSG_INIT = { count: 13 }
 
-  const tokens = [coin(321, "acudos")]
-  const deploy = await contract.deploy(MSG_INIT, bob, 'alpha', tokens)
+  const deploy = await contract.deploy(MSG_INIT, 'alpha', { signer: bob, fund: 123 })
   // ...
 ```
+
+* Gas fees are calculated and applied per transaction. Note that `deploy()` function submits two separate transactions (upload code + instantiate), and therefore auto `gasLimit` and `gasMultiplier` are used.
+* You can specify gas price from `blast.config.js`. It is used in format `<amount>acudos` 
+
+---
+## Creating a custom task
+
+Cudos Blast allows the creation of custom tasks that can easily run commonly used operations or help manage your workflow.
+This guide shows you how to create a sample task to print a parameter from the CLI.
+
+Let's add the following line in our `blast.config.js` outside of the scope of `module.exports`:
+  
+```js
+require('cudos-blast/utilities/task.js')
+
+task("print", "Prints a custom parameter").setAction(async () => {});
+```
+
+It is a good practice to split your code into several files and `require` them from the config file for more complex tasks.
+
+After adding it, you should be able to see the task and its description in `blast --help`.
+
+```bash
+Usage: blast <command> [arguments] [command options]
+
+Commands:
+  blast init                  Create a sample project
+  blast compile               Compile the smart contracts in the workspace in
+                              alphabetical order
+  blast test                  Run the JavaScript tests
+  blast rusttest              Run smart contracts rust tests
+  blast node                  Manage a local CUDOS node
+  blast run <scriptFilePath>  Run a single script
+  blast keys                  Manage node accounts (keys)
+  blast print                 Prints a custom parameter
+
+Options:
+  --version  Show version number                                       [boolean]
+  --help     Show help                                                 [boolean]
+```
+now let's add a param to our task
+
+```js
+require('cudos-blast/utilities/task.js')
+task("print", "Prints a custom parameter")
+  .addParam("param", "Our custom parameter")
+  .setAction(async (argv) => {
+    console.log(`Printing our param... ${argv.param}`)
+  });
+
+module.exports.config = {
+// ...
+
+```
+
+Now we can simply invoke it by running:
+
+```bash
+blast print --param "important thing to print"
+```
+
+You can add as many parameteres with `.addParam()` as you need.
+
+You should know that every task must end with `.setAction()` so it can take it's place.
 
 ---
 ## Network
