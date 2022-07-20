@@ -1,5 +1,4 @@
-// You can require Blast Runtime Environment explicitly to enable your code editor's IntelliSense
-// const bre = require('cudos-blast')
+const bre = require('cudos-blast')
 
 async function main() {
   const [alice, bob] = await bre.getSigners()
