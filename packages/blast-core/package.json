@@ -13,7 +13,7 @@
         "javascript",
         "rust"
       ],
-    "main": "./lib/bre.js",
+    "main": "./lib/index.js",
     "bin": {
         "blast": "./cmd/blast-cmd.js"
     },

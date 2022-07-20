@@ -3,6 +3,7 @@ const {
   getSigner,
   getAccounts
 } = require('../utilities/network-utils')
+// const { assertRevert } = require('./test-helpers')
 
 // For the local node: returns an array of predefined local accounts including the auto generated additional accounts
 // For other networks: returns an array of user-defined private accounts from private-accounts.json
@@ -30,4 +31,5 @@ globalThis.bre.getContractFromAddress = async function(contractAddress) {
   return CudosContract.constructDeployed(contractAddress)
 }
 
+// globalThis.bre.assertRevert = assertRevert
 module.exports = globalThis.bre
