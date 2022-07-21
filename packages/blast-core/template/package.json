@@ -9,6 +9,6 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "cudos-blast": "^2.0.0"
+    "cudos-blast": "2.0.0"
   }
 }
