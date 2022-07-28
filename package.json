@@ -11,7 +11,7 @@
         "lint": "eslint --ext .js,.jsx .",
         "test": "npm test -w @cudos/blast-e2e-tests",
         "install-cmd": "npm run install-global -w cudos-blast",
-        "unittest": "npm run bre-test -w cudos-blast"
+        "unittest": "npm run bre-test -w cudos-blast --silent"
     },
     "devDependencies": {
         "@types/jest": "^28.1.1",
