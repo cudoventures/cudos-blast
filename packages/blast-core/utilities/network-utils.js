@@ -1,12 +1,14 @@
 const {
   CosmWasmClient,
   DirectSecp256k1HdWallet,
-  SigningCosmWasmClient
+  SigningCosmWasmClient,
+  GasPrice
 } = require('cudosjs')
-const { localNetwork } = require('../config/blast-constants')
+const { LOCAL_NETWORK } = require('../config/blast-constants')
 const {
   getNetwork,
-  getAddressPrefix
+  getAddressPrefix,
+  getGasPrice
 } = require('./config-utils')
 const {
   getLocalAccounts,
@@ -18,7 +20,9 @@ const nodeUrl = getNetwork(process.env.BLAST_NETWORK)
 
 async function getSigner(mnemonic) {
   const wallet = await DirectSecp256k1HdWallet.fromMnemonic(mnemonic, { prefix: getAddressPrefix() })
-  const signer = await SigningCosmWasmClient.connectWithSigner(nodeUrl, wallet)
+  // gasPrice in signing client is considered only when auto gas is used
+  const signer = await SigningCosmWasmClient.connectWithSigner(
+    nodeUrl, wallet, { gasPrice: GasPrice.fromString(getGasPrice()) })
   const address = (await wallet.getAccounts())[0].address
   signer.address = address
   return signer
@@ -33,7 +37,7 @@ async function getDefaultSigner() {
 }
 
 function getAccounts() {
-  return (nodeUrl === localNetwork ? getLocalAccounts() : getPrivateAccounts())
+  return (nodeUrl === LOCAL_NETWORK ? getLocalAccounts() : getPrivateAccounts())
 }
 
 async function getContractInfo(contractAddress) {

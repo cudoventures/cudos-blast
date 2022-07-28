@@ -3,3 +3,4 @@ node_modules/
 .vscode
 **/.DS_Store
 test-blast-init*/
+packages/*/package-lock.json
