@@ -29,7 +29,7 @@ async function getSigner(mnemonic) {
 }
 
 async function getDefaultSigner() {
-  const accounts = getAccounts(nodeUrl)
+  const accounts = getAccounts()
   if (!accounts[0]) {
     throw new BlastError('Cannot get default signer. First account from accounts file is missing')
   }

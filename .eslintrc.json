@@ -9,7 +9,6 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["*.test.js"],
     "rules": {
         "space-before-function-paren": ["error", {
             "anonymous": "never",
@@ -22,6 +21,13 @@
             "code": 120,
             "tabWidth": 2,
             "ignoreUrls": true
-        }]
-    }
+        }],
+        "no-undef": 1
+    },
+    "overrides": [{
+        "files": ["*.test.js"],
+        "rules": {
+            "no-undef": 0
+        }
+    }]
 }

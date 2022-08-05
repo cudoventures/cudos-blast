@@ -4,47 +4,138 @@
 const BlastError = require('../utilities/blast-error')
 const { CudosContract } = require('./cudos-contract')
 
-// check formatting
-mockedSignersResult = [{
-  mockedData: 'mocked signer data', 
-  address: 'cudos1yvtuaadhfhxf8ke7zm902z4rj382a8ayymq32s'
-}, {
-  mockedData: 'mocked signer data', 
-  address: 'cudos1xgejtl9heykzscska6cetsferpelygx8g9vxp9'
-}]
+const validSignerAddress = 'cudos1yvtuaadhfhxf8ke7zm902z4rj382a8ayymq32s'
+const validContractAddress = 'cudos1x8gwn06l85q0lyncy7zsde8zzdn588k2dck00a8j6lkprydcutwq80rlv2'
 
-// utilities/network-utils --> getAccounts() are not covered by any tests as of July 2022
+// Mocking objects
+const mockedSigner1 = {
+  mockedData: 'mocked signer data',
+  upload: async (signerAddress, wasmFile, uploadFee) => await mockedSignerUpload(signerAddress, wasmFile, uploadFee),
+  instantiate: async (signerAddress, codeId, msg, label, instantiateFee, { funds }) =>
+    await mockedSignerInstantiate(signerAddress, codeId, msg, label, instantiateFee, { funds: funds }),
+  execute: async (signerAddress, contractAddress, msg, fee) =>
+    await mockedSignerExecute(signerAddress, contractAddress, msg, fee),
+  queryContractSmart: async (contractAddress, msg) => await mockedSignerQueryContractSmart(contractAddress, msg),
+  address: validSignerAddress
+}
+
+const mockedSigner2 = {
+  mockedData: 'mocked signer data',
+  upload: async (signerAddress, wasmFile, uploadFee) => await mockedSignerUpload(signerAddress, wasmFile, uploadFee),
+  instantiate: async (signerAddress, codeId, msg, label, instantiateFee, { funds }) =>
+    await mockedSignerInstantiate(signerAddress, codeId, msg, label, instantiateFee, { funds: funds }),
+  execute: async (signerAddress, contractAddress, msg, fee) =>
+    await mockedSignerExecute(signerAddress, contractAddress, msg, fee),
+  queryContractSmart: async (contractAddress, msg) => await mockedSignerQueryContractSmart(contractAddress, msg),
+  address: 'cudos1xgejtl9heykzscska6cetsferpelygx8g9vxp9'
+}
+
+const mockedSigners = [mockedSigner1, mockedSigner2]
+
+const mockedSignerUpload = async (signerAddress, wasmFile, uploadFee) => {
+  if (signerAddress === validSignerAddress && wasmFile === 'mockedWasmPathBuffer' && uploadFee) {
+    return mockedUploadTx
+  }
+  throw new Error("Mocked error: A parameter in mocked signer's upload() function is not valid")
+}
+const mockedSignerInstantiate = async (signerAddress, codeId, msg, label, instantiateFee, { funds }) => {
+  if (signerAddress === validSignerAddress && typeof codeId === 'number' && codeId && typeof (msg) === 'object' &&
+    typeof (label) === 'string' && label && instantiateFee) {
+    return mockedInstantiateTx
+  }
+  throw new Error("Mocked error: A parameter in mocked signer's instantiate() function is not valid")
+}
+const mockedSignerExecute = async (signerAddress, contractAddress, msg, fee) => {
+  if (signerAddress === validSignerAddress && contractAddress === validContractAddress &&
+    typeof (msg) === 'object' && fee) {
+    return mockedExecuteTx
+  }
+  throw new Error("Mocked error: A parameter in mocked signer's execute() function is not valid")
+}
+const mockedSignerQueryContractSmart = async (contractAddress, msg) => {
+  if (contractAddress === validContractAddress && typeof (msg) === 'object') {
+    return mockedQueryTx
+  }
+  throw new Error("Mocked error: A parameter in mocked signer's query() function is not valid")
+}
+
+const mockedUploadTx = {
+  originalSize: 128131,
+  originalChecksum: '4ba98b0642afe91d234e32b1f6cb696842977a9cd0a7d8e8e03d5aa85f540dbf',
+  compressedSize: 47480,
+  compressedChecksum: '87b2d334c13486f88517cf8e0db5aa41b181fe64cdba3ef382a6a1c657a65ceb',
+  codeId: 11,
+  logs: [],
+  height: 16074,
+  transactionHash: 'CAB3B37A927C79C181E406926F898CDBFC426CE36918BD6AB6AFA65D4CAEBFFB',
+  gasWanted: 1186959,
+  gasUsed: 924549
+}
+const mockedInstantiateTx = {
+  contractAddress: validContractAddress,
+  logs: [],
+  height: 16075,
+  transactionHash: 'F3C9182BDFC7063C940E42D190E051836CB85538981B033095E87EF701752AAD',
+  gasWanted: 178074,
+  gasUsed: 148444
+}
+const mockedExecuteTx = {
+  logs: [],
+  height: 3343,
+  transactionHash: '4A67215326981758AC278C20E59564BAFB895DD9E72FDCD177FEDE3C5FB44087',
+  gasWanted: 178074,
+  gasUsed: 131181
+}
+const mockedQueryTx = { resultData: 'resultData' }
+
+//utilities/network-utils --> getAccounts() are not covered by any tests
+// Mocking dependencies
 jest.mock('../utilities/network-utils', () => {
   const originalModule = jest.requireActual('../utilities/network-utils')
   return {
     __esModule: true,
     ...originalModule,
+    getSigner: (mnemonic) => {
+      switch (mnemonic) {
+        case 'ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit':
+          return mockedSigner1
+        case 'course hurdle stand heart rescue trap upset cousin dish embody business equip':
+          return mockedSigner2
+        default:
+          throw new Error('Mocked error: Invalid mnemonic passed to network-utils/getSigner()')
+      }
+    },
+    getDefaultSigner: () => mockedSigners[0],
     getAccounts: () => [{
-      address: "cudos1yvtuaadhfhxf8ke7zm902z4rj382a8ayymq32s",
-      mnemonic: "ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit",
+      address: validSignerAddress,
+      mnemonic: 'ordinary witness such toddler tag mouse helmet perfect venue eyebrow upgrade rabbit'
     }, {
-      address: "cudos1xgejtl9heykzscska6cetsferpelygx8g9vxp9",
-      mnemonic: "course hurdle stand heart rescue trap upset cousin dish embody business equip",
+      address: 'cudos1xgejtl9heykzscska6cetsferpelygx8g9vxp9',
+      mnemonic: 'course hurdle stand heart rescue trap upset cousin dish embody business equip'
     }],
-    getCodeDetails: (codeId) => { return {
-      id: codeId,
-      creator: 'mockedCreatorAddress', //"cudos1yvtuaadhfhxf8ke7zm902z4rj382a8ayymq32s",
-      checksum: 'mockedChecksum', //"4ba98b0642afe91d234e32b1f6cb696842977a9cd0a7d8e8e03d5aa85f540dbf",
-      data: 'mockedUint8Array'
-    }},
-    getContractInfo: (contractAddress) => { return {
-      address: contractAddress,
-      codeId: 13,
-      creator: 'mockedCreatorAddress2',
-      admin: undefined,
-      label: 'mockedLabel',
-      ibcPortId: undefined,
-    }}
+    getCodeDetails: (codeId) => {
+      return {
+        id: codeId,
+        creator: 'mockedCreatorAddress', // validSignerAddress,
+        checksum: 'mockedChecksum',
+        data: 'mockedUint8Array'
+      }
+    },
+    getContractInfo: (contractAddress) => {
+      return {
+        address: contractAddress,
+        codeId: 13,
+        creator: 'mockedCreatorAddress2',
+        admin: undefined,
+        label: 'mockedLabel',
+        ibcPortId: undefined
+      }
+    }
   }
 })
-// mocking blast.config.js
+// Mocking blast.config.js
 jest.mock('../utilities/config-utils', () => {
-  const originalModule = jest.requireActual('../utilities/config-utils') //requiring actual to create bre object
+  const originalModule = jest.requireActual('../utilities/config-utils') // requiring actual to create bre object
   return {
     __esModule: true,
     ...originalModule,
@@ -59,14 +150,6 @@ jest.mock('../utilities/config-utils', () => {
     }
   }
 })
-jest.mock('cudosjs', () => {
-  const originalModule = jest.requireActual('cudosjs')
-  return {
-    __esModule: true,
-    ...originalModule,
-    SigningCosmWasmClient: { connectWithSigner: () => {return { mockedData: 'mocked signer data'}}}
-  }
-})
 jest.mock('../utilities/package-info', () => {
   return {
     __esModule: true,
@@ -74,91 +157,270 @@ jest.mock('../utilities/package-info', () => {
     getProjectRootPath: () => '/mocked_project_path'
   }
 })
-
-test('Make sure required objects are the same as global', () => {
-  const bre_required = require('./bre')
-  expect(bre_required).toEqual(globalThis.bre)
-})
-
-jest.setTimeout(100000)
-test('Mino test: bre.getSigners()', async () => {
-  expect(await bre.getSigners()).toEqual(mockedSignersResult)
-})
-
 jest.mock('fs', () => {
   return {
     __esModule: true,
     existsSync: (wasmPath) => {
       return wasmPath === '/mocked_project_path/artifacts/mockedLabel.wasm'
+    },
+    readFileSync: (wasmPath) => {
+      if (wasmPath === '/mocked_project_path/artifacts/mockedLabel.wasm') {
+        return 'mockedWasmPathBuffer'
+      }
+      throw new Error('Mocked error: Invalid mocked path')
     }
   }
 })
 
-test('Mino test: bre.getContractFactory()', async () => {
-  const contract = await bre.getContractFactory('mockedLabel')
-  expect(contract).toBeInstanceOf(CudosContract)
-  expect(contract.getAddress()).toBeUndefined
-  expect(contract.getCodeId()).toBeUndefined
-  expect(contract.getLabel()).toBeUndefined
-  expect(contract.getCreator()).toBeUndefined
+// Enable increased timeout when debugging. Default is 5 sec
+jest.setTimeout(60 * 1000)
+
+test('Make sure required objects are the same as global', () => {
+  const breRequired = require('./bre')
+  expect(breRequired).toEqual(globalThis.bre)
 })
 
-test('Mino test: bre.getContractFactory() - non-existent/compiled contract', async () => {
-  await expect(() => {return bre.getContractFactory('nonExistentLabel')})
-    .rejects.toThrow(BlastError)
+test('Test bre.getSigners()', async () => {
+  // JSON.stringify(...).toMatch(...) is a workaround for comparing objects
+  expect(JSON.stringify(await bre.getSigners())).toMatch(JSON.stringify(mockedSigners))
 })
 
-test('Mino test: bre.getContractFromCodeId()', async () => {
-  const contract = await bre.getContractFromCodeId(12)
-  expect(contract).toBeInstanceOf(CudosContract)
-  expect(contract.getAddress()).toBeUndefined
-  expect(contract.getCodeId()).toBe(12)
-  expect(contract.getLabel()).toBeUndefined
-  expect(contract.getCreator()).toBe('mockedCreatorAddress')
+test('Test bre.getContractFactory() - Try creating non-existent/non-compiled contract', async () => {
+  await expect(bre.getContractFactory('invalidLabel')).rejects.toThrow(BlastError)
 })
 
-test('Mino test: bre.getContractFromAddress()', async () => {
-  const contract = await bre.getContractFromAddress('someContractAddress')
-  expect(contract).toBeInstanceOf(CudosContract)
-  expect(contract.getAddress()).toBe('someContractAddress')
-  expect(contract.getCodeId()).toBe(13)
-  expect(contract.getLabel()).toBe('mockedLabel')
-  expect(contract.getCreator()).toBe('mockedCreatorAddress2')
+describe('Test contracts created via bre.getContractFactory()', () => {
+  let contract
+  // get the contract oblect from local contract
+  beforeEach(async () => {
+    contract = await bre.getContractFactory('mockedLabel')
+  })
+
+  test('Verify bre.getContractFactory()', async () => {
+    expect(contract).toBeInstanceOf(CudosContract)
+    expect(contract.getAddress()).toBeNull()
+    expect(contract.getCodeId()).toBeNull()
+    expect(contract.getLabel()).toBeNull()
+    expect(contract.getCreator()).toBeNull()
+  })
+
+  test('Local contract: instantiate() should fail', async () => {
+    await expect(contract.instantiate({}, 'SomeLabel', {})).rejects.toThrow(BlastError)
+  })
+
+  test('Local contract: execute() should fail', async () => {
+    await expect(contract.execute({}, mockedSigners[0], {})).rejects.toThrow(BlastError)
+  })
+
+  test('Local contract: query() should fail', async () => {
+    await expect(contract.query({}, mockedSigners[0])).rejects.toThrow(BlastError)
+  })
+
+  // add some getAddress()... checks
+  test('Local contract: uploadCode() with no options parameter', async () => {
+    const tx = await contract.uploadCode()
+    expect(tx).toMatchObject(mockedUploadTx)
+  })
+
+  test('Local contract: uploadCode() with empty options object', async () => {
+    const tx = await contract.uploadCode({})
+    expect(tx).toMatchObject(mockedUploadTx)
+  })
+
+  test('Local contract: uploadCode() with passed valid signer', async () => {
+    const tx = await contract.uploadCode({ signer: mockedSigners[0] })
+    expect(tx).toMatchObject(mockedUploadTx)
+  })
+
+  test('Local contract: uploadCode() with passed another signer', async () => {
+    await expect(contract.uploadCode({ signer: mockedSigners[1] })).rejects.toThrow('Mocked error')
+  })
+
+  test('Local contract: deploy() with no options parameter', async () => {
+    const tx = await contract.deploy({}, 'SomeLabel')
+    expect(tx).toMatchObject({
+      uploadTx: mockedUploadTx,
+      instantiateTx: mockedInstantiateTx
+    })
+  })
+
+  test('Local contract: deploy() with empty options object', async () => {
+    const tx = await contract.deploy({}, 'SomeLabel', {})
+    expect(tx).toMatchObject({
+      uploadTx: mockedUploadTx,
+      instantiateTx: mockedInstantiateTx
+    })
+  })
+
+  test('Local contract: deploy() with passed valid signer', async () => {
+    const tx = await contract.deploy({}, 'SomeLabel', { signer: mockedSigners[0] })
+    expect(tx).toMatchObject({
+      uploadTx: mockedUploadTx,
+      instantiateTx: mockedInstantiateTx
+    })
+  })
+
+  test('Local contract: deploy() with passed another signer', async () => {
+    await expect(contract.deploy({}, 'SomeLabel', { signer: mockedSigners[1] })).rejects.toThrow('Mocked error')
+  })
+
+  describe('Test contracts created via bre.getContractFactory(), then uploadCode()', () => {
+    beforeEach(async () => {
+      await contract.uploadCode({})
+    })
+
+    test('Uploaded contract: instantiate()', async () => {
+      const tx = await contract.instantiate({}, 'SomeLabel', {})
+      expect(tx).toMatchObject(mockedInstantiateTx)
+    })
+
+    test('Uploaded contract: uploadCode() should fail', async () => {
+      await expect(contract.uploadCode({})).rejects.toThrow(BlastError)
+    })
+
+    test('Uploaded contract: deploy() should fail', async () => {
+      await expect(contract.deploy({})).rejects.toThrow(BlastError)
+    })
+
+    test('Uploaded contract: execute() should fail', async () => {
+      await expect(contract.execute({}, mockedSigners[0], {})).rejects.toThrow(BlastError)
+    })
+
+    test('Uploaded contract: query() should fail', async () => {
+      await expect(contract.query({}, mockedSigners[0])).rejects.toThrow(BlastError)
+    })
+  })
+
+  describe('Test contracts created via bre.getContractFactory(), then deploy()', () => {
+    beforeEach(async () => {
+      await contract.deploy({}, 'SomeLabel', {})
+    })
+
+    test('Deployed contract: uploadCode() should fail', async () => {
+      await expect(contract.uploadCode({})).rejects.toThrow(BlastError)
+    })
+
+    test('Deployed contract: deploy() should fail', async () => {
+      await expect(contract.deploy({})).rejects.toThrow(BlastError)
+    })
+
+    test('Deployed contract: instantiate()', async () => {
+      const tx = await contract.instantiate({}, 'SomeLabel', {})
+      expect(tx).toMatchObject(mockedInstantiateTx)
+    })
+
+    test('Deployed contract: execute()', async () => {
+      const tx = await contract.execute({}, mockedSigners[0], {})
+      expect(tx).toMatchObject(mockedExecuteTx)
+    })
+
+    test('Deployed contract: query()', async () => {
+      const tx = await contract.query({}, mockedSigners[0])
+      expect(tx).toMatchObject(mockedQueryTx)
+    })
+  })
 })
 
+describe('Test contracts created via bre.getContractFromCodeId()', () => {
+  let contract
+  // get uploaded, uninstantiated contract oblect
+  beforeEach(async () => {
+    contract = await bre.getContractFromCodeId(12)
+  })
 
+  test('Verify bre.getContractFromCodeId()', async () => {
+    expect(contract).toBeInstanceOf(CudosContract)
+    expect(contract.getAddress()).toBeNull()
+    expect(contract.getCodeId()).toBe(12)
+    expect(contract.getLabel()).toBeNull()
+    expect(contract.getCreator()).toBe('mockedCreatorAddress')
+  })
 
-//describe('alpha contract', () => {
-//  // Optional timeout. Default is 15000
-//  jest.setTimeout(30 * 1000);
-//
-//  const MSG_INIT = { count: 13 }
-//  const MSG_INCREMENT = { increment: {} }
-//  const MSG_RESET = { reset: { count: 1 } }
-//  const QUERY_GET_COUNT = { get_count: {} }
-//
-//  let alice, bob, contract
-//
-//  beforeAll(async () => {
-//    [alice, bob] = await bre.getSigners()
-//    contract = await bre.getContractFactory('alpha')
-//    await contract.deploy(MSG_INIT, 'alpha', { signer: bob })
-//  })
-//
-//  test('increment count', async () => {
-//    await contract.execute(MSG_INCREMENT, alice)
-//    return expect(contract.query(QUERY_GET_COUNT))
-//      .resolves.toEqual({ count: 14 })
-//  })
-//
-//  test('reset count from owner', async () => {
-//    await contract.execute(MSG_RESET, bob)
-//    return expect(contract.query(QUERY_GET_COUNT))
-//      .resolves.toEqual({ count: 1 })
-//  })
-//
-//  test('reset count from user throws unauthorized', () => {
-//    return expect(contract.execute(MSG_RESET, alice))
-//      .rejects.toThrow('Unauthorized')
-//  })
-//})
+  test('Uploaded contract: instantiate() with no options parameter', async () => {
+    const tx = await contract.instantiate({}, 'SomeLabel')
+    expect(tx).toMatchObject(mockedInstantiateTx)
+  })
+
+  test('Uploaded contract: instantiate() with empty options object', async () => {
+    const tx = await contract.instantiate({}, 'SomeLabel', {})
+    expect(tx).toMatchObject(mockedInstantiateTx)
+  })
+
+  test('Uploaded contract: instantiate() with passed valid signer', async () => {
+    const tx = await contract.instantiate({}, 'SomeLabel', { signer: mockedSigners[0] })
+    expect(tx).toMatchObject(mockedInstantiateTx)
+  })
+
+  test('Uploaded contract: instantiate() with passed another signer', async () => {
+    await expect(contract.instantiate({}, 'SomeLabel', { signer: mockedSigners[1] })).rejects.toThrow('Mocked error')
+  })
+
+  test('Uploaded contract: uploadCode() should fail', async () => {
+    await expect(contract.uploadCode({})).rejects.toThrow(BlastError)
+  })
+
+  test('Uploaded contract: deploy() should fail', async () => {
+    await expect(contract.deploy({})).rejects.toThrow(BlastError)
+  })
+
+  test('Uploaded contract: execute() should fail', async () => {
+    await expect(contract.execute({}, mockedSigners[0], {})).rejects.toThrow(BlastError)
+  })
+
+  test('Uploaded contract: query() should fail', async () => {
+    await expect(contract.query({}, mockedSigners[0])).rejects.toThrow(BlastError)
+  })
+})
+
+describe('Test contracts created via bre.getContractFromAddress()', () => {
+  let contract
+  // get instantiated (deployed) contract oblect
+  beforeEach(async () => {
+    contract = await bre.getContractFromAddress(validContractAddress)
+  })
+
+  test('Verify bre.getContractFromAddress()', async () => {
+    expect(contract).toBeInstanceOf(CudosContract)
+    expect(contract.getAddress()).toBe(validContractAddress)
+    expect(contract.getCodeId()).toBe(13)
+    expect(contract.getLabel()).toBe('mockedLabel')
+    expect(contract.getCreator()).toBe('mockedCreatorAddress2')
+  })
+
+  test('Deployed contract: uploadCode() should fail', async () => {
+    await expect(contract.uploadCode({})).rejects.toThrow(BlastError)
+  })
+
+  test('Deployed contract: deploy() should fail', async () => {
+    await expect(contract.deploy({})).rejects.toThrow(BlastError)
+  })
+
+  test('Deployed contract: instantiate()', async () => {
+    const tx = await contract.instantiate({}, 'SomeLabel', {})
+    expect(tx).toMatchObject(mockedInstantiateTx)
+  })
+
+  test('Deployed contract: execute() with no signer and no options parameter', async () => {
+    const tx = await contract.execute({})
+    expect(tx).toMatchObject(mockedExecuteTx)
+  })
+
+  test('Deployed contract: execute() with signer and empty options object', async () => {
+    const tx = await contract.execute({}, mockedSigners[0], {})
+    expect(tx).toMatchObject(mockedExecuteTx)
+  })
+
+  test('Deployed contract: execute() with another signer', async () => {
+    await expect(contract.execute({}, mockedSigners[1], {})).rejects.toThrow('Mocked error')
+  })
+
+  test('Deployed contract: query()', async () => {
+    const tx = await contract.query({})
+    expect(tx).toMatchObject(mockedQueryTx)
+  })
+
+  test('Deployed contract: query() with passed any signer', async () => {
+    const tx = await contract.query({}, mockedSigners[1])
+    expect(tx).toMatchObject(mockedQueryTx)
+  })
+})
