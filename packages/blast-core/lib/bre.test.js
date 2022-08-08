@@ -216,7 +216,6 @@ describe('Test contracts created via bre.getContractFactory()', () => {
     await expect(contract.query({}, mockedSigners[0])).rejects.toThrow(BlastError)
   })
 
-  // add some getAddress()... checks
   test('Local contract: uploadCode() with no options parameter', async () => {
     const tx = await contract.uploadCode()
     expect(tx).toMatchObject(mockedUploadTx)

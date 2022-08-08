@@ -22,7 +22,6 @@
             "tabWidth": 2,
             "ignoreUrls": true
         }],
-        "no-undef": 1
     },
     "overrides": [{
         "files": ["*.test.js"],
