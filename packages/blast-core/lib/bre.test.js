@@ -88,7 +88,6 @@ const mockedExecuteTx = {
 }
 const mockedQueryTx = { resultData: 'resultData' }
 
-//utilities/network-utils --> getAccounts() are not covered by any tests
 // Mocking dependencies
 jest.mock('../utilities/network-utils', () => {
   const originalModule = jest.requireActual('../utilities/network-utils')

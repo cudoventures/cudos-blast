@@ -21,7 +21,7 @@
             "code": 120,
             "tabWidth": 2,
             "ignoreUrls": true
-        }],
+        }]
     },
     "overrides": [{
         "files": ["*.test.js"],
