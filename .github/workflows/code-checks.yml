@@ -26,5 +26,7 @@ jobs:
           node-version: 16
       - run: npm install && npm run install-cmd
         name: Install dependencies and blast as a global command
+      - run: npm run unittest
+        name: Run bre unit tests
       - run: npm run test
         name: Run e2e tests
