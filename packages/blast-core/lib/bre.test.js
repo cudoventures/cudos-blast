@@ -172,7 +172,7 @@ jest.mock('fs', () => {
 })
 
 // Enable increased timeout when debugging. Default is 5 sec
-jest.setTimeout(60 * 1000)
+// jest.setTimeout(60 * 1000)
 
 test('Make sure required objects are the same as global', () => {
   const breRequired = require('./bre')
