@@ -8,7 +8,7 @@
   },
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@cosmjs/stargate": "^0.28.3"
+  "devDependencies": {
+    "cudos-blast": "2.0.0"
   }
 }
