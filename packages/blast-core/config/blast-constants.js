@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 module.exports = {
   DEFAULT_DENOM: 'acudos',
   GAS_AUTO: 'auto',

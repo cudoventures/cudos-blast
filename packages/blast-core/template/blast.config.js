@@ -1,4 +1,3 @@
-/* eslint-disable object-curly-newline */
 module.exports.config = {
   addressPrefix: 'cudos',
   rustOptimizerVersion: '0.12.6',

@@ -27,7 +27,7 @@
     "dependencies": {
         "axios": "^0.26.0",
         "bip39": "^3.0.4",
-        "cudosjs": "^0.0.21",
+        "cudosjs": "^1.0.0",
         "find-up": "^5.0.0",
         "fs-extra": "^10.0.0",
         "jest": "^27.5.1",

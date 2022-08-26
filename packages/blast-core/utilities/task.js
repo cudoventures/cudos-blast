@@ -10,12 +10,13 @@ class Task {
     }
   }
 
-  addParam = (name, description, alias) => {
+  addParam = (name, description, alias, type = 'string', demandOption = true, defaultValue = undefined) => {
     this.task.builder[name] = {
       description: description,
       alias: alias,
-      type: 'string',
-      demandOption: true
+      type: type,
+      demandOption: demandOption,
+      default: defaultValue
     }
 
     return this
@@ -28,7 +29,7 @@ class Task {
   }
 }
 
-task = (name, description) => {
+globalThis.task = (name, description) => {
   return new Task(name, description)
 }
 

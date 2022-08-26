@@ -1,0 +1,28 @@
+{
+  "name": "@cudos/blast-verify",
+  "version": "1.0.0",
+  "description": "Cudos Blast plugin for verifying contracts",
+  "main": "verify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "github:CudoVentures/cudos-blast",
+  "keywords": [
+    "cosmos",
+    "smart-contracts",
+    "cudos-blast",
+    "blast-plugin",
+    "verify"
+  ],
+  "author": "",
+  "license": "GNU GENERAL PUBLIC",
+  "bugs": {
+    "url": "https://github.com/CudoVentures/cudos-blast/issues"
+  },
+  "homepage": "https://github.com/CudoVentures/cudos-blast/tree/cudos-dev/packages/blast-core#readme",
+  "dependencies": {
+    "archiver": "^5.3.1",
+    "axios": "^0.27.2",
+    "cudosjs": "^1.0.0"
+  }
+}

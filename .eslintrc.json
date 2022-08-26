@@ -23,5 +23,11 @@
             "tabWidth": 2,
             "ignoreUrls": true
         }]
-    }
+    },
+    "overrides": [{
+        "files": ["blast.config.js", "**/config/*"],
+        "rules": {
+            "object-curly-newline": 0
+        }
+    }]
 }
