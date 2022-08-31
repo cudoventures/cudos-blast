@@ -8,16 +8,17 @@ const {
   mockedInstantiateTx,
   mockedExecuteTx,
   mockedQueryTx
-} = require('./bre.test-data')
+} = require('./data')
+
+const bre = require('../lib/bre') // the file being tested
 const BlastError = require('../utilities/blast-error')
-const { CudosContract } = require('./cudos-contract')
+const { CudosContract } = require('../lib/cudos-contract')
 
 // Enable increased timeout when debugging. Default is 5 sec
 // jest.setTimeout(60 * 1000)
 
 test('Make sure required objects are the same as global', () => {
-  const breRequired = require('./bre')
-  expect(breRequired).toEqual(globalThis.bre)
+  expect(bre).toEqual(globalThis.bre)
 })
 
 test('Test bre.getSigners()', async () => {

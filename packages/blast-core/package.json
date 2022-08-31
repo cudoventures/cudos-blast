@@ -20,7 +20,7 @@
     "scripts": {
         "lint": "eslint --ext .js,.jsx .",
         "install-global": "npm install -g",
-        "bre-test": "jest ./lib"
+        "bre-test": "jest ./tests/*.test.js"
     },
     "engines": {
         "node": ">=14.15.0"
