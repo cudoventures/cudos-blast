@@ -17,15 +17,21 @@ const {
   ARCHIVE_EXTENTION
 } = require('./config/verify-constants')
 
-globalThis.bre.verify = globalThis.verify = {}
+globalThis.verify = globalThis.bre.verify = {}
 
 globalThis.bre.verify.verifyContract = async (localContractLabel, contractAddress) => {
   const apiUrl = getVerifyUrlFromNetwork()
 
   // parameters validation
+  if (!localContractLabel) {
+    throw new BlastVerifyError('Invalid contract label!')
+  }
   if (!fs.existsSync(path.join(getProjectRootPath(), 'contracts', localContractLabel))) {
     throw new BlastVerifyError(`"${localContractLabel}" contract folder not found! ` +
       'Make sure your contract is in /contracts folder.')
+  }
+  if (!contractAddress) {
+    throw new BlastVerifyError('Invalid contract address!')
   }
   // TODO: This function is a workaround. isValidAddress() from cudosjs should be used once the bug about the address
   // byte length encoding is fixed.
@@ -173,8 +179,8 @@ const isValidAddress = (address, addressPrefix) => {
 }
 
 globalThis.task('verify', "Verify a deployed smart contract's code matches a local one")
-  .addParam('address', "Deployed contract's address", 'a')
-  .addParam('label', "Local smart contract's label", 'l')
+  .addParam('address', "Deployed contract's address", 'a', 'string', false)
+  .addParam('label', "Local smart contract's label", 'l', 'string', false)
   .addParam('list-networks', 'Prints all supported networks', 'ls', 'boolean', false, false)
   .setAction(async (argv) => {
     if (argv['list-networks']) {
