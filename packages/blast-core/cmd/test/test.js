@@ -6,7 +6,6 @@ const {
   getPackageRootPath,
   getProjectRootPath
 } = require('../../utilities/package-info')
-const { checkNodeOnline } = require('../../utilities/get-node-status')
 
 const JS_TESTS_FOLDER_NAME = 'tests'
 
@@ -18,7 +17,6 @@ async function testCmd(argv) {
     throw new BlastError('No tests folder found! Make sure to place your JavaScript tests in /' +
     JS_TESTS_FOLDER_NAME)
   }
-  await checkNodeOnline(argv.network)
   const silent = argv.silent ? '--silent' : ''
   console.log('Running JavaScript tests...')
 
