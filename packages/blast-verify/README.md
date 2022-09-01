@@ -11,6 +11,8 @@ Cudos Blast plugin for interaction with Cudos network's contract verification se
 
 ## Installation
 
+It is strongly advised to update cudos-blast to latest version before installing the verify plugin.
+
 ```bash
 npm install --save-dev @cudos/blast-verify
 ```
@@ -55,7 +57,9 @@ require('@cudos/blast-verify')
 
 module.exports.config = {
   // ...
-  verifyNetwork: 'private_testnet'
+  verify: {
+    network: 'testnet'
+  }
 }
 ```
 
@@ -85,10 +89,6 @@ blast verify --address=cudos1j68t7ythea9fr9qt7ajf4nfc8hlw8p6420ll70 --label=beta
 
 ## Plugin specifics
 
-TODO: {
-- The current plugin version is compatible with cudos-blast v2.?.? or later
-- It is strongly advised to check and update the cudos-blast version before installing the verify plugin
-}
 - The contracts in your project must be able to be compiled and optimized as a workspace.
 - The plugin compresses the contracts into a local archive in `{project_root}/temp` folder and deletes the folder when it is not needed.
 - Only after a successful contract verification, the plugin will try to parse the contract schema.
