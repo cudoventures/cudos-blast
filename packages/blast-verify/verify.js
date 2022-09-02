@@ -3,19 +3,17 @@ const axios = require('axios')
 const FormData = require('form-data')
 const path = require('path')
 const archiver = require('archiver')
-const { fromBech32 } = require('cudosjs')
 
-const BlastVerifyError = require('./utilities/blast-verify-error')
-const {
-  getRustOptimizerVersion,
-  getConfig
-} = require('cudos-blast/utilities/config-utils')
-const { getProjectRootPath } = require('cudos-blast/utilities/package-info')
 const networks = require('./config/networks-config')
 const {
   CONTRACTS_ARCHIVE_FILENAME,
   ARCHIVE_EXTENTION
 } = require('./config/verify-constants')
+const { isValidAddress } = require('./utilities/address-utils')
+const BlastVerifyError = require('./utilities/blast-verify-error')
+const { getVerifyUrlFromNetwork } = require('./utilities/config-utils')
+const { getRustOptimizerVersion } = require('cudos-blast/utilities/config-utils')
+const { getProjectRootPath } = require('cudos-blast/utilities/package-info')
 
 globalThis.verify = globalThis.bre.verify = {}
 
@@ -24,14 +22,14 @@ globalThis.bre.verify.verifyContract = async (localContractLabel, contractAddres
 
   // parameters validation
   if (!localContractLabel) {
-    throw new BlastVerifyError('Invalid contract label!')
+    throw new BlastVerifyError('Missing required parameter: contract label')
   }
   if (!fs.existsSync(path.join(getProjectRootPath(), 'contracts', localContractLabel))) {
     throw new BlastVerifyError(`"${localContractLabel}" contract folder not found! ` +
       'Make sure your contract is in /contracts folder.')
   }
   if (!contractAddress) {
-    throw new BlastVerifyError('Invalid contract address!')
+    throw new BlastVerifyError('Missing required parameter: contract address')
   }
   // TODO: This function is a workaround. isValidAddress() from cudosjs should be used once the bug about the address
   // byte length encoding is fixed.
@@ -78,12 +76,13 @@ globalThis.bre.verify.verifyContract = async (localContractLabel, contractAddres
   // Periodically check if the verification job is done
   console.log('Verifying contract...')
   let isVerified = false
-  while (1) {
+  let data
+  do {
     // Pause the process for 5 seconds
     await new Promise((resolve) => {
       setTimeout(resolve, 5 * 1000)
     })
-    const { data } = await axios.get(`${apiUrl}/verification-status?id=${id}`)
+    data = (await axios.get(`${apiUrl}/verification-status?id=${id}`)).data
 
     // checks for error messages from API
     if (data.verificationError && data.verificationError.length > 0) {
@@ -95,31 +94,13 @@ globalThis.bre.verify.verifyContract = async (localContractLabel, contractAddres
       return data
     }
     // watch for the progress depending on API response
-    if (!isVerified && data.verified === true) {
+    if (!isVerified && data.verified) {
       isVerified = true
       console.log('Smart contract is verified successfully! Parsing schema...')
     }
-    if (data.parsed === true) {
-      console.log('Schema is parsed successfully!')
-      return data
-    }
-  }
-}
-
-const getVerifyUrlFromNetwork = () => {
-  const { config } = getConfig()
-
-  if (!config.verify) {
-    throw new BlastVerifyError('Missing [verify] from the config file.')
-  }
-  if (!config.verify.network) {
-    throw new BlastVerifyError('Missing [verify.network] from the config file.')
-  }
-  if (!networks[config.verify.network]) {
-    throw new BlastVerifyError('Invalid network passed in the config file! Use "blast verify --ls" to show ' +
-      'all available networks.')
-  }
-  return networks[config.verify.network]
+  } while (!data.parsed)
+  console.log('Schema is parsed successfully!')
+  return data
 }
 
 const createContractsArchive = (outputArchiveDir) => {
@@ -164,21 +145,6 @@ const createContractsArchive = (outputArchiveDir) => {
     outputStream.on('end', () => { reject(new BlastVerifyError('Archiver error: Data has been drained')) })
     archive.finalize()
   })
-}
-
-const isValidAddress = (address, addressPrefix) => {
-  try {
-    const {
-      prefix, data
-    } = fromBech32(address)
-
-    if (prefix !== addressPrefix) {
-      return false
-    }
-    return data.length === 20 || data.length === 32
-  } catch {
-    return false
-  }
 }
 
 globalThis.task('verify', "Verify a deployed smart contract's code matches a local one")
