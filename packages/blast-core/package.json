@@ -18,9 +18,9 @@
         "blast": "./cmd/blast-cmd.js"
     },
     "scripts": {
-        "lint": "eslint --ext .js,.jsx .",
         "install-global": "npm install -g",
-        "bre-test": "jest ./tests/*.test.js"
+        "lint": "eslint --ext .js,.jsx .",
+        "test": "jest ./tests/*.test.js"
     },
     "engines": {
         "node": ">=14.15.0"
