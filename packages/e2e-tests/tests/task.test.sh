@@ -1,6 +1,6 @@
 #!/bin/bash
 source ./vars.sh
-init_folder="$INIT_FOLDER-task-test"
+init_folder="$INIT_FOLDER-task"
 exit_status=0
 
 echo -n 'blast custom task...'
