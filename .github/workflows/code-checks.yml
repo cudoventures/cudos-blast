@@ -24,7 +24,9 @@ jobs:
         name: Setup node.js
         with:
           node-version: 16
-      - run: npm install && npm run install-cmd
+      - run: npm install && npm run install-g
         name: Install dependencies and blast as a global command
+      - run: npm run test:core
+        name: Run bre unit tests
       - run: npm run test
         name: Run e2e tests
