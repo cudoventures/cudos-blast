@@ -4,7 +4,7 @@
   "description": "Cudos Blast plugin for verifying contracts",
   "main": "verify.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest ./tests/*.test.js"
   },
   "repository": "github:CudoVentures/cudos-blast",
   "keywords": [
