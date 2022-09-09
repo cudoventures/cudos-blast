@@ -1,6 +1,6 @@
 {
     "name": "cudos-blast",
-    "version": "2.0.0",
+    "version": "2.1.0",
     "license": "GNU GENERAL PUBLIC",
     "repository": "github:CudoVentures/cudos-blast",
     "description": "Cudos Blast is a Node.js CLI tool designed to work with the Cudos blockchain. It allows you to scaffold, compile and test your Rust smart contracts.",
@@ -12,14 +12,15 @@
         "tooling",
         "javascript",
         "rust"
-      ],
+    ],
     "main": "./lib/bre.js",
     "bin": {
         "blast": "./cmd/blast-cmd.js"
     },
     "scripts": {
+        "install-global": "npm install -g",
         "lint": "eslint --ext .js,.jsx .",
-        "install-global": "npm install -g"
+        "test": "jest ./tests/*.test.js"
     },
     "engines": {
         "node": ">=14.15.0"
@@ -30,7 +31,7 @@
         "cudosjs": "^1.0.0",
         "find-up": "^5.0.0",
         "fs-extra": "^10.0.0",
-        "jest": "^27.5.1",
+        "jest": "^28.1.1",
         "yargs": "^17.3.1"
     }
 }

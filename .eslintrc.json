@@ -9,7 +9,6 @@
         "ecmaVersion": "latest",
         "sourceType": "module"
     },
-    "ignorePatterns": ["**/template/tests", "**/template/scripts"],
     "rules": {
         "space-before-function-paren": ["error", {
             "anonymous": "never",
@@ -28,6 +27,11 @@
         "files": ["blast.config.js", "**/config/*"],
         "rules": {
             "object-curly-newline": 0
+        }
+    }, {
+        "files": ["*.test.js"],
+        "rules": {
+            "no-undef": 0
         }
     }]
 }
