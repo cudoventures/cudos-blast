@@ -4,7 +4,7 @@
   "description": "Cudos Blast plugin for verifying contracts",
   "main": "verify.js",
   "scripts": {
-    "test": "jest ./tests/*.test.js"
+    "test": "jest ./tests/*.test.js --silent"
   },
   "repository": "github:CudoVentures/cudos-blast",
   "keywords": [
@@ -23,6 +23,7 @@
   "dependencies": {
     "archiver": "^5.3.1",
     "axios": "^0.27.2",
-    "cudosjs": "^1.0.0"
+    "cudosjs": "^1.0.0",
+    "jest": "^28.1.1"
   }
 }
