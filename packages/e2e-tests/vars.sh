@@ -1,17 +1,13 @@
 #!/bin/bash
-e2e_dir=`pwd`
 
-export e2e_dir
 export TESTS_FOLDER='./tests'
 export INIT_FOLDER='./test-blast-init'
-export PATH_TO_BLAST_CORE='../blast-core'
-export PATH_TO_BLAST_VERIFY='../blast-verify'
-export PATH_TO_TEMPLATE="${PATH_TO_BLAST_CORE}/template"
-export DEFAULT_ACCOUNTS_FILE_PATH="${PATH_TO_BLAST_CORE}/config/default-accounts.json"
+export PATH_TO_TEMPLATE='../blast-core/template'
+export DEFAULT_ACCOUNTS_FILE_PATH='../blast-core/config/default-accounts.json'
 export CONTAINER_NAME='cudos_blast_node'
 export DOCKER_ERROR='Cannot connect to the Docker daemon'
-export LOCAL_NODE_EXEC="docker compose -f ${PATH_TO_BLAST_CORE}/config/docker-compose-start.yaml -f ${PATH_TO_BLAST_CORE}/config/docker-compose-init.yaml exec -T cudos-node"
-export DOCKER_COMPOSE="docker compose -f ${PATH_TO_BLAST_CORE}/config/docker-compose-start.yaml -f ${PATH_TO_BLAST_CORE}/config/docker-compose-init.yaml"
+export LOCAL_NODE_EXEC='docker compose -f ../blast-core/config/docker-compose-start.yaml -f ../blast-core/config/docker-compose-init.yaml exec -T cudos-node'
+export DOCKER_COMPOSE='docker compose -f ../blast-core/config/docker-compose-start.yaml -f ../blast-core/config/docker-compose-init.yaml'
 red='\033[0;31m'
 green='\033[0;32m'
 reset_color='\033[m'
