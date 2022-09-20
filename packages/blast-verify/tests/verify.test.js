@@ -4,10 +4,12 @@ const data = require('./data')
 const verify = require('../verify') // The file being tested
 const BlastVerifyError = require('../utilities/blast-verify-error')
 
-// Mock setTimeout to run immediately
-globalThis.setTimeout = (callback) => {
-  callback()
-}
+beforeAll(() => {
+  // Mock setTimeout to run immediately
+  globalThis.setTimeout = (callback) => {
+    callback()
+  }
+})
 
 beforeEach(() => {
   data.resetFlags()
