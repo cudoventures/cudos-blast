@@ -24,6 +24,11 @@
         }]
     },
     "overrides": [{
+        "files": ["blast.config.js", "**/config/*"],
+        "rules": {
+            "object-curly-newline": 0
+        }
+    }, {
         "files": ["*.test.js"],
         "rules": {
             "no-undef": 0

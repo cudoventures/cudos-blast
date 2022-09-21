@@ -87,6 +87,13 @@ const mockedQueryTx = { resultData: 'resultData' }
 
 // Mocking dependencies
 
+jest.mock('../utilities/get-node-status', () => {
+  return {
+    __esModule: true,
+    checkNodeOnline: () => {}
+  }
+})
+
 jest.mock('../utilities/network-utils', () => {
   const originalModule = jest.requireActual('../utilities/network-utils')
   return {
