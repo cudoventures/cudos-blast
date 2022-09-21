@@ -14,11 +14,11 @@ const NODE_CMD = 'exec cudos-node cudos-noded '
 const NODE_CMD_TTY = 'exec -T cudos-node cudos-noded '
 const NODE_MULTI_CMD = 'exec cudos-node sh -c '
 const NODE_MULTI_CMD_TTY = 'exec -T cudos-node sh -c '
-const CHECK_DOCKER_STATUS = 'docker info 1> /dev/null'
+const CHECK_DOCKER_STATUS = 'docker info'
 
-const runCommand = function(cmd) {
+const runCommand = function(cmd, pipeFlag = 'inherit') {
   const childResult = spawnSync(cmd, {
-    stdio: 'inherit',
+    stdio: pipeFlag,
     shell: true
   })
   if (childResult.status !== 0) {
@@ -57,7 +57,7 @@ const executeNodeMultiCmd = function(arg, enableTty = true) {
 
 const checkDockerStatus = async function() {
   try {
-    await runCommand(CHECK_DOCKER_STATUS)
+    await runCommand(CHECK_DOCKER_STATUS, 'ignore')
   } catch (error) {
     if (error instanceof BlastError) {
       throw new BlastError('Cannot connect to the Docker daemon. Is the docker daemon running?')

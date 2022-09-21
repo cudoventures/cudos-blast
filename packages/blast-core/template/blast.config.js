@@ -4,8 +4,6 @@ module.exports.config = {
   gasPrice: '250acudos',
 
   // optional parameners
-  gasLimit: 'auto',
-  gasMultiplier: 'auto',
   additionalAccounts: 0,
   customAccountBalances: 1000000000000000000,
   networks: {
