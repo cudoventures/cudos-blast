@@ -11,7 +11,8 @@
         "install-g": "npm run install-global -w cudos-blast",
         "lint": "eslint --ext .js,.jsx .",
         "test": "npm test -w @cudos/blast-e2e-tests",
-        "test:core": "npm test -w cudos-blast --silent"
+        "test:core": "npm test -w cudos-blast --silent",
+        "test:verify": "npm test -w @cudos/blast-verify --silent"
     },
     "devDependencies": {
         "@types/jest": "^28.1.1",

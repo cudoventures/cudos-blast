@@ -33,7 +33,7 @@ fi
 
 if [[ $1 == 'keys-add.test.sh' || $1 == 'keys-fund.test.sh' || $1 == 'keys-ls.test.sh' 
 || $1 == 'keys-rm.test.sh' || $1 == 'node-stop-status.test.sh' 
-|| $1 == 'compile-run.test.sh' || 'test.test.sh' ]]; then
+|| $1 == 'compile-run.test.sh' || $1 == 'node-stop-status.test.sh' ]]; then
     start_node
 fi
 echo "- Executing $1..."
