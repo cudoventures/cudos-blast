@@ -55,9 +55,9 @@ const executeNodeMultiCmd = function(arg, enableTty = true) {
   runCommand(dockerComposeCmd + nodeMultiCmd + `'${arg}'`)
 }
 
-const checkDockerStatus = async function() {
+const checkDockerStatus = function() {
   try {
-    await runCommand(CHECK_DOCKER_STATUS, 'ignore')
+    runCommand(CHECK_DOCKER_STATUS, 'ignore')
   } catch (error) {
     if (error instanceof BlastError) {
       throw new BlastError('Cannot connect to the Docker daemon. Is the docker daemon running?')
