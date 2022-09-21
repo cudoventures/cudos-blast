@@ -5,8 +5,9 @@ const {
   executeRun
 } = require('../../utilities/run-docker-commands')
 
-function runRustTests(argv) {
+async function rustTestCmd(argv) {
   checkDockerStatus()
+  console.log('Running contract rust tests...')
 
   // TODO: the slimbuster img is 604 mb, can we reuse the rust-optimizer to call the test? - So far could not make it
   // work on each test run the docker is downloading the packages again, how can we cache them?
@@ -16,11 +17,6 @@ function runRustTests(argv) {
     cmd += ' -q'
   }
   executeRun(cmd)
-}
-
-async function rustTestCmd(argv) {
-  console.log('Running contract rust tests...')
-  runRustTests(argv)
 }
 
 module.exports = { rustTestCmd: rustTestCmd }
