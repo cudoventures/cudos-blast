@@ -2,18 +2,20 @@ const fs = require('fs')
 const axios = require('axios')
 const FormData = require('form-data')
 const path = require('path')
-const archiver = require('archiver')
 
+const { getRustOptimizerVersion } = require('cudos-blast/utilities/config-utils')
+const { getProjectRootPath } = require('cudos-blast/utilities/package-info')
 const networks = require('./config/networks-config')
 const {
   CONTRACTS_ARCHIVE_FILENAME,
   ARCHIVE_EXTENTION
 } = require('./config/verify-constants')
-const { isValidAddress } = require('./utilities/address-utils')
 const BlastVerifyError = require('./utilities/blast-verify-error')
-const { getVerifyUrlFromNetwork } = require('./utilities/config-utils')
-const { getRustOptimizerVersion } = require('cudos-blast/utilities/config-utils')
-const { getProjectRootPath } = require('cudos-blast/utilities/package-info')
+const {
+  getVerifyUrlFromNetwork,
+  createContractsArchive,
+  isValidAddress
+} = require('./utilities/verify-utils')
 
 globalThis.verify = globalThis.bre.verify = {}
 
@@ -101,50 +103,6 @@ globalThis.bre.verify.verifyContract = async (localContractLabel, contractAddres
   } while (!data.parsed)
   console.log('Schema is parsed successfully!')
   return data
-}
-
-const createContractsArchive = (outputArchiveDir) => {
-  const contractsDir = path.join(getProjectRootPath(), 'contracts')
-  const packagesDir = path.join(getProjectRootPath(), 'packages')
-  const cargoLockDir = path.join(getProjectRootPath(), 'Cargo.lock')
-  const cargoTomlDir = path.join(getProjectRootPath(), 'Cargo.toml')
-
-  if (!fs.existsSync(contractsDir)) {
-    throw new BlastVerifyError('No contracts folder found! Make sure to place your smart contracts in /contracts.')
-  }
-  if (!fs.existsSync(cargoLockDir)) {
-    throw new BlastVerifyError('No Cargo.lock file found in the project root directory!')
-  }
-  if (!fs.existsSync(cargoTomlDir)) {
-    throw new BlastVerifyError('No Cargo.toml file found in the project root directory!')
-  }
-
-  const archive = archiver(ARCHIVE_EXTENTION, { zlib: { level: 9 } }) // Sets the compression level.
-  const outputStream = fs.createWriteStream(outputArchiveDir)
-
-  return new Promise((resolve, reject) => {
-    archive
-      .directory(contractsDir, 'contracts')
-      .directory(packagesDir, 'packages')
-      .file(cargoLockDir, { name: 'Cargo.lock' })
-      .file(cargoTomlDir, { name: 'Cargo.toml' })
-      .on('error', (err) => {
-        console.log('Archiver error:')
-        reject(err)
-      })
-      .on('warning', (err) => {
-        if (err.code === 'ENOENT') {
-          console.log(`Archiver warning: ${err}`)
-        } else {
-          console.log('Archiver error:')
-          reject(err)
-        }
-      })
-      .pipe(outputStream)
-    outputStream.on('close', () => { resolve() })
-    outputStream.on('end', () => { reject(new BlastVerifyError('Archiver error: Data has been drained')) })
-    archive.finalize()
-  })
 }
 
 globalThis.task('verify', "Verify a deployed smart contract's code matches a local one")
