@@ -37,10 +37,10 @@ async function main() {
     })
     .argv
 
-    // load blast config
-    if (hideBin(process.argv)[0] !== 'init') {
-      getConfig()
-    }
+  // load blast config
+  if (hideBin(process.argv)[0] !== 'init') {
+    getConfig()
+  }
 }
 
 main()
