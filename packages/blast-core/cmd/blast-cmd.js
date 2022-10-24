@@ -9,10 +9,6 @@ const { customTasks } = require('../utilities/task')
 const { getConfig } = require('../utilities/config-utils')
 
 async function main() {
-  if (hideBin(process.argv)[0] !== 'init') {
-    getConfig()
-  }
-
   await yargs(hideBin(process.argv))
     .scriptName('blast')
     .usage('Usage: $0 <command> [arguments] [command options]')
@@ -40,6 +36,11 @@ async function main() {
       process.exit(1)
     })
     .argv
+
+    // load blast config
+    if (hideBin(process.argv)[0] !== 'init') {
+      getConfig()
+    }
 }
 
 main()
