@@ -9,37 +9,42 @@ const { customTasks } = require('../utilities/task')
 const { getConfig } = require('../utilities/config-utils')
 
 async function main() {
-  if (hideBin(process.argv)[0] !== 'init') {
-    getConfig()
+  try {
+    // load blast config
+    if (hideBin(process.argv)[0] !== 'init') {
+      getConfig()
+    }
+  } finally {
+    // load blast commands nevertheless, to enable usage
+    // of --version and --help globally
+    await yargs(hideBin(process.argv))
+      .scriptName('blast')
+      .usage('Usage: $0 <command> [arguments] [command options]')
+      .command(commands.initInfo)
+      .command(commands.compileInfo)
+      .command(commands.testInfo)
+      .command(commands.rustTestInfo)
+      .command(commands.nodeInfo)
+      .command(commands.runInfo)
+      .command(commands.keysInfo)
+      .command(customTasks)
+      .demandCommand(1, 'No command specified!') // user must specify atleast one command
+      .recommendCommands()
+      .strict() // checks if the command or optional parameters are specified, if not - user friendly error
+      .showHelpOnFail(true) // show help automatically
+      .help()
+      .fail((message, error) => {
+        // yargs error message goes here so this is a way to check if error is from yargs
+        if (message) {
+          yargs.showHelp()
+          console.error(message)
+        } else {
+          return setImmediate(() => { throw error })
+        }
+        process.exit(1)
+      })
+      .argv
   }
-
-  await yargs(hideBin(process.argv))
-    .scriptName('blast')
-    .usage('Usage: $0 <command> [arguments] [command options]')
-    .command(commands.initInfo)
-    .command(commands.compileInfo)
-    .command(commands.testInfo)
-    .command(commands.rustTestInfo)
-    .command(commands.nodeInfo)
-    .command(commands.runInfo)
-    .command(commands.keysInfo)
-    .command(customTasks)
-    .demandCommand(1, 'No command specified!') // user must specify atleast one command
-    .recommendCommands()
-    .strict() // checks if the command or optional parameters are specified, if not - user friendly error
-    .showHelpOnFail(true) // show help automatically
-    .help()
-    .fail((message, error) => {
-      // yargs error message goes here so this is a way to check if error is from yargs
-      if (message) {
-        yargs.showHelp()
-        console.error(message)
-      } else {
-        return setImmediate(() => { throw error })
-      }
-      process.exit(1)
-    })
-    .argv
 }
 
 main()
