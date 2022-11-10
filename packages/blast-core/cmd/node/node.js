@@ -25,7 +25,7 @@ const {
 const BlastError = require('../../utilities/blast-error')
 
 const startNodeCmd = async function(argv) {
-  await checkDockerStatus()
+  checkDockerStatus()
   await checkNodeOffline()
 
   if (!argv.logs) {

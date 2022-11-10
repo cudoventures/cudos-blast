@@ -1,5 +1,8 @@
 const fs = require('fs')
-const { executeRun } = require('../../utilities/run-docker-commands')
+const {
+  checkDockerStatus,
+  executeRun
+} = require('../../utilities/run-docker-commands')
 const { getProjectRootPath } = require('../../utilities/package-info')
 const { getRustOptimizerVersion } = require('../../utilities/config-utils')
 const BlastError = require('../../utilities/blast-error')
@@ -11,6 +14,7 @@ function compileCmd(argv) {
     ' --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry' +
     ` cosmwasm/workspace-optimizer:${optimizerVer}`
 
+  checkDockerStatus()
   if (!fs.existsSync(`${projectRootPath}/contracts`)) {
     throw new BlastError('No contracts folder found! Make sure to place your smart contracts in /contracts.')
   }
