@@ -27,6 +27,7 @@ export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
 checksums_intermediate.txt'
+export LC_ALL=C
 export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
 blast.config.js
