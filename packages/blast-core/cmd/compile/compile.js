@@ -7,8 +7,7 @@ const BlastError = require('../../utilities/blast-error')
 function compileCmd(argv) {
   const optimizerVer = getRustOptimizerVersion()
   const projectRootPath = getProjectRootPath()
-  const compileCmd = `-v "${projectRootPath}":/code  --mount type=volume,source="contracts_cache",target=/code/target` +
-    ' --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry' +
+  const compileCmd = `-v "${projectRootPath}":/code -v "$HOME/.cargo/registry/":/usr/local/cargo/registry` +
     ` cosmwasm/workspace-optimizer:${optimizerVer}`
 
   if (!fs.existsSync(`${projectRootPath}/contracts`)) {

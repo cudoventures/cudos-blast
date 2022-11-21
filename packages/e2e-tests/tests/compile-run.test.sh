@@ -21,7 +21,7 @@ cd ..
 
 echo -n 'blast run sample deploy script...'
 if [[ $exit_status == 1 ]]; then
-    docker run --rm -v "`pwd`":/code  --mount type=volume,source="contracts_cache",target=/code/target --mount type=volume,source=registry_cache,target=/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.6 &> /dev/null
+    docker -u $(id -u):$(id -g) run --rm -v "`pwd`":/code -v "$HOME/.cargo/registry/":/usr/local/cargo/registry cosmwasm/workspace-optimizer:0.12.6 &> /dev/null
 fi
 
 if [[ `blast run ./scripts/deploy.js` =~ cudos([0-9]|[a-z])+ ]]; then

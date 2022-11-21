@@ -27,6 +27,7 @@ export COMPILE_FILES='alpha.wasm
 beta.wasm
 checksums.txt
 checksums_intermediate.txt'
+export LC_ALL=C
 export TEMPLATE_FILES='Cargo.lock
 Cargo.toml
 blast.config.js
@@ -37,6 +38,7 @@ package-lock.json
 package.json
 private-accounts.json
 scripts
+target
 tests'
 export TEMPLATE_SCRIPTS_FILES='deploy.js
 interact.js'
