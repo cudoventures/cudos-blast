@@ -38,6 +38,7 @@ package-lock.json
 package.json
 private-accounts.json
 scripts
+target
 tests'
 export TEMPLATE_SCRIPTS_FILES='deploy.js
 interact.js'

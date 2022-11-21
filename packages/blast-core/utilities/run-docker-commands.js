@@ -9,7 +9,7 @@ const {
 } = require('./package-info')
 
 const dockerComposeCmd = `docker-compose -f ${getDockerComposeStartFile()} -f ${getDockerComposeInitFile()} `
-const DOCKER_RUN_CMD = 'docker run --rm '
+const DOCKER_RUN_CMD = 'docker run -u $(id -u):$(id -g) --rm '
 const NODE_CMD = 'exec cudos-node cudos-noded '
 const NODE_CMD_TTY = 'exec -T cudos-node cudos-noded '
 const NODE_MULTI_CMD = 'exec cudos-node sh -c '
